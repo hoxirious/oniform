@@ -1,27 +1,34 @@
 import Connector from "./connector.ts";
 import ActionButton from "./actionButton.ts";
 
-export class TerminalButtonAdd extends ActionButton {
-    private newTerminalActionItems: HTMLUListElement;
+class SubActionButton extends ActionButton {
 
-    constructor() {
-        super("New Terminal", "new-terminal", ["button"], () => {});
-        this.newTerminalActionItems = document.createElement("ul");
-        this.addButton("Sibling", "terminal-sibling");
-        this.addButton("Children", "terminal-children");
-        this.addButton("Dependant", "terminal-dependant");
-    }
-
-    private addButton(label: string, id: string): void {
-        const item = document.createElement("li");
-        item.appendChild(new ActionButton(label, id, ["add_terminal_button"],() => {}).button);
-        this.newTerminalActionItems.appendChild(item);
+    constructor(_label: string, _id: string, _classes: string[]) {
+        super(_label, _id, _classes, undefined, false);
+        const subActionItems = document.createElement("ul");
+        subActionItems.classList.add("sub_action_items");
+        subActionItems.appendChild(document.createElement("li").appendChild(new ActionButton("New Group", "new-group", ["new-group"], () => {}).button));
+        subActionItems.appendChild(document.createElement("li").appendChild(new ActionButton("New Terminal", "new-terminal", ["new-terminal"], () => {}).button));
+        this.actionItems = subActionItems;
     }
 
 }
 
-export default class Terminal {
+export class TerminalButtonAdd extends ActionButton {
 
+    constructor() {
+        const actionItems = document.createElement("ul");
+        actionItems.classList.add("action_items");
+        actionItems.appendChild(document.createElement("li").appendChild(new SubActionButton("Sibling", "terminal-sibling", ["add_terminal_button"]).button));
+        actionItems.appendChild(document.createElement("li").appendChild(new SubActionButton("Children", "terminal-children", ["add_terminal_button"]).button));
+        actionItems.appendChild(document.createElement("li").appendChild(new SubActionButton("Dependant", "terminal-dependant", ["add_terminal_button"]).button));
+        super("New Terminal", "new-terminal", ["button"], () => {
+            actionItems.classList.toggle("show");
+        }, true, actionItems);
+    }
+}
+
+export default class Terminal {
     public constructor(
         private _label: string,
         private _nextConnectors: Connector[] = [],

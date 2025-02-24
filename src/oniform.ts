@@ -8,6 +8,14 @@ export default class Oniform {
         private _groups: Group[]
     ) {}
 
+    get groups(): Group[] {
+        return this._groups;
+    }
+
+    get groupLength(): number {
+        return this._groups.length;
+    }
+
     render() {
         const form = document.createElement("form");
         form.id = "oniform";
@@ -15,18 +23,14 @@ export default class Oniform {
         form.innerHTML = `
             <h1>Oniform</h1>
         `;
-        this._groups.forEach((group, index) => {
-            const groupDiv = document.createElement("div");
-            groupDiv.id = `group-${index}`;
-            groupDiv.innerHTML = `
-                <h2>${group.label}</h2>
-            `;
-            groupDiv.appendChild(new TerminalButtonAdd().button);
+
+        this._groups.forEach(group => {
+            const groupDiv = group.groupDiv;
             form.appendChild(groupDiv);
         });
 
         const newGroupButton = new ActionButton("New Group", "new-group", ["button"], () => {
-            this._groups.push(new Group("New Group", []));
+            this._groups.push(new Group(`group-${this._groups.length}`,"New Group", []));
             this.rerender();
         });
 
