@@ -1,29 +1,33 @@
 import "../styles/action-button.css";
 
 export default class ActionButton {
+    private readonly _button: HTMLButtonElement;
+    private _actionItems?: HTMLUListElement;
+
     constructor(
-        private _label: string,
-        private _id: string,
-        private _class: string[],
-        private readonly _callback?: () => void,
-        private _isClicked: boolean = true,
-        private _actionItems?: HTMLUListElement,
-        private _button: HTMLButtonElement = document.createElement("button")
-    ){
+        private readonly _label: string,
+        private readonly _id: string,
+        private readonly _class: string[],
+        private readonly _callback: () => void = () => {
+            this._actionItems?.classList.add("show");
+        },
+        private readonly _isClicked: boolean = true,
+        actionItems?: HTMLUListElement
+    ) {
+        this._button = document.createElement("button");
         this._button.type = "button";
         this._button.textContent = this._label;
         this._button.classList.add("action-button", ...this._class);
         this._button.id = this._id;
 
-        if(this._actionItems) {
-            this._actionItems.classList.add("action_items");
-            this._button.appendChild(this._actionItems);
+        if (actionItems) {
+            this.actionItems = actionItems;
         }
-        if (!this._callback) {
-            this._callback = () => {
-                this._actionItems?.classList.add("show");
-            }
-        }
+
+        this.addEventListeners();
+    }
+
+    private addEventListeners(): void {
         if (this._isClicked) {
             this._button.addEventListener("click", this._callback);
         } else {
@@ -46,6 +50,7 @@ export default class ActionButton {
 
     set actionItems(actionItems: HTMLUListElement) {
         this._actionItems = actionItems;
+        this._actionItems.classList.add("action_items");
         this._button.appendChild(this._actionItems);
     }
 }
