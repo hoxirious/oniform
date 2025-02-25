@@ -1,6 +1,4 @@
-import Group from "./components/group.ts";
-import ActionButton from "./components/actionButton.ts";
-import { TerminalButtonAdd } from "./components/terminal.ts";
+import Group, {GroupButtonAdd} from "./components/group.ts";
 
 export default class Oniform {
     static instance = new Oniform([]);
@@ -10,10 +8,6 @@ export default class Oniform {
 
     get groups(): Group[] {
         return this._groups;
-    }
-
-    get groupLength(): number {
-        return this._groups.length;
     }
 
     render() {
@@ -29,11 +23,7 @@ export default class Oniform {
             form.appendChild(groupDiv);
         });
 
-        const newGroupButton = new ActionButton("New Group", "new-group", ["button"], () => {
-            this._groups.push(new Group(`group-${this._groups.length}`,"New Group", []));
-            this.rerender();
-        });
-
+        const newGroupButton = new GroupButtonAdd(this.groups);
         form.appendChild(newGroupButton.button);
         return form;
     }

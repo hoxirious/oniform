@@ -1,5 +1,16 @@
-import Terminal, {TerminalButtonAdd} from "./terminal.ts";
+import Terminal from "./terminal.ts";
 import '../styles/group.css';
+import ActionButton from "./actionButton.ts";
+import Oniform from "../oniform.ts";
+
+export class GroupButtonAdd extends ActionButton {
+    constructor(parent: Group[]) {
+        super("New Group", "new-group", ["button"], () => {
+            parent.push(new Group(`group-${parent.length}`, "New Group", []));
+            Oniform.instance.rerender();
+        });
+    }
+}
 
 export default class Group {
     constructor(
@@ -15,7 +26,7 @@ export default class Group {
         this._groupDiv.innerHTML = `
                 <input value="${this._label}" class="group_label" />
             `;
-        this._groupDiv.appendChild(new TerminalButtonAdd().button);
+        this._groupDiv.appendChild(new Terminal().html);
     }
 
     get label(): string {

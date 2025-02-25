@@ -5,7 +5,7 @@ export default class ActionButton {
     private _actionItems?: HTMLUListElement;
 
     constructor(
-        private readonly _label: string,
+        private readonly _label: string | HTMLElement,
         private readonly _id: string,
         private readonly _class: string[],
         private readonly _callback: () => void = () => {
@@ -16,9 +16,9 @@ export default class ActionButton {
     ) {
         this._button = document.createElement("button");
         this._button.type = "button";
-        this._button.textContent = this._label;
         this._button.classList.add("action-button", ...this._class);
         this._button.id = this._id;
+        this._button.appendChild(typeof this._label === "string" ? document.createTextNode(this._label) : this._label);
 
         if (actionItems) {
             this.actionItems = actionItems;
@@ -54,3 +54,12 @@ export default class ActionButton {
         this._button.appendChild(this._actionItems);
     }
 }
+
+export class SubActionButton extends ActionButton {
+    constructor(_label: string, _id: string, _classes: string[], subActionItems: HTMLUListElement) {
+        super(_label, _id, _classes, undefined, false);
+        subActionItems.classList.add("sub_action_items");
+        this.actionItems = subActionItems;
+    }
+}
+
