@@ -22,7 +22,7 @@ export class ConnectorButtonAdd extends ActionButton {
 function createSubActionItems(): HTMLUListElement {
     const subActionItems = document.createElement("ul");
     subActionItems.classList.add("sub_action_items");
-    subActionItems.appendChild(document.createElement("li").appendChild(new ActionButton("New Terminal", "new-terminal", ["new-terminal"], () => {}).button));
+    // subActionItems.appendChild(document.createElement("li").appendChild(new ActionButton("New Terminal", "new-terminal", ["new-terminal"], () => {}).button));
     subActionItems.appendChild(document.createElement("li").appendChild(new ActionButton("New Group", "new-group", ["new-group"], () => {}).button));
     return subActionItems;
 }

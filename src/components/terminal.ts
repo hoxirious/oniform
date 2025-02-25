@@ -3,12 +3,18 @@ import ActionButton from "./actionButton.ts";
 import "../styles/terminal.css";
 
 import plusUrl from "../../public/plus.svg";
+import Group from "./group.ts";
 
 export class TerminalButtonAdd extends ActionButton {
-    constructor() {
+    constructor(owner: Group) {
         const actionItems = document.createElement("ul");
         actionItems.classList.add("action_items");
-        actionItems.appendChild(document.createElement("li").appendChild(new ActionButton("Sibling", "terminal-sibling", ["add_terminal_button"]).button));
+        actionItems.appendChild(document.createElement("li").appendChild(new ActionButton("Sibling", "terminal-sibling", ["add_terminal_button"],
+        () => {
+            owner.addTerminal(new Terminal(owner));
+            owner.rerender();
+        }
+            ).button));
         actionItems.appendChild(document.createElement("li").appendChild(new ActionButton("Dependant", "terminal-dependant", ["add_terminal_button"]).button));
 
         const plus = document.createElement("img");
@@ -23,10 +29,36 @@ export class TerminalButtonAdd extends ActionButton {
 
 export default class Terminal {
     public constructor(
+        private _groupOwner: Group,
         private _label: string = "",
         private _nextConnectors: Connector[] = [new Connector("", this)],
         private _html: HTMLDivElement = document.createElement("div")
     ) {
+        this.render();
+    }
+
+    render() {
+        const terminal = document.createElement("div");
+        terminal.classList.add("terminal");
+        terminal.appendChild(new TerminalButtonAdd(this._groupOwner).button);
+        const textareaElement = document.createElement("textarea");
+        textareaElement.classList.add("terminal_textarea");
+        textareaElement.setAttribute("value", this.label);
+
+        terminal.appendChild(textareaElement);
+
+
+        const connectors = document.createElement("div");
+        connectors.classList.add("connectors");
+        this.nextConnectors.forEach(connector => connectors.appendChild(connector.html));
+        this._html.classList.add("container");
+
+        this._html.appendChild(terminal);
+        this._html.appendChild(connectors);
+    }
+
+    rerender() {
+        this._html.innerHTML = "";
         this.render();
     }
 
@@ -46,28 +78,4 @@ export default class Terminal {
         this.nextConnectors.push(connector);
     }
 
-    render(){
-        const terminal = document.createElement("div");
-        terminal.classList.add("terminal");
-        terminal.appendChild(new TerminalButtonAdd().button);
-        const textareaElement = document.createElement("textarea");
-        textareaElement.classList.add("terminal_textarea");
-        textareaElement.setAttribute("value", this.label);
-
-        terminal.appendChild(textareaElement);
-
-
-        const connectors = document.createElement("div");
-        connectors.classList.add("connectors");
-        this.nextConnectors.forEach(connector => connectors.appendChild(connector.html));
-        this._html.classList.add("container");
-
-        this._html.appendChild(terminal);
-        this._html.appendChild(connectors);
-    }
-
-    rerender(){
-        this._html.innerHTML = "";
-        this.render();
-    }
 }
