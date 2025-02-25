@@ -4,7 +4,7 @@
     height: 2.5rem;
     min-width: 2.5rem;
     position: relative;
-    background-color: #007bff;
+    background-color: #1077ec;
     border: none;
     color: white;
     padding: 0.625rem;
@@ -19,6 +19,30 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.action-button.success {
+    background-color: #28a745;
+}
+
+.action-button.warning {
+    background-color: #ffc107;
+}
+
+.action-button.error {
+    background-color: #dc3545;
+}
+
+.action-button.success:hover {
+    background-color: #218838;
+}
+
+.action-button.warning:hover {
+    background-color: #e0a800;
+}
+
+.action-button.error:hover {
+    background-color: #c82333;
 }
 
 .action-button.rounded {

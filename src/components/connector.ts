@@ -12,7 +12,7 @@ export class ConnectorButtonAdd extends ActionButton {
         const plus = document.createElement("img");
         plus.src = plusUrl as string;
         plus.alt = "Plus";
-        super(plus, "new-connector", ["rounded"], () => {});
+        super(plus, "new-connector", ["success", "rounded"], () => {});
     }
 }
 

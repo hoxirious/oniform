@@ -15,7 +15,7 @@ export class TerminalButtonAdd extends ActionButton {
         plus.src = plusUrl as string;
         plus.alt = "Plus";
 
-        super(plus, "new-terminal", ["rounded"], () => {
+        super(plus, "new-terminal", ["success","rounded"], () => {
             actionItems.classList.toggle("show");
         }, true, actionItems);
     }
