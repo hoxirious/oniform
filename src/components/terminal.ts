@@ -15,7 +15,7 @@ export class TerminalButtonAdd extends ActionButton {
         plus.src = plusUrl as string;
         plus.alt = "Plus";
 
-        super(plus, "new-terminal", ["success","rounded"], () => {
+        super(plus, "new-terminal", ["rounded"], () => {
             actionItems.classList.toggle("show");
         }, true, actionItems);
     }
@@ -27,6 +27,26 @@ export default class Terminal {
         private _nextConnectors: Connector[] = [new Connector("", this)],
         private _html: HTMLDivElement = document.createElement("div")
     ) {
+        this.render();
+    }
+
+    get label(): string {
+        return this._label;
+    }
+
+    get html(): HTMLDivElement {
+        return this._html;
+    }
+
+    get nextConnectors(): Connector[] {
+        return this._nextConnectors;
+    }
+
+    addConnector(connector: Connector) {
+        this.nextConnectors.push(connector);
+    }
+
+    render(){
         const terminal = document.createElement("div");
         terminal.classList.add("terminal");
         terminal.appendChild(new TerminalButtonAdd().button);
@@ -46,19 +66,8 @@ export default class Terminal {
         this._html.appendChild(connectors);
     }
 
-    get label(): string {
-        return this._label;
-    }
-
-    get html(): HTMLDivElement {
-        return this._html;
-    }
-
-    get nextConnectors(): Connector[] {
-        return this._nextConnectors;
-    }
-
-    addConnector(connector: Connector) {
-        this.nextConnectors.push(connector);
+    rerender(){
+        this._html.innerHTML = "";
+        this.render();
     }
 }

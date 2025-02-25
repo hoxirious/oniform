@@ -56,8 +56,6 @@
 .action_items {
     display: none;
     position: absolute;
-    top: 120%; /* Position below the action-button */
-    left: 0;
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -67,6 +65,18 @@
 .action_items.show {
     display: flex;
     flex-direction: column;
+    top: 120%; /* Position below the action-button */
+    left: 0;
+}
+
+.action_items.show.right {
+    top: 0;
+    left: 120%; /* Position to the right of the action-button */
+}
+
+.action_items.show.left {
+    top: 0;
+    right: 120%; /* Position to the left of the action-button */
 }
 
 .action_items .sub_action_items {

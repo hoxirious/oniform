@@ -8,11 +8,14 @@ import arrowRightUrl from "../../public/arrow-right.svg";
 type Relationship = "dependant" | "children" | "sibling";
 
 export class ConnectorButtonAdd extends ActionButton {
-    constructor() {
+    constructor(parent: Terminal) {
         const plus = document.createElement("img");
         plus.src = plusUrl as string;
         plus.alt = "Plus";
-        super(plus, "new-connector", ["success", "rounded"], () => {});
+        super(plus, "new-connector", ["rounded"], () => {
+            parent.addConnector(new Connector("", parent));
+            parent.rerender();
+        });
     }
 }
 
@@ -27,7 +30,7 @@ function createSubActionItems(): HTMLUListElement {
 export class ConnectorButtonNext extends ActionButton {
     constructor() {
         const actionItems = document.createElement("ul");
-        actionItems.classList.add("action_items");
+        actionItems.classList.add("action_items", "right");
 
         actionItems.appendChild(document.createElement("li").appendChild(new SubActionButton("Sibling", "connector-sibling", ["add_connector_button"], createSubActionItems()).button));
         actionItems.appendChild(document.createElement("li").appendChild(new SubActionButton("Children", "connector-children", ["add_connector_button"], createSubActionItems()).button));
@@ -56,7 +59,7 @@ export default class Connector {
         inputElement.value = this.label;
         inputElement.classList.add("connector_input");
 
-        this._html.appendChild(new ConnectorButtonAdd().button);
+        this._html.appendChild(new ConnectorButtonAdd(_prevTerminal).button);
         this._html.appendChild(inputElement);
         this._html.appendChild(new ConnectorButtonNext().button);
     }
