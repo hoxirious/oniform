@@ -1,33 +1,32 @@
 /* src/styles/terminal.css */
 
-.container {
+.terminals {
     display: flex;
     flex-direction: column;
-    max-width: 25rem;
+    justify-content: flex-end;
+    align-items: flex-end;
 }
 
 .terminal {
     display: flex;
     align-items: center;
-    margin: 1rem;
+    justify-content: end;
 }
 
-.terminal_textarea {
+.terminal_input {
     width: 100%;
-    min-height: 40px;
+    height: 40px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-family: monospace;
+    font-family: Arial, sans-serif;
     font-size: 14px;
     background-color: #f9f9f9;
     color: #333;
-    resize: vertical;
-    overflow-y: auto;
     box-sizing: border-box;
 }
 
-.terminal_textarea:focus {
+.terminal_input:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);

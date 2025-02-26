@@ -1,32 +1,33 @@
-/* src/styles/connector.css */
+/* src/styles/station.css */
 
-.connectors {
+.container {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-end;
+    max-width: 25rem;
 }
 
-.connector {
+.station {
     display: flex;
     align-items: center;
-    justify-content: end;
+    margin: 1rem;
 }
 
-.connector_input {
+.station_textarea {
     width: 100%;
-    height: 40px;
+    min-height: 40px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-family: Arial, sans-serif;
+    font-family: monospace;
     font-size: 14px;
     background-color: #f9f9f9;
     color: #333;
+    resize: vertical;
+    overflow-y: auto;
     box-sizing: border-box;
 }
 
-.connector_input:focus {
+.station_textarea:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);

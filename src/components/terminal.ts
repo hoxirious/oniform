@@ -1,65 +1,67 @@
-import Connector from "./connector.ts";
-import ActionButton from "./actionButton.ts";
-import "../styles/terminal.css";
-
-import plusUrl from "../../public/plus.svg";
 import Group from "./group.ts";
+import Station from "./station.ts";
+import ActionButton, {SubActionButton} from "./actionButton.ts";
+import "../styles/terminal.css";
+import plusUrl from "../../public/plus.svg";
+import arrowRightUrl from "../../public/arrow-right.svg";
+
+type Relationship = "dependant" | "children" | "sibling";
 
 export class TerminalButtonAdd extends ActionButton {
-    constructor(owner: Group) {
-        const actionItems = document.createElement("ul");
-        actionItems.classList.add("action_items");
-        actionItems.appendChild(document.createElement("li").appendChild(new ActionButton("Sibling", "terminal-sibling", ["add_terminal_button"],
-        () => {
-            owner.addTerminal(new Terminal(owner));
-            owner.rerender();
-        }
-            ).button));
-        actionItems.appendChild(document.createElement("li").appendChild(new ActionButton("Dependant", "terminal-dependant", ["add_terminal_button"]).button));
-
+    constructor(parent: Station) {
         const plus = document.createElement("img");
         plus.src = plusUrl as string;
         plus.alt = "Plus";
-
         super(plus, "new-terminal", ["rounded"], () => {
+            parent.addTerminal(new Terminal("", parent));
+            parent.rerender();
+        });
+    }
+}
+
+function createSubActionItems(): HTMLUListElement {
+    const subActionItems = document.createElement("ul");
+    subActionItems.classList.add("sub_action_items");
+    // subActionItems.appendChild(document.createElement("li").appendChild(new ActionButton("New Station", "new-station", ["new-station"], () => {}).button));
+    subActionItems.appendChild(document.createElement("li").appendChild(new ActionButton("New Group", "new-group", ["new-group"], () => {}).button));
+    return subActionItems;
+}
+
+export class TerminalButtonNext extends ActionButton {
+    constructor() {
+        const actionItems = document.createElement("ul");
+        actionItems.classList.add("action_items", "right");
+
+        actionItems.appendChild(document.createElement("li").appendChild(new SubActionButton("Sibling", "terminal-sibling", ["add_terminal_button"], createSubActionItems()).button));
+        actionItems.appendChild(document.createElement("li").appendChild(new SubActionButton("Children", "terminal-children", ["add_terminal_button"], createSubActionItems()).button));
+        actionItems.appendChild(document.createElement("li").appendChild(new SubActionButton("Dependant", "terminal-dependant", ["add_terminal_button"], createSubActionItems()).button));
+
+        const arrowRight = document.createElement("img");
+        arrowRight.src = arrowRightUrl as string;
+        arrowRight.alt = "Arrow Right";
+
+        super(arrowRight, "next-terminal", ["rounded"], () => {
             actionItems.classList.toggle("show");
         }, true, actionItems);
     }
 }
 
 export default class Terminal {
-    public constructor(
-        private _groupOwner: Group,
-        private _label: string = "",
-        private _nextConnectors: Connector[] = [new Connector("", this)],
+    constructor(
+        private _label: string,
+        private _prevStation: Station,
+        private _relationship?: Relationship,
+        private _nextGroup: Group[] = [],
         private _html: HTMLDivElement = document.createElement("div")
     ) {
-        this.render();
-    }
+        this._html.classList.add("terminal");
+        const inputElement = document.createElement("input");
+        inputElement.value = this.label;
+        inputElement.classList.add("terminal_input");
 
-    render() {
-        const terminal = document.createElement("div");
-        terminal.classList.add("terminal");
-        terminal.appendChild(new TerminalButtonAdd(this._groupOwner).button);
-        const textareaElement = document.createElement("textarea");
-        textareaElement.classList.add("terminal_textarea");
-        textareaElement.setAttribute("value", this.label);
-
-        terminal.appendChild(textareaElement);
-
-
-        const connectors = document.createElement("div");
-        connectors.classList.add("connectors");
-        this.nextConnectors.forEach(connector => connectors.appendChild(connector.html));
-        this._html.classList.add("container");
-
-        this._html.appendChild(terminal);
-        this._html.appendChild(connectors);
-    }
-
-    rerender() {
-        this._html.innerHTML = "";
-        this.render();
+        this._html.appendChild(new TerminalButtonAdd(_prevStation).button);
+        this._html.appendChild(inputElement);
+        this._html.appendChild(new TerminalButtonNext().button);
     }
 
     get label(): string {
@@ -70,12 +72,15 @@ export default class Terminal {
         return this._html;
     }
 
-    get nextConnectors(): Connector[] {
-        return this._nextConnectors;
+    get nextGroup(): Group[] {
+        return this._nextGroup;
     }
 
-    addConnector(connector: Connector) {
-        this.nextConnectors.push(connector);
+    get prevStation(): Station {
+        return this._prevStation;
     }
 
+    public addGroup(group: Group) {
+        this.nextGroup.push(group);
+    }
 }

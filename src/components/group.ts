@@ -1,4 +1,4 @@
-import Terminal from "./terminal.ts";
+import Station from "./station.ts";
 import '../styles/group.css';
 import ActionButton from "./actionButton.ts";
 import Oniform from "../oniform.ts";
@@ -16,7 +16,7 @@ export default class Group {
     constructor(
         private _id: string,
         private _label: string,
-        private _terminals: Terminal[] = [new Terminal(this)],
+        private _stations: Station[] = [new Station(this)],
         private _scoreExpression: string = "",
         private _score: number = 0,
         private _groupDiv: HTMLDivElement = document.createElement("div")
@@ -31,9 +31,9 @@ export default class Group {
         inputElement.value = this.label;
         inputElement.classList.add("group_label");
         this._groupDiv.appendChild(inputElement);
-        const terminalDiv =  document.createElement("div");
-        this._terminals.forEach(terminal => { terminalDiv.appendChild(terminal.html) });
-        this._groupDiv.appendChild(terminalDiv);
+        const stationDiv =  document.createElement("div");
+        this._stations.forEach(station => { stationDiv.appendChild(station.html) });
+        this._groupDiv.appendChild(stationDiv);
     }
 
     rerender() {
@@ -41,8 +41,8 @@ export default class Group {
         this.render();
     }
 
-    addTerminal(terminal: Terminal) {
-        this._terminals.push(terminal);
+    addStation(station: Station) {
+        this._stations.push(station);
     }
 
     get id(): string {
@@ -53,8 +53,8 @@ export default class Group {
         return this._label;
     }
 
-    get terminals(): Terminal[] {
-        return this._terminals;
+    get stations(): Station[] {
+        return this._stations;
     }
 
     get scoreExpression(): string {
