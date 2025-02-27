@@ -76,7 +76,7 @@
 
 .action_items.show.left {
     top: 0;
-    left: -280%; /* Position to the left of the action-button */
+    left: -200%; /* Position to the left of the action-button */
 }
 
 .action_items .sub_action_items {
