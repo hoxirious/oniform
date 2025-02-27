@@ -1,13 +1,10 @@
 .link {
-    position: absolute;
-    width: 2px;
-    background-color: white;
+    margin-top: 1rem;
 }
 
 .link.dependant {
-    border-left: 2px dotted white;
+    margin-left: 4rem;
 }
 
-.link.children {
-    border-left: 2px dashed white;
+.link.sibling {
 }

@@ -9,11 +9,17 @@ export class TerminalButtonAdd extends ActionButton {
         const actionItems = document.createElement("ul");
         actionItems.classList.add("action_items", "bottom");
 
-        actionItems.appendChild(document.createElement("li").appendChild(new ActionButton("Sibling", "terminal-sibling", ["add_terminal_button"], () => {
-            parent.addTerminal(new Terminal("", parent));
-            parent.rerender();
-        }).button));
-        actionItems.appendChild(document.createElement("li").appendChild(new ActionButton("Dependant", "terminal-dependant", ["add_terminal_button"]).button));
+        actionItems.appendChild(document.createElement("li").appendChild(
+            new ActionButton("Sibling", "terminal-sibling", ["add_terminal_button"], () => {
+                parent.addTerminal(new Terminal("", parent));
+                parent.rerender();
+            }).button));
+        actionItems.appendChild(document.createElement("li").appendChild(
+            new ActionButton("Dependant", "terminal-dependant", ["add_terminal_button"], () => {
+                parent.addTerminal(new Terminal("", parent));
+                parent.rerender();
+            }).button));
+
         const plus = document.createElement("img");
         plus.src = plusUrl as string;
         plus.alt = "Plus";

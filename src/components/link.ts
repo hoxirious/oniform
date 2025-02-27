@@ -10,7 +10,7 @@ export enum Relationship {
 
 export default class Link {
     constructor(
-        private _left: Terminal | Station | Group,
+        private _left: Station,
         private _right: Station | Group,
         private _relationship: Relationship,
         private _html: HTMLDivElement = document.createElement("div")
@@ -19,9 +19,15 @@ export default class Link {
     }
 
     render() {
-        this._html.classList.add("link");
-        this._left.addLink(this);
-        this.left.html.appendChild(this._html);
+        this._html = document.createElement("div");
+        this._html.classList.add("link", this._relationship);
+        this._html.appendChild(this._right.html);
+        if(this._relationship == Relationship.SIBLING) {
+            this._left.root.addLink(this);
+        }
+        if(this._relationship == Relationship.DEPENDANT) {
+            this._left.addLink(this);
+        }
     }
 
     get left(): Terminal | Station | Group {
