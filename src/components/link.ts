@@ -9,32 +9,31 @@ export enum Relationship {
 }
 
 export default class Link {
+    private readonly _html: HTMLDivElement = document.createElement("div");
+
     constructor(
-        private _left: Station | Terminal,
-        private _right: Station | Group,
-        private _relationship: Relationship,
-        private _html: HTMLDivElement = document.createElement("div")
+        private readonly _left: Station | Terminal,
+        private readonly _right: Station | Group,
+        private readonly _relationship: Relationship
     ) {
         this.render();
     }
 
-    render() {
-        this._html = document.createElement("div");
+    private render() {
         this._html.classList.add("link", this._relationship);
         this._html.appendChild(this._right.html);
-        if(this._relationship == Relationship.SIBLING) {
+        if (this._relationship === Relationship.SIBLING) {
             this._left.root.addLink(this);
-        }
-        if(this._relationship == Relationship.DEPENDANT) {
+        } else if (this._relationship === Relationship.DEPENDANT) {
             this._left.addLink(this);
         }
     }
 
-    get left(): Terminal | Station | Group {
+    get left(): Station | Terminal {
         return this._left;
     }
 
-    get right(): Group | Station {
+    get right(): Station | Group {
         return this._right;
     }
 
@@ -44,5 +43,5 @@ export default class Link {
 
     get html(): HTMLDivElement {
         return this._html;
-}
     }
+}

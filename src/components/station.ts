@@ -19,8 +19,8 @@ export class StationButtonAdd extends ActionButton {
             new Link(self, newStation, Relationship.DEPENDANT);
         }).button;
 
-        actionItems.appendChild(document.createElement("li").appendChild(siblingButton));
-        actionItems.appendChild(document.createElement("li").appendChild(dependantButton));
+        actionItems.appendChild(createListItem(siblingButton));
+        actionItems.appendChild(createListItem(dependantButton));
 
         const plus = document.createElement("img");
         plus.src = plusUrl as string;
@@ -32,45 +32,50 @@ export class StationButtonAdd extends ActionButton {
     }
 }
 
-export default class Station {
-    #groupOwner: Group;
-    #root: Station;
-    #label: string;
-    #nextTerminals: Terminal[];
-    #links: Link[];
-    #html: HTMLDivElement;
+function createListItem(button: HTMLButtonElement): HTMLLIElement {
+    const listItem = document.createElement("li");
+    listItem.appendChild(button);
+    return listItem;
+}
 
-    public constructor(
+export default class Station {
+    private readonly _groupOwner: Group;
+    private readonly _root: Station;
+    private readonly _label: string;
+    private readonly _nextTerminals: Terminal[];
+    private _links: Link[];
+    private readonly _html: HTMLDivElement;
+
+    constructor(
         groupOwner: Group,
-        root: Station = this,
+        root: Station = null,
         label: string = "New Station",
         nextTerminals: Terminal[] = [new Terminal(this)],
         links: Link[] = [],
         html: HTMLDivElement = document.createElement("div")
     ) {
-        this.#groupOwner = groupOwner;
-        this.#root = root || this;
-        this.#label = label;
-        this.#nextTerminals = nextTerminals;
-        this.#links = links;
-        this.#html = html;
+        this._groupOwner = groupOwner;
+        this._root = root || this;
+        this._label = label;
+        this._nextTerminals = nextTerminals;
+        this._links = links;
+        this._html = html;
         this.render();
     }
 
     render() {
-        this.#html.innerHTML = "";
-        this.#html.classList.add("station_container");
+        this._html.innerHTML = "";
+        this._html.classList.add("station_container");
 
         const station = document.createElement("div");
         station.classList.add("station");
 
-
         const labelElement = document.createElement("input");
-        labelElement.value = this.label;
+        labelElement.value = this._label;
         labelElement.classList.add("station_label");
         station.appendChild(labelElement);
 
-        const buttonAdd = new StationButtonAdd(this.#groupOwner, this).button;
+        const buttonAdd = new StationButtonAdd(this._groupOwner, this).button;
         station.appendChild(buttonAdd);
 
         const textareaElement = document.createElement("textarea");
@@ -79,12 +84,12 @@ export default class Station {
 
         const terminals = document.createElement("div");
         terminals.classList.add("terminals");
-        this.#nextTerminals.forEach(terminal => terminals.appendChild(terminal.html));
+        this._nextTerminals.forEach(terminal => terminals.appendChild(terminal.html));
 
-        this.#html.appendChild(station);
-        this.#html.appendChild(terminals);
+        this._html.appendChild(station);
+        this._html.appendChild(terminals);
 
-        this.#links.forEach(link => this.#html.appendChild(link.html));
+        this._links.forEach(link => this._html.appendChild(link.html));
     }
 
     rerender() {
@@ -92,39 +97,39 @@ export default class Station {
     }
 
     get root(): Station {
-        return this.#root;
+        return this._root;
     }
 
     get label(): string {
-        return this.#label;
+        return this._label;
     }
 
     get html(): HTMLDivElement {
-        return this.#html;
+        return this._html;
     }
 
     get nextTerminals(): Terminal[] {
-        return this.#nextTerminals;
+        return this._nextTerminals;
     }
 
     get groupOwner(): Group {
-        return this.#groupOwner;
+        return this._groupOwner;
     }
 
     addTerminal(terminal: Terminal) {
-        this.#nextTerminals.push(terminal);
+        this._nextTerminals.push(terminal);
     }
 
     addLink(link: Link) {
         if (link.relationship === Relationship.DEPENDANT) {
-            const siblingIndex = this.#links.findIndex(l => l.relationship === Relationship.SIBLING);
+            const siblingIndex = this._links.findIndex(l => l.relationship === Relationship.SIBLING);
             if (siblingIndex !== -1) {
-                this.#links.splice(siblingIndex, 0, link);
+                this._links.splice(siblingIndex, 0, link);
             } else {
-                this.#links.push(link);
+                this._links.push(link);
             }
         } else {
-            this.#links.push(link);
+            this._links.push(link);
         }
         this.rerender();
     }

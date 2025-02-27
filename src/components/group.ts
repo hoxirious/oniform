@@ -15,14 +15,15 @@ export class GroupButtonAdd extends ActionButton {
 }
 
 export default class Group {
+    private readonly _html: HTMLDivElement = document.createElement("div");
+
     constructor(
-        private _id: string,
-        private _label: string,
-        private _stations: Station[] = [new Station(this)],
-        private _scoreExpression: string = "",
+        private readonly _id: string,
+        private readonly _label: string,
+        private readonly _stations: Station[] = [new Station(this)],
+        private readonly _scoreExpression: string = "",
         private _score: number = 0,
-        private _links: Link[] = [],
-        private _html: HTMLDivElement = document.createElement("div")
+        private readonly _links: Link[] = []
     ) {
         this.render();
         this.makeResizable();
@@ -31,12 +32,14 @@ export default class Group {
     render() {
         this._html.classList.add("group");
         this._html.id = this._id;
+
         const inputElement = document.createElement("input");
-        inputElement.value = this.label;
+        inputElement.value = this._label;
         inputElement.classList.add("group_label");
         this._html.appendChild(inputElement);
-        const stationDiv =  document.createElement("div");
-        this._stations.forEach(station => { stationDiv.appendChild(station.html) });
+
+        const stationDiv = document.createElement("div");
+        this._stations.forEach(station => stationDiv.appendChild(station.html));
         this._html.appendChild(stationDiv);
     }
 
