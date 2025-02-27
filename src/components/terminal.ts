@@ -9,7 +9,7 @@ export class TerminalButtonAdd extends ActionButton {
     constructor(parent: Station, self: Terminal) {
         const actionItems = createActionItems(parent, self);
         const plus = createPlusIcon();
-        super(plus, "new-terminal", ["rounded"], () => {
+        super(plus, "new-terminal", ["icon"], () => {
             actionItems.classList.toggle("show");
         }, true, actionItems);
     }
@@ -17,7 +17,7 @@ export class TerminalButtonAdd extends ActionButton {
 
 function createActionItems(parent: Station, self: Terminal): HTMLUListElement {
     const actionItems = document.createElement("ul");
-    actionItems.classList.add("action_items", "left");
+    actionItems.classList.add("action_items");
 
     const siblingButton = new ActionButton("Sibling", "terminal-sibling", ["add_terminal_button"], () => {
         parent.addTerminal(new Terminal(parent));

@@ -11,6 +11,7 @@
     flex-direction: column;
     resize: both;
     overflow: auto;
+    background-color: rgb(23, 23, 23);
 }
 
 .group_label {
@@ -18,5 +19,4 @@
     position: absolute;
     top: -2.5rem;
     left: 0;
-    width: 100%;
 }

@@ -2,9 +2,9 @@
 
 .action-button {
     height: 2.5rem;
-    min-width: 2.5rem;
+    min-width: 1rem;
     position: relative;
-    background-color: #1077ec;
+    background-color: rgba(108, 117, 125);
     border: none;
     color: white;
     padding: 0.625rem;
@@ -12,7 +12,7 @@
     text-align: center;
     text-decoration: none;
     font-size: 1rem;
-    margin: 0.25rem;
+    margin: 0.25rem 0.5rem;
     cursor: pointer;
     border-radius: 0.25rem;
     transition: background-color 0.3s ease;
@@ -45,12 +45,19 @@
     background-color: #c82333;
 }
 
-.action-button.rounded {
-    border-radius: 50%;
+.action-button.icon {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.25rem;
+    background: none;
+}
+
+.action-button.icon:hover {
+    background-color: rgba(108, 117, 125, 0.31);
 }
 
 .action-button:hover {
-    background-color: #0056b3;
+    background-color: #58646c;
 }
 
 .action_items {
@@ -76,7 +83,7 @@
 
 .action_items.show.left {
     top: 0;
-    left: -200%; /* Position to the left of the action-button */
+    left: -280%; /* Position to the left of the action-button */
 }
 
 .action_items .sub_action_items {

@@ -26,7 +26,6 @@ export default class Group {
         private readonly _links: Link[] = []
     ) {
         this.render();
-        this.makeResizable();
     }
 
     render() {
@@ -41,11 +40,6 @@ export default class Group {
         const stationDiv = document.createElement("div");
         this._stations.forEach(station => stationDiv.appendChild(station.html));
         this._html.appendChild(stationDiv);
-    }
-
-    makeResizable() {
-        this._html.style.resize = "both";
-        this._html.style.overflow = "auto";
     }
 
     rerender() {

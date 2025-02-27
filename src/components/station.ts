@@ -26,7 +26,7 @@ export class StationButtonAdd extends ActionButton {
         plus.src = plusUrl as string;
         plus.alt = "Plus";
 
-        super(plus, "new-station", ["rounded"], () => {
+        super(plus, "new-station", ["icon"], () => {
             actionItems.classList.toggle("show");
         }, true, actionItems);
     }
@@ -48,7 +48,7 @@ export default class Station {
 
     constructor(
         groupOwner: Group,
-        root: Station = null,
+        root: Station = this,
         label: string = "New Station",
         nextTerminals: Terminal[] = [new Terminal(this)],
         links: Link[] = [],
