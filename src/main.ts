@@ -1,4 +1,4 @@
-import Oniform from "./oniform.ts";
+import Oniform from "./components/oniform.ts";
 
 declare global {
     interface Window {

@@ -1,7 +1,7 @@
 import Station from "./station.ts";
 import '../styles/group.css';
 import ActionButton from "./actionButton.ts";
-import Oniform from "../oniform.ts";
+import Oniform from "./oniform.ts";
 import Link from "./link.ts";
 
 export class GroupButtonAdd extends ActionButton {
