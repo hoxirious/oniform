@@ -19,7 +19,7 @@ export default class Oniform {
         `;
 
         this._groups.forEach(group => {
-            const groupDiv = group.groupDiv;
+            const groupDiv = group.html;
             form.appendChild(groupDiv);
         });
 
