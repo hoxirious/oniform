@@ -3,11 +3,12 @@ import ActionButton from "./actionButton.ts";
 import "../styles/terminal.css";
 import plusUrl from "../../public/plus.svg";
 import Link, {Relationship} from "./link.ts";
+import Group from "./group.ts";
 
 export class TerminalButtonAdd extends ActionButton {
-    constructor(parent: Station) {
+    constructor(parent: Station, self: Terminal) {
         const actionItems = document.createElement("ul");
-        actionItems.classList.add("action_items", "bottom");
+        actionItems.classList.add("action_items", "left");
 
         actionItems.appendChild(document.createElement("li").appendChild(
             new ActionButton("Sibling", "terminal-sibling", ["add_terminal_button"], () => {
@@ -16,7 +17,8 @@ export class TerminalButtonAdd extends ActionButton {
             }).button));
         actionItems.appendChild(document.createElement("li").appendChild(
             new ActionButton("Dependant", "terminal-dependant", ["add_terminal_button"], () => {
-
+                const newGroup = new Group(`group-${parent.label}`, "New Group");
+                new Link(self, newGroup, Relationship.DEPENDANT);
             }).button));
 
         const plus = document.createElement("img");
@@ -50,7 +52,7 @@ export default class Terminal {
 
     public render() {
         this._html.innerHTML = "";
-        this._html.classList.add("terminal");
+        this._html.classList.add("terminal_container");
 
         const labelElement = document.createElement("input");
         labelElement.value = this.label;
@@ -59,9 +61,17 @@ export default class Terminal {
         const inputElement = document.createElement("input");
         inputElement.classList.add("terminal_input");
 
-        this._html.appendChild(labelElement);
-        this._html.appendChild(new TerminalButtonAdd(this._prevStation).button);
-        this._html.appendChild(inputElement);
+        const terminalElement = document.createElement("div");
+        terminalElement.classList.add("terminal");
+
+
+        terminalElement.appendChild(labelElement);
+        terminalElement.appendChild(new TerminalButtonAdd(this._prevStation, this).button);
+        terminalElement.appendChild(inputElement);
+
+        this._html.appendChild(terminalElement);
+
+        this._links.forEach(link => this._html.appendChild(link.html));
     }
 
     public rerender() {
@@ -97,5 +107,6 @@ export default class Terminal {
             this._links.push(link);
         }
         this.rerender();
+        this.prevStation.groupOwner.rerender();
     }
 }

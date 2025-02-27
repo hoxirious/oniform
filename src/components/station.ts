@@ -59,7 +59,7 @@ export default class Station {
 
     render() {
         this.#html.innerHTML = "";
-        this.#html.classList.add("container");
+        this.#html.classList.add("station_container");
 
         const station = document.createElement("div");
         station.classList.add("station");
@@ -105,6 +105,10 @@ export default class Station {
 
     get nextTerminals(): Terminal[] {
         return this.#nextTerminals;
+    }
+
+    get groupOwner(): Group {
+        return this.#groupOwner;
     }
 
     addTerminal(terminal: Terminal) {

@@ -10,7 +10,7 @@ export enum Relationship {
 
 export default class Link {
     constructor(
-        private _left: Station,
+        private _left: Station | Terminal,
         private _right: Station | Group,
         private _relationship: Relationship,
         private _html: HTMLDivElement = document.createElement("div")

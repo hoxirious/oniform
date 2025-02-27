@@ -1,0 +1,4 @@
+.omiform {
+    display: flex;
+    flex-direction: column;
+}

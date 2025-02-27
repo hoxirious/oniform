@@ -1,4 +1,5 @@
 import Group, {GroupButtonAdd} from "./components/group.ts";
+import "./styles/oniform.css";
 
 export default class Oniform {
     static instance = new Oniform([]);
