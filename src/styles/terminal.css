@@ -5,12 +5,23 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-end;
+    gap: 1rem;
+    margin: 1rem;
 }
 
 .terminal {
     display: flex;
     align-items: center;
     justify-content: end;
+    position: relative;
+}
+
+.terminal_label {
+    font-size: 1rem;
+    position: absolute;
+    top: -1rem;
+    left: 3rem;
+    width: 100%;
 }
 
 .terminal_input {

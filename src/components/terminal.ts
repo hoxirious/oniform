@@ -2,7 +2,7 @@ import Station from "./station.ts";
 import ActionButton from "./actionButton.ts";
 import "../styles/terminal.css";
 import plusUrl from "../../public/plus.svg";
-import Link from "./link.ts";
+import Link, {Relationship} from "./link.ts";
 
 export class TerminalButtonAdd extends ActionButton {
     constructor(parent: Station) {
@@ -11,13 +11,12 @@ export class TerminalButtonAdd extends ActionButton {
 
         actionItems.appendChild(document.createElement("li").appendChild(
             new ActionButton("Sibling", "terminal-sibling", ["add_terminal_button"], () => {
-                parent.addTerminal(new Terminal("", parent));
+                parent.addTerminal(new Terminal(parent));
                 parent.rerender();
             }).button));
         actionItems.appendChild(document.createElement("li").appendChild(
             new ActionButton("Dependant", "terminal-dependant", ["add_terminal_button"], () => {
-                parent.addTerminal(new Terminal("", parent));
-                parent.rerender();
+
             }).button));
 
         const plus = document.createElement("img");
@@ -40,18 +39,34 @@ function createSubActionItems(): HTMLUListElement {
 
 export default class Terminal {
     constructor(
-        private _label: string,
         private _prevStation: Station,
+        private _label: string = "New Terminal",
+        private _root: Terminal = this,
         private _links: Link[] = [],
         private _html: HTMLDivElement = document.createElement("div")
     ) {
+        this.render();
+    }
+
+    public render() {
+        this._html.innerHTML = "";
         this._html.classList.add("terminal");
+
+        const labelElement = document.createElement("input");
+        labelElement.value = this.label;
+        labelElement.classList.add("terminal_label");
+
         const inputElement = document.createElement("input");
-        inputElement.value = this.label;
         inputElement.classList.add("terminal_input");
 
-        this._html.appendChild(new TerminalButtonAdd(_prevStation).button);
+        this._html.appendChild(labelElement);
+        this._html.appendChild(new TerminalButtonAdd(this._prevStation).button);
         this._html.appendChild(inputElement);
+    }
+
+    public rerender() {
+        this._html.innerHTML = "";
+        this.render();
     }
 
     get label(): string {
@@ -62,11 +77,25 @@ export default class Terminal {
         return this._html;
     }
 
+    get root(): Terminal {
+        return this._root;
+    }
+
     get prevStation(): Station {
         return this._prevStation;
     }
 
     public addLink(link: Link) {
-        this._links.push(link);
+        if (link.relationship === Relationship.DEPENDANT) {
+            const siblingIndex = this._links.findIndex(l => l.relationship === Relationship.SIBLING);
+            if (siblingIndex !== -1) {
+                this._links.splice(siblingIndex, 0, link);
+            } else {
+                this._links.push(link);
+            }
+        } else {
+            this._links.push(link);
+        }
+        this.rerender();
     }
 }
