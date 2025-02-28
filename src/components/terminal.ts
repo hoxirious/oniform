@@ -141,8 +141,8 @@ export default class Terminal {
         buttons.appendChild(deleteButton);
         buttons.appendChild(addButton);
         buttons.appendChild(collapseButton);
+        buttons.appendChild(labelElement);
 
-        terminalElement.appendChild(labelElement);
         terminalElement.appendChild(buttons);
         terminalElement.appendChild(inputElement);
 

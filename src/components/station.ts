@@ -24,6 +24,7 @@ export class StationButtonAdd extends ActionButton {
         else {
             const actionItems = document.createElement("ul");
             actionItems.classList.add("action_items");
+
             const siblingButton = new ActionButton("Sibling", "station-sibling", ["add_station_button"], () => {
                 const newStation = new Station(group);
                 group.addStation(newStation);
@@ -146,7 +147,6 @@ export default class Station {
         const labelElement = document.createElement("input");
         labelElement.value = this._label;
         labelElement.classList.add("station_label");
-        station.appendChild(labelElement);
 
         const buttons = document.createElement("div");
         buttons.classList.add("buttons");
@@ -156,7 +156,7 @@ export default class Station {
         buttons.appendChild(buttonDelete);
         buttons.appendChild(buttonAdd);
         buttons.appendChild(buttonCollapse);
-
+        buttons.appendChild(labelElement);
 
         station.appendChild(buttons);
 

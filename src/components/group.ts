@@ -78,13 +78,13 @@ export default class Group {
                 buttons.appendChild(addButton.button);
             }
         }
-
-        this.html.appendChild(buttons);
-
         const inputElement = document.createElement("input");
         inputElement.value = this._label;
         inputElement.classList.add("group_label");
-        group.appendChild(inputElement);
+        buttons.appendChild(inputElement);
+
+        this.html.appendChild(buttons);
+
 
         const stationDiv = document.createElement("div");
         stationDiv.classList.add("stations");
