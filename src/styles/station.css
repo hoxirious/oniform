@@ -6,6 +6,10 @@
     width: 30rem;
 }
 
+.station_container .buttons {
+    margin: 0 0.25rem;
+}
+
 .station {
     display: flex;
     align-items: center;

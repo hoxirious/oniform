@@ -2,6 +2,8 @@ import Terminal from "./terminal.ts";
 import ActionButton from "./actionButton.ts";
 import "../styles/station.css";
 import plusUrl from "../../public/plus.svg";
+import chevronDownUrl from "../../public/chevron-down.svg";
+import chevronUpUrl from "../../public/chevron-up.svg";
 import Group from "./group.ts";
 import Link, { Relationship } from "./link.ts";
 
@@ -31,6 +33,37 @@ export class StationButtonAdd extends ActionButton {
         }, true, actionItems);
     }
 }
+
+export class StationButtonCollapse extends ActionButton {
+    constructor(self: Station) {
+        const chevronDown = document.createElement("img");
+        chevronDown.src = chevronDownUrl as string;
+        chevronDown.alt = "Collapse All";
+
+        const chevronUp = document.createElement("img");
+        chevronUp.src = chevronUpUrl as string;
+        chevronUp.alt = "Expand All";
+
+        super(chevronDown, "collapse-stations", ["icon"], () => {
+            const links = self.html.getElementsByClassName(`link ${Relationship.DEPENDANT}`);
+            for (let i = 0; i < links.length; i++) {
+                links[i].classList.toggle("collapse");
+            }
+
+            const terminals = self.html.getElementsByClassName("terminals");
+            terminals[0].classList.toggle("collapse");
+
+            if ((terminals.length > 0 && terminals[0].classList.contains("collapse")) ||
+                (links.length > 0 && links[0].classList.contains("collapse"))) {
+                this.button.replaceChild(chevronUp, this.button.firstChild);
+            }
+            else {
+                this.button.replaceChild(chevronDown, this.button.firstChild);
+            }
+        }, true);
+    }
+}
+
 
 function createListItem(button: HTMLButtonElement): HTMLLIElement {
     const listItem = document.createElement("li");
@@ -75,8 +108,14 @@ export default class Station {
         labelElement.classList.add("station_label");
         station.appendChild(labelElement);
 
+        const buttons = document.createElement("div");
+        buttons.classList.add("buttons");
+        const buttonCollapse = new StationButtonCollapse(this).button;
+        buttons.appendChild(buttonCollapse);
         const buttonAdd = new StationButtonAdd(this._groupOwner, this).button;
-        station.appendChild(buttonAdd);
+        buttons.appendChild(buttonAdd);
+
+        station.appendChild(buttons);
 
         const textareaElement = document.createElement("textarea");
         textareaElement.classList.add("station_textarea");

@@ -50,6 +50,7 @@
     height: 2rem;
     padding: 0.25rem;
     background: none;
+    margin: 0;
 }
 
 .action-button.icon:hover {
@@ -102,4 +103,3 @@
     display: flex;
     flex-direction: column;
 }
-
