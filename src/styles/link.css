@@ -1,4 +1,7 @@
 .link {
+    border-left: 0.15rem solid #ff9898;
+    border-bottom-left-radius: 1rem;
+    border-left-style: groove;
 }
 
 .link.dependant {

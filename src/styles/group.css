@@ -1,5 +1,6 @@
 .group_container {
     margin-top: 1rem;
+    padding-left: 1rem;
 }
 
 .group_container .buttons {
@@ -11,6 +12,7 @@
     border-width: 0.1rem;
     border-style: dashed;
     border-radius: 0.5rem;
+    border-color: rgba(224, 224, 224, 0.5);
     min-width: 35rem;
     min-height: 15rem;
     width: fit-content;
@@ -20,7 +22,7 @@
     display: flex;
     flex-direction: column;
     background-color: rgb(23, 23, 23);
-    box-shadow: 2px 5px 8px rgba(169, 169, 169, 0.53);
+    box-shadow: 2px 3px 5px 2px rgba(169, 169, 169, 0.3);
 }
 
 .group_label {

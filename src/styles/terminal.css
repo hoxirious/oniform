@@ -6,26 +6,28 @@
     justify-content: flex-end;
     align-items: flex-end;
     gap: 1rem;
-    margin-top: 1rem;
+    margin-left: 1rem;
+    border-left: 0.15rem solid #cade8d;
+    border-bottom-left-radius: 1rem;
 }
 
 .terminal_container {
     display: flex;
     flex-direction: column;
-    width: 95%;
+    width: 100%;
     position: relative;
     padding-left: 1rem;
 }
 
-.terminal_container:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 95%;
-    width: 0.15rem;
-    background-color: #ff9898;
-}
+/*.terminal_container:after {*/
+/*    content: "";*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    height: 95%;*/
+/*    width: 0.15rem;*/
+/*    background-color: #ff9898;*/
+/*}*/
 
 .terminal {
     display: flex;
@@ -41,7 +43,7 @@
 }
 
 .terminal_input {
-    width: 100%;
+    width: 30rem;
     height: 40px;
     padding: 10px;
     border: 1px solid #ccc;

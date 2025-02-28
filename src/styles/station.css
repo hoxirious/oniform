@@ -9,22 +9,23 @@
 .station_container {
     display: flex;
     flex-direction: column;
-    width: 30rem;
+    min-width: 30rem;
+    width: fit-content;
     margin-top: 1rem;
     margin-bottom: 1rem;
     padding-left: 1rem;
     position: relative;
 }
 
-.station_container:after{
-    content: "";
-    position: absolute;
-    top: 0.25rem;
-    left: 0;
-    height: 100%;
-    width: 0.15rem;
-    background-color: #cade8d;
-}
+/*.station_container:after{*/
+/*    content: "";*/
+/*    position: absolute;*/
+/*    top: 0.25rem;*/
+/*    left: 0;*/
+/*    height: 100%;*/
+/*    width: 0.15rem;*/
+/*    background-color: #cade8d;*/
+/*}*/
 
 .station {
     position: relative;
@@ -36,13 +37,13 @@
 }
 
 .station_textarea {
-    width: 100%;
+    min-width: 30rem;
     min-height: 40px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: monospace;
     font-size: 14px;
-    resize: both;
+    resize: vertical;
     overflow: auto;
 }
