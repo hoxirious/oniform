@@ -6,14 +6,25 @@ import Link, {Relationship} from "./link.ts";
 import Group from "./group.ts";
 import chevronDownUrl from "../../public/chevron-down.svg";
 import chevronUpUrl from "../../public/chevron-up.svg";
+import {generateGUID} from "../common/utility.ts";
 
 export class TerminalButtonAdd extends ActionButton {
-    constructor(parent: Station, self: Terminal) {
-        const actionItems = createActionItems(parent, self);
-        const plus = createPlusIcon();
-        super(plus, "new-terminal", ["icon"], () => {
-            actionItems.classList.toggle("show");
-        }, true, actionItems);
+    constructor(parent: Station, self?: Terminal) {
+        if(!self) {
+            super("New Terminal", "new-terminal", ["button"], () => {
+                    parent.addTerminal(new Terminal(parent));
+                    parent.rerender();
+                }
+            );
+        }
+        else
+        {
+            const actionItems = createActionItems(parent, self);
+            const plus = createPlusIcon();
+            super(plus, "new-terminal", ["icon"], () => {
+                actionItems.classList.toggle("show");
+            }, true, actionItems);
+        }
     }
 }
 
@@ -34,10 +45,10 @@ export class TerminalButtonCollapse extends ActionButton {
             }
 
             if (links.length > 0 && links[0].classList.contains("collapse")) {
-                this.button.replaceChild(chevronUp, this.button.firstChild);
+                this.button.replaceChild(chevronUp, this.button.firstChild!);
             }
             else {
-                this.button.replaceChild(chevronDown, this.button.firstChild);
+                this.button.replaceChild(chevronDown, this.button.firstChild!);
             }
         }, true);
     }
@@ -82,7 +93,8 @@ export default class Terminal {
         private _label: string = "New Terminal",
         private _root: Terminal = this,
         private _links: Link[] = [],
-        private _html: HTMLDivElement = document.createElement("div")
+        private _html: HTMLDivElement = document.createElement("div"),
+        private _id: string = `terminal-${generateGUID()}`
     ) {
         this.render();
     }
@@ -90,6 +102,7 @@ export default class Terminal {
     public render() {
         this._html.innerHTML = "";
         this._html.classList.add("terminal_container");
+        this._html.id = this._id;
 
         const terminalElement = this.createTerminalElement();
         this._html.appendChild(terminalElement);

@@ -31,7 +31,7 @@ export default class Oniform {
 
     rerender() {
         const app = document.getElementById("app");
-        app.innerHTML = "";
-        app.appendChild(this.render());
+        app!.innerHTML = "";
+        app!.appendChild(this.render());
     }
 }

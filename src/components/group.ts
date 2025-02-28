@@ -1,13 +1,14 @@
-import Station from "./station.ts";
+import Station, {StationButtonAdd} from "./station.ts";
 import '../styles/group.css';
 import ActionButton from "./actionButton.ts";
 import Oniform from "./oniform.ts";
 import Link from "./link.ts";
+import {generateGUID} from "../common/utility.ts";
 
 export class GroupButtonAdd extends ActionButton {
     constructor(parent: Group[]) {
         super("New Group", "new-group", ["button"], () => {
-            const newGroup = new Group(`group-${parent.length}`, "New Group");
+            const newGroup = new Group("New Group");
             parent.push(newGroup);
             Oniform.instance.rerender();
         });
@@ -18,12 +19,12 @@ export default class Group {
     private readonly _html: HTMLDivElement = document.createElement("div");
 
     constructor(
-        private readonly _id: string,
         private readonly _label: string,
-        private readonly _stations: Station[] = [new Station(this)],
+        private readonly _stations: Station[] = [],
         private readonly _scoreExpression: string = "",
         private _score: number = 0,
-        private readonly _links: Link[] = []
+        private readonly _links: Link[] = [],
+        private readonly _id: string = `group-${generateGUID()}`
     ) {
         this.render();
     }
@@ -38,6 +39,9 @@ export default class Group {
         this._html.appendChild(inputElement);
 
         const stationDiv = document.createElement("div");
+        if(this._stations.length == 0) {
+            this._html.appendChild(new StationButtonAdd(this).button);
+        }
         this._stations.forEach(station => stationDiv.appendChild(station.html));
         this._html.appendChild(stationDiv);
     }
@@ -49,6 +53,7 @@ export default class Group {
 
     addStation(station: Station) {
         this._stations.push(station);
+        this.rerender();
     }
 
     get id(): string {
