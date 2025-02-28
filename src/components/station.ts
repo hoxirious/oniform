@@ -4,6 +4,7 @@ import "../styles/station.css";
 import plusUrl from "../../public/plus.svg";
 import chevronDownUrl from "../../public/chevron-down.svg";
 import chevronUpUrl from "../../public/chevron-up.svg";
+import minusUrl from "../../public/minus.svg";
 import Group from "./group.ts";
 import Link, { Relationship } from "./link.ts";
 import {generateGUID} from "../common/utility.ts";
@@ -15,22 +16,22 @@ export class StationButtonAdd extends ActionButton {
         plus.alt = "Plus";
 
         if (!self) {
-            super(plus, "new-station", ["icon"], () => {
+            super("New Station", "new-station", ["button"], () => {
                 const newStation = new Station(group);
                 group.addStation(newStation);
-            });
+            }, true, undefined, "New Station");
         }
         else {
             const actionItems = document.createElement("ul");
             actionItems.classList.add("action_items");
             const siblingButton = new ActionButton("Sibling", "station-sibling", ["add_station_button"], () => {
-                const newStation = new Station(group, self);
-                new Link(self, newStation, Relationship.SIBLING);
-            }).button;
-            const dependantButton = new ActionButton("Dependant", "station-dependant", ["add_station_button"], () => {
                 const newStation = new Station(group);
-                new Link(self, newStation, Relationship.DEPENDANT);
-            }).button;
+                group.addStation(newStation);
+            }, true, undefined, "New Station").button;
+            const dependantButton = new ActionButton("Dependant", "station-dependant", ["add_station_button"], () => {
+                const newGroup = new Group("New Group");
+                new Link(self, newGroup, Relationship.DEPENDANT);
+            }, true, undefined, "New Dependant Station").button;
 
             actionItems.appendChild(createListItem(siblingButton));
             actionItems.appendChild(createListItem(dependantButton));
@@ -38,7 +39,7 @@ export class StationButtonAdd extends ActionButton {
 
             super(plus, "new-station", ["icon"], () => {
                 actionItems.classList.toggle("show");
-            }, true, actionItems);
+            }, true, actionItems, "New Station");
         }
     }
 }
@@ -69,7 +70,33 @@ export class StationButtonCollapse extends ActionButton {
             else {
                 this.button.replaceChild(chevronDown, this.button.firstChild!);
             }
-        }, true);
+        }, true, undefined, "Collapse Dependants");
+    }
+}
+
+export class StationButtonDelete extends ActionButton {
+    constructor(self: Station) {
+        const minus = document.createElement("img");
+        minus.src = minusUrl as string;
+        minus.alt = "Delete";
+
+        super(minus, "delete-station", ["icon"], () => {
+            if(self.html.parentElement && self.html.parentElement.classList.contains("link")) {
+                console.log(self.links);
+                const toDeleteLinkIndex = self.root.links.findIndex(link => link.id === self.html.parentElement?.id);
+                if(toDeleteLinkIndex !== -1) {
+                    self.root.links[toDeleteLinkIndex].html.remove();
+                    self.root.links.splice(toDeleteLinkIndex, 1);
+                    self.root.groupOwner.rerender();
+                }
+                console.log("Contains Link")
+            }
+            else {
+                console.log("Does not contain Link");
+                self.html.remove();
+                self.groupOwner.deleteStation(self);
+            }
+        }, true, undefined, "Delete Station");
     }
 }
 
@@ -106,7 +133,6 @@ export default class Station {
         this._html = html;
         this._id = id;
         this.render();
-        this._groupOwner.addStation(this);
     }
 
     render() {
@@ -125,9 +151,12 @@ export default class Station {
         const buttons = document.createElement("div");
         buttons.classList.add("buttons");
         const buttonCollapse = new StationButtonCollapse(this).button;
-        buttons.appendChild(buttonCollapse);
         const buttonAdd = new StationButtonAdd(this._groupOwner, this).button;
+        const buttonDelete = new StationButtonDelete(this).button;
+        buttons.appendChild(buttonDelete);
         buttons.appendChild(buttonAdd);
+        buttons.appendChild(buttonCollapse);
+
 
         station.appendChild(buttons);
 
@@ -138,7 +167,10 @@ export default class Station {
         this._html.appendChild(station);
         if(this._nextTerminals.length == 0)
         {
-            station.appendChild(new TerminalButtonAdd(this).button);
+            const terminalElement = document.createElement("div");
+            terminalElement.classList.add("terminal");
+            terminalElement.appendChild(new TerminalButtonAdd(this).button);
+            this._html.appendChild(terminalElement);
         }
         else  {
             const terminals = document.createElement("div");
@@ -165,6 +197,10 @@ export default class Station {
         return this._html;
     }
 
+    get id(): string {
+        return this._id;
+    }
+
     get nextTerminals(): Terminal[] {
         return this._nextTerminals;
     }
@@ -173,8 +209,18 @@ export default class Station {
         return this._groupOwner;
     }
 
+    get links(): Link[] {
+        return this._links;
+    }
+
     addTerminal(terminal: Terminal) {
         this._nextTerminals.push(terminal);
+    }
+
+    deleteTerminal(terminal: Terminal) {
+        const terminalIndex = this._nextTerminals.findIndex(t => t.id === terminal.id);
+        this._nextTerminals.splice(terminalIndex, 1);
+        this.rerender();
     }
 
     addLink(link: Link) {

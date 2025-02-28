@@ -52,7 +52,17 @@ export default class Group {
     }
 
     addStation(station: Station) {
+        console.log("Before add", this._stations.length);
         this._stations.push(station);
+        console.log("After add", this._stations.length);
+        this.rerender();
+    }
+
+    deleteStation(station: Station) {
+        console.log("Before delete", this._stations.length);
+        const stationIndex = this._stations.findIndex(s => s.id === station.id);
+        this._stations.splice(stationIndex, 1);
+        console.log("After delete", stationIndex, this._stations.length);
         this.rerender();
     }
 

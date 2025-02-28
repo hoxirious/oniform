@@ -13,7 +13,18 @@
     display: flex;
     flex-direction: column;
     width: 80%;
+    /*position: relative;*/
 }
+
+/*.terminal_container:after {*/
+/*    content: "";*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    height: 95%;*/
+/*    width: 0.15rem;*/
+/*    background-color: #ff9898;*/
+/*}*/
 
 .terminal {
     display: flex;

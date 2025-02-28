@@ -2,6 +2,7 @@ import Station from "./station.ts";
 import ActionButton from "./actionButton.ts";
 import "../styles/terminal.css";
 import plusUrl from "../../public/plus.svg";
+import minusUrl from "../../public/minus.svg";
 import Link, {Relationship} from "./link.ts";
 import Group from "./group.ts";
 import chevronDownUrl from "../../public/chevron-down.svg";
@@ -10,20 +11,23 @@ import {generateGUID} from "../common/utility.ts";
 
 export class TerminalButtonAdd extends ActionButton {
     constructor(parent: Station, self?: Terminal) {
+        const plus = createPlusIcon();
         if(!self) {
             super("New Terminal", "new-terminal", ["button"], () => {
                     parent.addTerminal(new Terminal(parent));
                     parent.rerender();
-                }
+                },
+                true,
+                undefined,
+                "New Terminal"
             );
         }
         else
         {
             const actionItems = createActionItems(parent, self);
-            const plus = createPlusIcon();
             super(plus, "new-terminal", ["icon"], () => {
                 actionItems.classList.toggle("show");
-            }, true, actionItems);
+            }, true, actionItems, "New Terminal");
         }
     }
 }
@@ -50,7 +54,19 @@ export class TerminalButtonCollapse extends ActionButton {
             else {
                 this.button.replaceChild(chevronDown, this.button.firstChild!);
             }
-        }, true);
+        }, true, undefined, "Collapse Dependants");
+    }
+}
+
+export class TerminalButtonDelete extends ActionButton {
+    constructor(parent: Station, self: Terminal) {
+        const minus = document.createElement("img");
+        minus.src = minusUrl as string;
+        minus.alt = "Delete";
+
+        super(minus, "delete-terminal", ["icon"], () => {
+            parent.deleteTerminal(self);
+        }, true, undefined, "Delete Terminal");
     }
 }
 
@@ -64,7 +80,7 @@ function createActionItems(parent: Station, self: Terminal): HTMLUListElement {
     }).button;
 
     const dependantButton = new ActionButton("Dependant", "terminal-dependant", ["add_terminal_button"], () => {
-        const newGroup = new Group(`group-${parent.label}`, "New Group");
+        const newGroup = new Group("New Group");
         new Link(self, newGroup, Relationship.DEPENDANT);
     }).button;
 
@@ -119,10 +135,12 @@ export default class Terminal {
 
         const buttons = document.createElement("div");
         buttons.classList.add("buttons");
+        const deleteButton = new TerminalButtonDelete(this._prevStation, this).button;
         const collapseButton = new TerminalButtonCollapse(this).button;
         const addButton = new TerminalButtonAdd(this._prevStation, this).button;
-        buttons.appendChild(collapseButton);
+        buttons.appendChild(deleteButton);
         buttons.appendChild(addButton);
+        buttons.appendChild(collapseButton);
 
         terminalElement.appendChild(labelElement);
         terminalElement.appendChild(buttons);
@@ -163,6 +181,10 @@ export default class Terminal {
 
     get prevStation(): Station {
         return this._prevStation;
+    }
+
+    get id(): string {
+        return this._id;
     }
 
     public addLink(link: Link) {

@@ -12,12 +12,15 @@ export default class ActionButton {
             this._actionItems?.classList.add("show");
         },
         private readonly _isClicked: boolean = true,
-        actionItems?: HTMLUListElement
+        actionItems?: HTMLUListElement,
+        tooltip?: string
     ) {
         this._button = document.createElement("button");
         this._button.type = "button";
         this._button.classList.add("action-button", ...this._class);
         this._button.id = this._id;
+        if(tooltip)
+            this._button.title = tooltip;
         this._button.appendChild(typeof this._label === "string" ? document.createTextNode(this._label) : this._label);
 
         if (actionItems) {
