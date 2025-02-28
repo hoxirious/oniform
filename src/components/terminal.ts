@@ -80,7 +80,7 @@ function createActionItems(parent: Station, self: Terminal): HTMLUListElement {
     }).button;
 
     const dependantButton = new ActionButton("Dependant", "terminal-dependant", ["add_terminal_button"], () => {
-        const newGroup = new Group("New Group", [], self);
+        const newGroup = new Group(self);
         new Link(self, newGroup, Relationship.DEPENDANT);
     }).button;
 
@@ -106,7 +106,7 @@ function createPlusIcon(): HTMLImageElement {
 export default class Terminal {
     constructor(
         private _prevStation: Station,
-        private _label: string = "New Terminal",
+        private _label: string = "T1",
         private _root: Terminal = this,
         private _links: Link[] = [],
         private _html: HTMLDivElement = document.createElement("div"),
@@ -198,14 +198,16 @@ export default class Terminal {
         this.rerender();
     }
 
+    findGroupIndex(group: Group): string {
+        const index = this.links.findIndex(g => g.right.id === group.id);
+        if (index == -1) return '0';
+        return (index+1).toString();
+    }
+
     public addLink(link: Link) {
-        if (link.relationship === Relationship.DEPENDANT) {
-            const siblingIndex = this._links.findIndex(l => l.relationship === Relationship.SIBLING);
-            if (siblingIndex !== -1) {
-                this._links.splice(siblingIndex, 0, link);
-            } else {
-                this._links.push(link);
-            }
+        const siblingIndex = this._links.findIndex(l => l.relationship === Relationship.SIBLING);
+        if (siblingIndex !== -1) {
+            this._links.splice(siblingIndex, 0, link);
         } else {
             this._links.push(link);
         }

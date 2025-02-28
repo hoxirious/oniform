@@ -20,6 +20,7 @@ export default class Oniform {
         `;
 
         this._groups.forEach(group => {
+            group.rerender();
             const groupDiv = group.html;
             form.appendChild(groupDiv);
         });
@@ -37,8 +38,14 @@ export default class Oniform {
         app!.appendChild(this.render());
     }
 
-    addGroup(group: Group) {
-        this._groups.push(group);
+    addGroup(prevGroup?: Group) {
+        if (prevGroup) {
+            const prevGroupIndex = this._groups.findIndex(g => g.id === prevGroup.id) + 1;
+            this._groups.splice(prevGroupIndex, 0, new Group(this, `${prevGroupIndex + 1}`));
+        }
+        else {
+            this._groups.push(new Group(this));
+        }
         this.rerender();
     }
 
@@ -46,5 +53,9 @@ export default class Oniform {
         const groupIndex = this._groups.findIndex(g => g.id === group.id);
         this._groups.splice(groupIndex, 1);
         this.rerender();
+    }
+
+    findGroupIndex(group: Group): string {
+        return (this._groups.findIndex(g => g.id === group.id) + 1).toString();
     }
 }

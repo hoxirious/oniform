@@ -26,10 +26,9 @@ export default class Link {
         this._html.id = this._id;
 
         this._html.appendChild(this._right.html);
-        if (this._relationship === Relationship.SIBLING) {
-            this._left.root.addLink(this);
-        } else if (this._relationship === Relationship.DEPENDANT) {
+        if (this._relationship === Relationship.DEPENDANT) {
             this._left.addLink(this);
+            this._right.rerender();
         }
     }
 

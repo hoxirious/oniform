@@ -12,8 +12,7 @@ export class GroupButtonAdd extends ActionButton {
     constructor(self?: Group) {
         if(!self) {
             super("New Group", "new-group", ["button"], () => {
-                const newGroup = new Group("New Group", [], Oniform.instance);
-                Oniform.instance.addGroup(newGroup);
+                Oniform.instance.addGroup();
             });
         }
         else {
@@ -22,8 +21,7 @@ export class GroupButtonAdd extends ActionButton {
             plus.alt = "Plus";
 
             super(plus, "new-group", ["icon"], () => {
-                const newGroup = new Group("New Group", [], Oniform.instance);
-                Oniform.instance.addGroup(newGroup);
+                Oniform.instance.addGroup(self);
             });
         }
     }
@@ -46,9 +44,9 @@ export default class Group {
     private readonly _html: HTMLDivElement = document.createElement("div");
 
     constructor(
-        private readonly _label: string,
-        private readonly _stations: Station[] = [],
         private readonly _parent?: Oniform|Station|Terminal,
+        private readonly _label: string = "1",
+        private readonly _stations: Station[] = [],
         private readonly _scoreExpression: string = "",
         private _score: number = 0,
         private readonly _links: Link[] = [],
@@ -69,6 +67,10 @@ export default class Group {
         buttons.classList.add("buttons");
 
 
+        const inputElement = document.createElement("input");
+        inputElement.value = this._label;
+        inputElement.classList.add("group_label");
+
         if (this._parent) {
             const deleteButton = new GroupButtonDelete(this._parent, this);
             buttons.appendChild(deleteButton.button);
@@ -77,10 +79,8 @@ export default class Group {
                 const addButton = new GroupButtonAdd(this);
                 buttons.appendChild(addButton.button);
             }
+            inputElement.value = this._parent.findGroupIndex(this);
         }
-        const inputElement = document.createElement("input");
-        inputElement.value = this._label;
-        inputElement.classList.add("group_label");
         buttons.appendChild(inputElement);
 
         this.html.appendChild(buttons);
@@ -91,7 +91,10 @@ export default class Group {
         if(this._stations.length == 0) {
             group.appendChild(new StationButtonAdd(this).button);
         }
-        this._stations.forEach(station => stationDiv.appendChild(station.html));
+        this._stations.forEach(station => {
+            station.rerender();
+            stationDiv.appendChild(station.html)
+        });
         group.appendChild(stationDiv);
 
         this._html.appendChild(group);
@@ -102,8 +105,15 @@ export default class Group {
         this.render();
     }
 
-    addStation(station: Station) {
-        this._stations.push(station);
+    addStation(prevStation?: Station) {
+        if(prevStation) {
+            const stationIndex = this._stations.findIndex(s => s.id === prevStation.id) + 1;
+            const station = new Station(this, prevStation, `${stationIndex + 1}`);
+            this._stations.splice(stationIndex, 0, station);
+        }
+        else {
+            this._stations.push(new Station(this));
+        }
         this.rerender();
     }
 
@@ -112,6 +122,14 @@ export default class Group {
         this._stations.splice(stationIndex, 1);
         this.rerender();
     }
+
+    findStationIndex(station: Station): string {
+        const stationIndex = this._stations.findIndex(s => s.id === station.id);
+        if(stationIndex === -1) return '1';
+
+        return (stationIndex + 1).toString();
+    }
+
 
     get id(): string {
         return this._id;
@@ -139,6 +157,10 @@ export default class Group {
 
     get links(): Link[] {
         return this._links;
+    }
+
+    get parent(): Oniform|Station|Terminal|undefined {
+        return this._parent;
     }
 
     addLink(link: Link) {

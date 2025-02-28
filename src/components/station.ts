@@ -17,8 +17,7 @@ export class StationButtonAdd extends ActionButton {
 
         if (!self) {
             super("New Station", "new-station", ["button"], () => {
-                const newStation = new Station(group);
-                group.addStation(newStation);
+                group.addStation();
             }, true, undefined, "New Station");
         }
         else {
@@ -26,11 +25,10 @@ export class StationButtonAdd extends ActionButton {
             actionItems.classList.add("action_items");
 
             const siblingButton = new ActionButton("Sibling", "station-sibling", ["add_station_button"], () => {
-                const newStation = new Station(group);
-                group.addStation(newStation);
+                group.addStation(self);
             }, true, undefined, "New Station").button;
             const dependantButton = new ActionButton("Dependant", "station-dependant", ["add_station_button"], () => {
-                const newGroup = new Group("New Group", [], self);
+                const newGroup = new Group(self);
                 new Link(self, newGroup, Relationship.DEPENDANT);
             }, true, undefined, "New Dependant Station").button;
 
@@ -111,7 +109,7 @@ function createListItem(button: HTMLButtonElement): HTMLLIElement {
 export default class Station {
     private readonly _groupOwner: Group;
     private readonly _root: Station;
-    private readonly _label: string;
+    private _label: string;
     private readonly _nextTerminals: Terminal[];
     private _links: Link[];
     private readonly _html: HTMLDivElement;
@@ -120,7 +118,7 @@ export default class Station {
     constructor(
         groupOwner: Group,
         root: Station = this,
-        label: string = "New Station",
+        label: string = "1",
         nextTerminals: Terminal[] = [new Terminal(this)],
         links: Link[] = [],
         html: HTMLDivElement = document.createElement("div"),
@@ -145,6 +143,11 @@ export default class Station {
         station.classList.add("station");
 
         const labelElement = document.createElement("input");
+        const stationIndex = this.groupOwner.findStationIndex(this);
+
+        if (stationIndex !== this._label) {
+            this._label = stationIndex;
+        }
         labelElement.value = this._label;
         labelElement.classList.add("station_label");
 
@@ -230,14 +233,16 @@ export default class Station {
         this.rerender();
     }
 
+    findGroupIndex(group: Group): string {
+        const index = this.links.findIndex(g => g.right.id === group.id);
+        if (index == -1) return '1';
+        return (index+1).toString();
+    }
+
     addLink(link: Link) {
-        if (link.relationship === Relationship.DEPENDANT) {
-            const siblingIndex = this._links.findIndex(l => l.relationship === Relationship.SIBLING);
-            if (siblingIndex !== -1) {
-                this._links.splice(siblingIndex, 0, link);
-            } else {
-                this._links.push(link);
-            }
+        const siblingIndex = this._links.findIndex(l => l.relationship === Relationship.SIBLING);
+        if (siblingIndex !== -1) {
+            this._links.splice(siblingIndex, 0, link);
         } else {
             this._links.push(link);
         }
