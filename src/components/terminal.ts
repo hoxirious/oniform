@@ -4,6 +4,8 @@ import "../styles/terminal.css";
 import plusUrl from "../../public/plus.svg";
 import Link, {Relationship} from "./link.ts";
 import Group from "./group.ts";
+import chevronDownUrl from "../../public/chevron-down.svg";
+import chevronUpUrl from "../../public/chevron-up.svg";
 
 export class TerminalButtonAdd extends ActionButton {
     constructor(parent: Station, self: Terminal) {
@@ -12,6 +14,32 @@ export class TerminalButtonAdd extends ActionButton {
         super(plus, "new-terminal", ["icon"], () => {
             actionItems.classList.toggle("show");
         }, true, actionItems);
+    }
+}
+
+export class TerminalButtonCollapse extends ActionButton {
+    constructor(self: Terminal) {
+        const chevronDown = document.createElement("img");
+        chevronDown.src = chevronDownUrl as string;
+        chevronDown.alt = "Collapse All";
+
+        const chevronUp = document.createElement("img");
+        chevronUp.src = chevronUpUrl as string;
+        chevronUp.alt = "Expand All";
+
+        super(chevronDown, "collapse-stations", ["icon"], () => {
+            const links = self.html.getElementsByClassName(`link ${Relationship.DEPENDANT}`);
+            for (let i = 0; i < links.length; i++) {
+                links[i].classList.toggle("collapse");
+            }
+
+            if (links.length > 0 && links[0].classList.contains("collapse")) {
+                this.button.replaceChild(chevronUp, this.button.firstChild);
+            }
+            else {
+                this.button.replaceChild(chevronDown, this.button.firstChild);
+            }
+        }, true);
     }
 }
 
@@ -75,10 +103,16 @@ export default class Terminal {
 
         const labelElement = this.createLabelElement();
         const inputElement = this.createInputElement();
+
+        const buttons = document.createElement("div");
+        buttons.classList.add("buttons");
+        const collapseButton = new TerminalButtonCollapse(this).button;
         const addButton = new TerminalButtonAdd(this._prevStation, this).button;
+        buttons.appendChild(collapseButton);
+        buttons.appendChild(addButton);
 
         terminalElement.appendChild(labelElement);
-        terminalElement.appendChild(addButton);
+        terminalElement.appendChild(buttons);
         terminalElement.appendChild(inputElement);
 
         return terminalElement;
