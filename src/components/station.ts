@@ -29,7 +29,7 @@ export class StationButtonAdd extends ActionButton {
                 group.addStation(newStation);
             }, true, undefined, "New Station").button;
             const dependantButton = new ActionButton("Dependant", "station-dependant", ["add_station_button"], () => {
-                const newGroup = new Group("New Group");
+                const newGroup = new Group("New Group", [], self);
                 new Link(self, newGroup, Relationship.DEPENDANT);
             }, true, undefined, "New Dependant Station").button;
 
@@ -220,6 +220,13 @@ export default class Station {
     deleteTerminal(terminal: Terminal) {
         const terminalIndex = this._nextTerminals.findIndex(t => t.id === terminal.id);
         this._nextTerminals.splice(terminalIndex, 1);
+        this.rerender();
+    }
+
+    deleteGroup(group: Group) {
+        const linkIndex = this.links.findIndex(g => g.right.id === group.id);
+        this.links[linkIndex].html.remove();
+        this.links.splice(linkIndex, 1);
         this.rerender();
     }
 

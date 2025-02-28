@@ -80,7 +80,7 @@ function createActionItems(parent: Station, self: Terminal): HTMLUListElement {
     }).button;
 
     const dependantButton = new ActionButton("Dependant", "terminal-dependant", ["add_terminal_button"], () => {
-        const newGroup = new Group("New Group");
+        const newGroup = new Group("New Group", [], self);
         new Link(self, newGroup, Relationship.DEPENDANT);
     }).button;
 
@@ -185,6 +185,17 @@ export default class Terminal {
 
     get id(): string {
         return this._id;
+    }
+
+    get links(): Link[] {
+        return this._links;
+    }
+
+    deleteGroup(group: Group) {
+        const linkIndex = this.links.findIndex(g => g.right.id === group.id);
+        this.links[linkIndex].html.remove();
+        this.links.splice(linkIndex, 1);
+        this.rerender();
     }
 
     public addLink(link: Link) {

@@ -9,7 +9,7 @@ declare global {
 const initForm = () => {
     const app = document.getElementById("app");
     const form = Oniform.instance;
-    app.appendChild(form.render());
+    app!.appendChild(form.render());
     window.oniformInstance = form; // Attach the instance to the window object
 }
 

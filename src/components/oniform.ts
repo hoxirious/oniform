@@ -24,8 +24,10 @@ export default class Oniform {
             form.appendChild(groupDiv);
         });
 
-        const newGroupButton = new GroupButtonAdd(this.groups);
-        form.appendChild(newGroupButton.button);
+        if(this._groups.length === 0) {
+            const newGroupButton = new GroupButtonAdd();
+            form.appendChild(newGroupButton.button);
+        }
         return form;
     }
 
@@ -33,5 +35,16 @@ export default class Oniform {
         const app = document.getElementById("app");
         app!.innerHTML = "";
         app!.appendChild(this.render());
+    }
+
+    addGroup(group: Group) {
+        this._groups.push(group);
+        this.rerender();
+    }
+
+    deleteGroup(group: Group) {
+        const groupIndex = this._groups.findIndex(g => g.id === group.id);
+        this._groups.splice(groupIndex, 1);
+        this.rerender();
     }
 }

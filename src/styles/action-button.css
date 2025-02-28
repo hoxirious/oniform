@@ -2,7 +2,7 @@
 
 .action-button {
     height: 2.5rem;
-    min-width: 1rem;
+    width: fit-content;
     position: relative;
     background-color: rgba(108, 117, 125);
     border: none;

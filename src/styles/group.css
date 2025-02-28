@@ -1,3 +1,12 @@
+.group_container {
+    display: flex;
+    margin-top: 1rem;
+}
+
+.group_container .buttons {
+    margin: 0 0.5rem;
+}
+
 .group {
     border-width: 0.1rem;
     border-style: dashed;
@@ -5,7 +14,6 @@
     width: 35rem;
     height: 24rem;
     padding: 1rem;
-    margin: 1rem;
     position: relative;
     display: flex;
     flex-direction: column;

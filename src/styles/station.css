@@ -18,10 +18,6 @@
 /*    background-color: #cade8d;*/
 /*}*/
 
-.station_container .buttons {
-    margin: 0 0.5rem;
-}
-
 .station {
     display: flex;
     align-items: center;
