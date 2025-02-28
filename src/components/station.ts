@@ -3,7 +3,7 @@ import ActionButton from "./actionButton.ts";
 import "../styles/station.css";
 import plusUrl from "../../public/plus.svg";
 import chevronDownUrl from "../../public/chevron-down.svg";
-import chevronUpUrl from "../../public/chevron-up.svg";
+import chevronRightUrl from "../../public/chevron-right.svg";
 import minusUrl from "../../public/minus.svg";
 import Group from "./group.ts";
 import Link, { Relationship } from "./link.ts";
@@ -51,9 +51,9 @@ export class StationButtonCollapse extends ActionButton {
         chevronDown.src = chevronDownUrl as string;
         chevronDown.alt = "Collapse All";
 
-        const chevronUp = document.createElement("img");
-        chevronUp.src = chevronUpUrl as string;
-        chevronUp.alt = "Expand All";
+        const chevronRight = document.createElement("img");
+        chevronRight.src = chevronRightUrl as string;
+        chevronRight.alt = "Expand All";
 
         super(chevronDown, "collapse-stations", ["icon"], () => {
             const links = self.html.getElementsByClassName(`link ${Relationship.DEPENDANT}`);
@@ -66,7 +66,7 @@ export class StationButtonCollapse extends ActionButton {
 
             if ((terminals.length > 0 && terminals[0].classList.contains("collapse")) ||
                 (links.length > 0 && links[0].classList.contains("collapse"))) {
-                this.button.replaceChild(chevronUp, this.button.firstChild!);
+                this.button.replaceChild(chevronRight, this.button.firstChild!);
             }
             else {
                 this.button.replaceChild(chevronDown, this.button.firstChild!);

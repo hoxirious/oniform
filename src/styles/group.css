@@ -19,9 +19,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    /*resize: both;*/
-    /*overflow: auto;*/
     background-color: rgb(23, 23, 23);
+    box-shadow: 2px 5px 8px rgba(169, 169, 169, 0.53);
 }
 
 .group_label {
