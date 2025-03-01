@@ -6,7 +6,7 @@ import chevronDownUrl from "../../public/chevron-down.svg";
 import chevronRightUrl from "../../public/chevron-right.svg";
 import minusUrl from "../../public/minus.svg";
 import Group from "./group.ts";
-import Link, { Relationship } from "./link.ts";
+import Link, {Relationship} from "./link.ts";
 import {generateGUID} from "../common/utility.ts";
 
 export class StationButtonAdd extends ActionButton {
@@ -30,7 +30,7 @@ export class StationButtonAdd extends ActionButton {
             const dependantButton = new ActionButton("Dependant", "station-dependant", ["add_station_button"], () => {
                 const newGroup = new Group(self);
                 new Link(self, newGroup, Relationship.DEPENDANT);
-            }, true, undefined, "New Dependant Station").button;
+            }, true, undefined, "New Dependant Group").button;
 
             actionItems.appendChild(createListItem(siblingButton));
             actionItems.appendChild(createListItem(dependantButton));
@@ -118,8 +118,8 @@ export default class Station {
     constructor(
         groupOwner: Group,
         root: Station = this,
-        label: string = "1",
-        nextTerminals: Terminal[] = [new Terminal(this)],
+        label: string = `Station ${groupOwner.label}`,
+        nextTerminals: Terminal[] = [],
         links: Link[] = [],
         html: HTMLDivElement = document.createElement("div"),
         id: string = `station-${generateGUID()}`
@@ -144,10 +144,7 @@ export default class Station {
 
         const labelElement = document.createElement("input");
         const stationIndex = this.groupOwner.findStationIndex(this);
-
-        if (stationIndex !== this._label) {
-            this._label = stationIndex;
-        }
+        this._label = `Station ${stationIndex}`;
         labelElement.value = this._label;
         labelElement.classList.add("station_label");
 
@@ -178,7 +175,12 @@ export default class Station {
         else  {
             const terminals = document.createElement("div");
             terminals.classList.add("terminals");
-            this._nextTerminals.forEach(terminal => terminals.appendChild(terminal.html));
+            this._nextTerminals.forEach(terminal =>
+            {
+                terminal.rerender();
+                terminals.appendChild(terminal.html);
+            }
+            );
             this._html.appendChild(terminals);
         }
         this._links.forEach(link => this._html.appendChild(link.html));
@@ -224,6 +226,12 @@ export default class Station {
         const terminalIndex = this._nextTerminals.findIndex(t => t.id === terminal.id);
         this._nextTerminals.splice(terminalIndex, 1);
         this.rerender();
+    }
+
+    findTerminalIndex(terminal: Terminal): string {
+        const terminalIndex = this._nextTerminals.findIndex(t => t.id === terminal.id);
+        if (terminalIndex === -1) return '1';
+        return (terminalIndex + 1).toString();
     }
 
     deleteGroup(group: Group) {

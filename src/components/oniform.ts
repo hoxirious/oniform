@@ -4,11 +4,16 @@ import "../styles/oniform.css";
 export default class Oniform {
     static instance = new Oniform([]);
     private constructor(
-        private _groups: Group[]
+        private _groups: Group[],
+        private _label: string = ""
     ) {}
 
     get groups(): Group[] {
         return this._groups;
+    }
+
+    get label(): string {
+        return this._label;
     }
 
     render() {

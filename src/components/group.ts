@@ -45,7 +45,7 @@ export default class Group {
 
     constructor(
         private readonly _parent?: Oniform|Station|Terminal,
-        private readonly _label: string = "1",
+        private _label: string = "Group 1",
         private readonly _stations: Station[] = [],
         private readonly _scoreExpression: string = "",
         private _score: number = 0,
@@ -66,7 +66,6 @@ export default class Group {
         const buttons = document.createElement("div");
         buttons.classList.add("buttons");
 
-
         const inputElement = document.createElement("input");
         inputElement.value = this._label;
         inputElement.classList.add("group_label");
@@ -79,8 +78,25 @@ export default class Group {
                 const addButton = new GroupButtonAdd(this);
                 buttons.appendChild(addButton.button);
             }
-            inputElement.value = this._parent.findGroupIndex(this);
+            let parentLabel = this._parent.label;
+            let parentSignature = "";
+
+
+            if(this._parent instanceof Station) {
+                parentLabel = this._parent.groupOwner.label;
+                parentSignature = "S";
+            }
+            else if(this._parent instanceof Terminal) {
+                parentLabel = this._parent.prevStation.groupOwner.label;
+                parentSignature = "T";
+            }
+            const parentLabelSplit = parentLabel.split(" ");
+            let parentIndex = parentLabelSplit[parentLabelSplit.length - 1]
+            parentIndex = parentIndex.slice(0, -parentSignature.length);
+            this._label = `Group ${parentIndex ? parentIndex + "." : ""}${this._parent.findGroupIndex(this)}${parentSignature}`;
+            inputElement.value = this._label;
         }
+
         buttons.appendChild(inputElement);
 
         this.html.appendChild(buttons);

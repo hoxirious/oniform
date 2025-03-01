@@ -106,7 +106,7 @@ function createPlusIcon(): HTMLImageElement {
 export default class Terminal {
     constructor(
         private _prevStation: Station,
-        private _label: string = "T1",
+        private _label: string = `Terminal ${_prevStation.label}-1`,
         private _root: Terminal = this,
         private _links: Link[] = [],
         private _html: HTMLDivElement = document.createElement("div"),
@@ -151,7 +151,10 @@ export default class Terminal {
 
     private createLabelElement(): HTMLInputElement {
         const labelElement = document.createElement("input");
-        labelElement.value = this.label;
+        const stationLabelSplit = this._prevStation.label.split(" ");
+        console.log(stationLabelSplit);
+        const stationIndex = stationLabelSplit[stationLabelSplit.length-1];
+        labelElement.value = `Terminal ${stationIndex}-${this.prevStation.findTerminalIndex(this)}`;
         labelElement.classList.add("terminal_label");
         return labelElement;
     }
