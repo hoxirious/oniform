@@ -14,8 +14,7 @@ export class TerminalButtonAdd extends ActionButton {
         const plus = createPlusIcon();
         if(!self) {
             super("New Terminal", "new-terminal", ["button"], () => {
-                    parent.addTerminal(new Terminal(parent));
-                    parent.rerender();
+                    parent.addTerminal();
                 },
                 true,
                 undefined,
@@ -75,7 +74,7 @@ function createActionItems(parent: Station, self: Terminal): HTMLUListElement {
     actionItems.classList.add("action_items");
 
     const siblingButton = new ActionButton("Sibling", "terminal-sibling", ["add_terminal_button"], () => {
-        parent.addTerminal(new Terminal(parent));
+        parent.addTerminal(self);
         parent.rerender();
     }).button;
 
@@ -108,6 +107,7 @@ export default class Terminal {
         private _prevStation: Station,
         private _label: string = `Terminal ${_prevStation.label}-1`,
         private _root: Terminal = this,
+        private _value: string = "",
         private _links: Link[] = [],
         private _html: HTMLDivElement = document.createElement("div"),
         private _id: string = `terminal-${generateGUID()}`
@@ -151,10 +151,10 @@ export default class Terminal {
 
     private createLabelElement(): HTMLInputElement {
         const labelElement = document.createElement("input");
+        labelElement.disabled = true;
         const stationLabelSplit = this._prevStation.label.split(" ");
-        console.log(stationLabelSplit);
         const stationIndex = stationLabelSplit[stationLabelSplit.length-1];
-        labelElement.value = `Terminal ${stationIndex}-${this.prevStation.findTerminalIndex(this)}`;
+        labelElement.value = `Terminal ${stationIndex}-${this.prevStation.findTerminalIndex(this).toString()}`;
         labelElement.classList.add("terminal_label");
         return labelElement;
     }
@@ -162,6 +162,10 @@ export default class Terminal {
     private createInputElement(): HTMLInputElement {
         const inputElement = document.createElement("input");
         inputElement.classList.add("terminal_input");
+        inputElement.value = this._value;
+        inputElement.addEventListener("input", (event) => {
+            this._value = (event.target as HTMLInputElement).value;
+        });
         return inputElement;
     }
 
@@ -201,10 +205,10 @@ export default class Terminal {
         this.rerender();
     }
 
-    findGroupIndex(group: Group): string {
+    findGroupIndex(group: Group): number {
         const index = this.links.findIndex(g => g.right.id === group.id);
-        if (index == -1) return '0';
-        return (index+1).toString();
+        if (index == -1) return 1;
+        return (index+1);
     }
 
     public addLink(link: Link) {

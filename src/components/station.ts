@@ -81,17 +81,14 @@ export class StationButtonDelete extends ActionButton {
 
         super(minus, "delete-station", ["icon"], () => {
             if(self.html.parentElement && self.html.parentElement.classList.contains("link")) {
-                console.log(self.links);
                 const toDeleteLinkIndex = self.root.links.findIndex(link => link.id === self.html.parentElement?.id);
                 if(toDeleteLinkIndex !== -1) {
                     self.root.links[toDeleteLinkIndex].html.remove();
                     self.root.links.splice(toDeleteLinkIndex, 1);
                     self.root.groupOwner.rerender();
                 }
-                console.log("Contains Link")
             }
             else {
-                console.log("Does not contain Link");
                 self.html.remove();
                 self.groupOwner.deleteStation(self);
             }
@@ -107,30 +104,16 @@ function createListItem(button: HTMLButtonElement): HTMLLIElement {
 }
 
 export default class Station {
-    private readonly _groupOwner: Group;
-    private readonly _root: Station;
-    private _label: string;
-    private readonly _nextTerminals: Terminal[];
-    private _links: Link[];
-    private readonly _html: HTMLDivElement;
-    private readonly _id: string;
-
     constructor(
-        groupOwner: Group,
-        root: Station = this,
-        label: string = `Station ${groupOwner.label}`,
-        nextTerminals: Terminal[] = [],
-        links: Link[] = [],
-        html: HTMLDivElement = document.createElement("div"),
-        id: string = `station-${generateGUID()}`
+        private _groupOwner: Group,
+        private _root: Station = this,
+        private _value: string = "",
+        private _label?: string,
+        private _nextTerminals: Terminal[] = [],
+        private _links: Link[] = [],
+        private _html: HTMLDivElement = document.createElement("div"),
+        private _id: string = `station-${generateGUID()}`
     ) {
-        this._groupOwner = groupOwner;
-        this._root = root || this;
-        this._label = label;
-        this._nextTerminals = nextTerminals;
-        this._links = links;
-        this._html = html;
-        this._id = id;
         this.render();
     }
 
@@ -143,11 +126,18 @@ export default class Station {
         station.classList.add("station");
 
         const labelElement = document.createElement("input");
-        const stationIndex = this.groupOwner.findStationIndex(this);
-        this._label = `Station ${stationIndex}`;
+        labelElement.disabled = true;
+        const stationIndex = this.groupOwner.findStationIndex(this).toString();
+        if(!this._label || this._label != `Station ${stationIndex}`)
+            this._label = `Station ${stationIndex}`;
         labelElement.value = this._label;
         labelElement.classList.add("station_label");
 
+        labelElement.addEventListener("input", (event) => {
+            this._label = (event.target as HTMLInputElement).value;
+        });
+
+        // Buttons
         const buttons = document.createElement("div");
         buttons.classList.add("buttons");
         const buttonCollapse = new StationButtonCollapse(this).button;
@@ -162,6 +152,11 @@ export default class Station {
 
         const textareaElement = document.createElement("textarea");
         textareaElement.classList.add("station_textarea");
+        textareaElement.value = this._value;
+        textareaElement.addEventListener("input", (event) => {
+            this._value = (event.target as HTMLTextAreaElement).value;
+        });
+
         station.appendChild(textareaElement);
 
         this._html.appendChild(station);
@@ -194,7 +189,7 @@ export default class Station {
         return this._root;
     }
 
-    get label(): string {
+    get label() {
         return this._label;
     }
 
@@ -218,20 +213,28 @@ export default class Station {
         return this._links;
     }
 
-    addTerminal(terminal: Terminal) {
-        this._nextTerminals.push(terminal);
+    addTerminal(prevTerminal?: Terminal) {
+        if(prevTerminal) {
+            const terminalIndex = this.findTerminalIndex(prevTerminal);
+            const terminal = new Terminal(this);
+            this.nextTerminals.splice(terminalIndex, 0, terminal);
+        }
+        else {
+            this.nextTerminals.push(new Terminal(this));
+        }
+        this.rerender();
     }
 
     deleteTerminal(terminal: Terminal) {
-        const terminalIndex = this._nextTerminals.findIndex(t => t.id === terminal.id);
+        const terminalIndex = this.findTerminalIndex(terminal)-1;
         this._nextTerminals.splice(terminalIndex, 1);
         this.rerender();
     }
 
-    findTerminalIndex(terminal: Terminal): string {
+    findTerminalIndex(terminal: Terminal): number {
         const terminalIndex = this._nextTerminals.findIndex(t => t.id === terminal.id);
-        if (terminalIndex === -1) return '1';
-        return (terminalIndex + 1).toString();
+        if (terminalIndex === -1) return 1;
+        return (terminalIndex + 1);
     }
 
     deleteGroup(group: Group) {
@@ -241,10 +244,10 @@ export default class Station {
         this.rerender();
     }
 
-    findGroupIndex(group: Group): string {
+    findGroupIndex(group: Group): number {
         const index = this.links.findIndex(g => g.right.id === group.id);
-        if (index == -1) return '1';
-        return (index+1).toString();
+        if (index == -1) return 1;
+        return (index+1);
     }
 
     addLink(link: Link) {

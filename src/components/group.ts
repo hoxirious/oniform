@@ -70,6 +70,10 @@ export default class Group {
         inputElement.value = this._label;
         inputElement.classList.add("group_label");
 
+        inputElement.addEventListener("input", (event) => {
+            this._label = (event.target as HTMLInputElement).value;
+        });
+
         if (this._parent) {
             const deleteButton = new GroupButtonDelete(this._parent, this);
             buttons.appendChild(deleteButton.button);
@@ -78,9 +82,9 @@ export default class Group {
                 const addButton = new GroupButtonAdd(this);
                 buttons.appendChild(addButton.button);
             }
+
             let parentLabel = this._parent.label;
             let parentSignature = "";
-
 
             if(this._parent instanceof Station) {
                 parentLabel = this._parent.groupOwner.label;
@@ -92,15 +96,16 @@ export default class Group {
             }
             const parentLabelSplit = parentLabel.split(" ");
             let parentIndex = parentLabelSplit[parentLabelSplit.length - 1]
+            // Remove signature if applicable
             parentIndex = parentIndex.slice(0, -parentSignature.length);
-            this._label = `Group ${parentIndex ? parentIndex + "." : ""}${this._parent.findGroupIndex(this)}${parentSignature}`;
+
+            // Group parentIndex.groupIndex(S/T)
+            this._label = `Group ${parentIndex ? parentIndex + "." : ""}${this._parent.findGroupIndex(this).toString()}${parentSignature}`;
             inputElement.value = this._label;
         }
 
         buttons.appendChild(inputElement);
-
         this.html.appendChild(buttons);
-
 
         const stationDiv = document.createElement("div");
         stationDiv.classList.add("stations");
@@ -123,8 +128,8 @@ export default class Group {
 
     addStation(prevStation?: Station) {
         if(prevStation) {
-            const stationIndex = this._stations.findIndex(s => s.id === prevStation.id) + 1;
-            const station = new Station(this, prevStation, `${stationIndex + 1}`);
+            const stationIndex = this.findStationIndex(prevStation);
+            const station = new Station(this, prevStation, "",`Station ${stationIndex + 1}`);
             this._stations.splice(stationIndex, 0, station);
         }
         else {
@@ -134,16 +139,16 @@ export default class Group {
     }
 
     deleteStation(station: Station) {
-        const stationIndex = this._stations.findIndex(s => s.id === station.id);
+        const stationIndex = this.findStationIndex(station) - 1;
         this._stations.splice(stationIndex, 1);
         this.rerender();
     }
 
-    findStationIndex(station: Station): string {
+    findStationIndex(station: Station): number {
         const stationIndex = this._stations.findIndex(s => s.id === station.id);
-        if(stationIndex === -1) return '1';
+        if(stationIndex === -1) return 1;
 
-        return (stationIndex + 1).toString();
+        return (stationIndex + 1);
     }
 
 
@@ -177,9 +182,5 @@ export default class Group {
 
     get parent(): Oniform|Station|Terminal|undefined {
         return this._parent;
-    }
-
-    addLink(link: Link) {
-        this._links.push(link);
     }
 }

@@ -45,7 +45,7 @@ export default class Oniform {
 
     addGroup(prevGroup?: Group) {
         if (prevGroup) {
-            const prevGroupIndex = this._groups.findIndex(g => g.id === prevGroup.id) + 1;
+            const prevGroupIndex = this.findGroupIndex(prevGroup);
             this._groups.splice(prevGroupIndex, 0, new Group(this, `${prevGroupIndex + 1}`));
         }
         else {
@@ -55,12 +55,12 @@ export default class Oniform {
     }
 
     deleteGroup(group: Group) {
-        const groupIndex = this._groups.findIndex(g => g.id === group.id);
+        const groupIndex = this.findGroupIndex(group) - 1;
         this._groups.splice(groupIndex, 1);
         this.rerender();
     }
 
-    findGroupIndex(group: Group): string {
-        return (this._groups.findIndex(g => g.id === group.id) + 1).toString();
+    findGroupIndex(group: Group): number {
+        return (this._groups.findIndex(g => g.id === group.id) + 1);
     }
 }
