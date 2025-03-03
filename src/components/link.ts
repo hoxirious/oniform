@@ -51,4 +51,12 @@ export default class Link {
     get id(): string {
         return this._id;
     }
+
+    toJSON() {
+        return {
+            left_id: this._left.id,
+            right: this._right.toJSON(),
+            relationship: this._relationship
+        }
+    }
 }

@@ -183,4 +183,13 @@ export default class Group {
     get parent(): Oniform|Station|Terminal|undefined {
         return this._parent;
     }
+
+    toJSON() {
+        return {
+            id: this._id,
+            label: this._label,
+            stations: this._stations.map(station => station.toJSON()),
+            links: this._links.map(link => link.toJSON())
+        }
+    }
 }

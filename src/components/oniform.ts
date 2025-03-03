@@ -1,5 +1,6 @@
 import Group, {GroupButtonAdd} from "./group.ts";
 import "../styles/oniform.css";
+import ActionButton from "./actionButton.ts";
 
 export default class Oniform {
     static instance = new Oniform([]);
@@ -23,6 +24,11 @@ export default class Oniform {
         form.innerHTML = `
             <h1>Oniform</h1>
         `;
+        const exportButton = new ActionButton("Export Json", "export-json", ["button"], () => {
+            const json = this.toJSON();
+            console.log(json);
+        });
+        form.appendChild(exportButton.button);
 
         this._groups.forEach(group => {
             group.rerender();
@@ -34,6 +40,7 @@ export default class Oniform {
             const newGroupButton = new GroupButtonAdd();
             form.appendChild(newGroupButton.button);
         }
+
         return form;
     }
 
@@ -62,5 +69,13 @@ export default class Oniform {
 
     findGroupIndex(group: Group): number {
         return (this._groups.findIndex(g => g.id === group.id) + 1);
+    }
+
+    static fromJSON(json: any): Oniform {
+        return new Oniform(json._groups, json._label);
+    }
+
+    toJSON() {
+        return this._groups.map(group => group.toJSON());
     }
 }

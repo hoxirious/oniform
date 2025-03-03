@@ -259,4 +259,14 @@ export default class Station {
         }
         this.rerender();
     }
+
+    toJSON() {
+        return {
+            id: this._id,
+            label: this._label,
+            value: this._value,
+            terminals: this._nextTerminals.map(terminal => terminal.toJSON()),
+            links: this._links.map(link => link.toJSON())
+        };
+    }
 }

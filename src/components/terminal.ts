@@ -221,4 +221,13 @@ export default class Terminal {
         this.rerender();
         this.prevStation.groupOwner.rerender();
     }
+
+    toJSON() {
+        return {
+            id: this._id,
+            label: this._label,
+            value: this._value,
+            links: this._links.map(link => link.toJSON())
+        }
+    }
 }
