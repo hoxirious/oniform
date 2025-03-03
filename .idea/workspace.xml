@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="Add toJSON methods for serialization in group, link, oniform, station, and terminal classes">
+      <change afterPath="$PROJECT_DIR$/src/data/sample.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;hoxirious&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:hoxirious/oniform.git&quot;,
+    &quot;accountId&quot;: &quot;b815287a-a6c5-4b76-90f9-585695594626&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2t8CXNq9yemhvRP4Z7LJ0CUljXZ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JavaScript Debug.localhost:5173.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/hoxirious/WebstormProjects/oniform",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie",
+    "ts.external.directory.path": "/home/hoxirious/WebstormProjects/oniform/exporter/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/exporter" />
+      <recent name="$PROJECT_DIR$/src/data" />
+      <recent name="$PROJECT_DIR$/src/components" />
+      <recent name="$PROJECT_DIR$/src/styles" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="localhost:5173" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:5173/">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.localhost:5173" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-WS-243.23654.157" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="" />
+      <created>1739724353410</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1739724353410</updated>
+      <workItem from="1739724354505" duration="227000" />
+      <workItem from="1739724596355" duration="19389000" />
+      <workItem from="1739934245910" duration="60755000" />
+      <workItem from="1740623724846" duration="65000" />
+      <workItem from="1740623806477" duration="22675000" />
+      <workItem from="1740756767311" duration="44255000" />
+      <workItem from="1740966164855" duration="491000" />
+    </task>
+    <task id="LOCAL-00001" summary="Init barebone">
+      <option name="closed" value="true" />
+      <created>1739729738813</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1739729738813</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Create structure">
+      <option name="closed" value="true" />
+      <created>1739935206175</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1739935206175</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add New Group button">
+      <option name="closed" value="true" />
+      <created>1739938673885</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1739938673885</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Added sub action buttons and style">
+      <option name="closed" value="true" />
+      <created>1740357816496</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1740357816496</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Added sub action buttons and style">
+      <option name="closed" value="true" />
+      <created>1740357898156</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1740357898156</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added sub action buttons and style">
+      <option name="closed" value="true" />
+      <created>1740362093173</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1740362093173</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Add terminal, connector html">
+      <option name="closed" value="true" />
+      <created>1740455500512</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1740455500512</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Add terminal, connector html">
+      <option name="closed" value="true" />
+      <created>1740455725420</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1740455725420</updated>
+    </task>
+    <task id="LOCAL-00009" summary="new connector logic and button position style">
+      <option name="closed" value="true" />
+      <created>1740456971012</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1740456971012</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Add new terminal">
+      <option name="closed" value="true" />
+      <created>1740460140941</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1740460140941</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Add new terminal">
+      <option name="closed" value="true" />
+      <created>1740460178450</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1740460178450</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Restructure components">
+      <option name="closed" value="true" />
+      <created>1740539732136</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1740539732136</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Simplify button">
+      <option name="closed" value="true" />
+      <created>1740618364688</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1740618364688</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Organize Link relationship position">
+      <option name="closed" value="true" />
+      <created>1740621359925</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1740621359925</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Add label for terminal and station">
+      <option name="closed" value="true" />
+      <created>1740625750846</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1740625750846</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Resizable group">
+      <option name="closed" value="true" />
+      <created>1740630592263</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1740630592263</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Optimize code">
+      <option name="closed" value="true" />
+      <created>1740631345048</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1740631345048</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Optimize code">
+      <option name="closed" value="true" />
+      <created>1740631455900</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1740631455900</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Optimize code">
+      <option name="closed" value="true" />
+      <created>1740631522407</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1740631522407</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Change style">
+      <option name="closed" value="true" />
+      <created>1740699466032</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1740699466032</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Change style">
+      <option name="closed" value="true" />
+      <created>1740699568650</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1740699568650</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Add Station Collapse">
+      <option name="closed" value="true" />
+      <created>1740702099413</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1740702099413</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Add Terminal Collapse">
+      <option name="closed" value="true" />
+      <created>1740702527786</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1740702527786</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Update button styles and replace chevron icons for improved UI consistency">
+      <option name="closed" value="true" />
+      <created>1740727929424</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1740727929424</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Step up the styling game">
+      <option name="closed" value="true" />
+      <created>1740760487923</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1740760487924</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Splice instead of push new group and station">
+      <option name="closed" value="true" />
+      <created>1740785725078</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1740785725078</updated>
+    </task>
+    <task id="LOCAL-00027" summary="populate label index">
+      <option name="closed" value="true" />
+      <created>1740858210630</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1740858210630</updated>
+    </task>
+    <task id="LOCAL-00028" summary="populate label index">
+      <option name="closed" value="true" />
+      <created>1740858624100</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1740858624100</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Refactor group, station, and terminal classes for improved index handling and input management">
+      <option name="closed" value="true" />
+      <created>1740947842080</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1740947842080</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Add toJSON methods for serialization in group, link, oniform, station, and terminal classes">
+      <option name="closed" value="true" />
+      <created>1740962721185</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1740962721185</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Init barebone" />
+    <MESSAGE value="Create structure" />
+    <MESSAGE value="Add New Group button" />
+    <MESSAGE value="Added sub action buttons and style" />
+    <MESSAGE value="Add terminal, connector html" />
+    <MESSAGE value="new connector logic and button position style" />
+    <MESSAGE value="Add new terminal" />
+    <MESSAGE value="Restructure components" />
+    <MESSAGE value="Simplify button" />
+    <MESSAGE value="Organize Link relationship position" />
+    <MESSAGE value="Add label for terminal and station" />
+    <MESSAGE value="Resizable group" />
+    <MESSAGE value="Optimize code" />
+    <MESSAGE value="Change style" />
+    <MESSAGE value="Add Station Collapse" />
+    <MESSAGE value="Add Terminal Collapse" />
+    <MESSAGE value="Update button styles and replace chevron icons for improved UI consistency" />
+    <MESSAGE value="Step up the styling game" />
+    <MESSAGE value="Splice instead of push new group and station" />
+    <MESSAGE value="populate label index" />
+    <MESSAGE value="Refactor group, station, and terminal classes for improved index handling and input management" />
+    <MESSAGE value="Add toJSON methods for serialization in group, link, oniform, station, and terminal classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add toJSON methods for serialization in group, link, oniform, station, and terminal classes" />
+  </component>
+</project>
