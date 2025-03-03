@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="Add toJSON methods for serialization in group, link, oniform, station, and terminal classes">
-      <change afterPath="$PROJECT_DIR$/src/data/sample.json" afterDir="false" />
+    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="Move to exporter">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +104,7 @@
       <workItem from="1740623724846" duration="65000" />
       <workItem from="1740623806477" duration="22675000" />
       <workItem from="1740756767311" duration="44255000" />
-      <workItem from="1740966164855" duration="491000" />
+      <workItem from="1740966164855" duration="1173000" />
     </task>
     <task id="LOCAL-00001" summary="Init barebone">
       <option name="closed" value="true" />
@@ -346,7 +346,31 @@
       <option name="project" value="LOCAL" />
       <updated>1740962721185</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Add sample JSON data">
+      <option name="closed" value="true" />
+      <created>1740966677608</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1740966677608</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Move to exporter">
+      <option name="closed" value="true" />
+      <created>1740966913289</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1740966913289</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Move to exporter">
+      <option name="closed" value="true" />
+      <created>1740966919316</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1740966919316</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -398,6 +422,8 @@
     <MESSAGE value="populate label index" />
     <MESSAGE value="Refactor group, station, and terminal classes for improved index handling and input management" />
     <MESSAGE value="Add toJSON methods for serialization in group, link, oniform, station, and terminal classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add toJSON methods for serialization in group, link, oniform, station, and terminal classes" />
+    <MESSAGE value="Add sample JSON data" />
+    <MESSAGE value="Move to exporter" />
+    <option name="LAST_COMMIT_MESSAGE" value="Move to exporter" />
   </component>
 </project>
