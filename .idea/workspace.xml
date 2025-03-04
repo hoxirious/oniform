@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="Init importer">
-      <change afterPath="$PROJECT_DIR$/exporter/public/copy.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/exporter/public/paste.svg" afterDir="false" />
+    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="Add README.md">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/components/group.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/group.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/components/link.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/link.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/components/oniform.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/oniform.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/components/station.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/station.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/components/terminal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/terminal.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +21,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="SOFT" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -36,12 +30,12 @@
     &quot;assignee&quot;: &quot;hoxirious&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/hoxirious/oniform.git",
-    "accountId": "b815287a-a6c5-4b76-90f9-585695594626"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/hoxirious/oniform.git&quot;,
+    &quot;accountId&quot;: &quot;b815287a-a6c5-4b76-90f9-585695594626&quot;
   }
-}]]></component>
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -61,14 +55,14 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "ignore_missing_gitignore": "true",
-    "last_opened_file_path": "/home/hoxirious/WebstormProjects/oniform/importer/src/data",
+    "last_opened_file_path": "C:/Users/i60860/WebstormProjects/oniform",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_interpreter_path": "node",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie",
+    "settings.editor.selected.configurable": "ssh.settings",
     "ts.external.directory.path": "C:\\Users\\giahy\\WebstormProjects\\oniform\\exporter\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
@@ -102,6 +96,9 @@
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\i60860\AppData\Roaming\Subversion</configuration>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="" />
@@ -119,6 +116,7 @@
       <workItem from="1740967659489" duration="9243000" />
       <workItem from="1741051844059" duration="4251000" />
       <workItem from="1741059648343" duration="2007000" />
+      <workItem from="1741106859785" duration="378000" />
     </task>
     <task id="LOCAL-00001" summary="Init barebone">
       <option name="closed" value="true" />
@@ -392,7 +390,23 @@
       <option name="project" value="LOCAL" />
       <updated>1740967708499</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Init importer">
+      <option name="closed" value="true" />
+      <created>1741106928838</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1741106928838</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Add README.md">
+      <option name="closed" value="true" />
+      <created>1741107064062</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1741107064062</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -422,7 +436,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Create structure" />
     <MESSAGE value="Add New Group button" />
     <MESSAGE value="Added sub action buttons and style" />
     <MESSAGE value="Add terminal, connector html" />
@@ -445,8 +458,9 @@
     <MESSAGE value="Add toJSON methods for serialization in group, link, oniform, station, and terminal classes" />
     <MESSAGE value="Add sample JSON data" />
     <MESSAGE value="Move to exporter" />
-    <MESSAGE value="Init importer" />
     <MESSAGE value="Refactor station and group components for improved layout and styling; adjust button placements and CSS properties" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor station and group components for improved layout and styling; adjust button placements and CSS properties" />
+    <MESSAGE value="Init importer" />
+    <MESSAGE value="Add README.md" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add README.md" />
   </component>
 </project>
