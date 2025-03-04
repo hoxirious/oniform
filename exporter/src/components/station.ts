@@ -2,9 +2,11 @@ import Terminal, {TerminalButtonAdd} from "./terminal.ts";
 import ActionButton from "./actionButton.ts";
 import "../styles/station.css";
 import plusUrl from "../../public/plus.svg";
+import minusUrl from "../../public/minus.svg";
 import chevronDownUrl from "../../public/chevron-down.svg";
 import chevronRightUrl from "../../public/chevron-right.svg";
-import minusUrl from "../../public/minus.svg";
+import copyUrl from "../../public/copy.svg";
+import pasteUrl from "../../public/paste.svg";
 import Group from "./group.ts";
 import Link, {Relationship} from "./link.ts";
 import {generateGUID} from "../common/utility.ts";
@@ -96,6 +98,30 @@ export class StationButtonDelete extends ActionButton {
     }
 }
 
+export class StationButtonCopy extends ActionButton {
+    constructor(self: Station) {
+        const copy = document.createElement("img");
+        copy.src = copyUrl as string;
+        copy.alt = "Copy";
+
+        super(copy, "copy-station", ["icon"], () => {
+            console.log("copy")
+        }, true, undefined, "Copy Station");
+    }
+}
+
+export class StationButtonPaste extends ActionButton {
+    constructor(self: Station) {
+        const paste = document.createElement("img");
+        paste.src = pasteUrl as string;
+        paste.alt = "Paste";
+
+        super(paste, "paste-station", ["icon"], () => {
+            console.log("paste")
+        }, true, undefined, "Paste Station");
+    }
+}
+
 
 function createListItem(button: HTMLButtonElement): HTMLLIElement {
     const listItem = document.createElement("li");
@@ -108,7 +134,7 @@ export default class Station {
         private _groupOwner: Group,
         private _root: Station = this,
         private _value: string = "",
-        private _label?: string,
+        private _label: string = "",
         private _nextTerminals: Terminal[] = [],
         private _links: Link[] = [],
         private _html: HTMLDivElement = document.createElement("div"),
@@ -143,9 +169,13 @@ export default class Station {
         const buttonCollapse = new StationButtonCollapse(this).button;
         const buttonAdd = new StationButtonAdd(this._groupOwner, this).button;
         const buttonDelete = new StationButtonDelete(this).button;
+        const buttonCopy = new StationButtonCopy(this).button;
+        const buttonPaste = new StationButtonPaste(this).button;
         buttons.appendChild(buttonDelete);
         buttons.appendChild(buttonAdd);
         buttons.appendChild(buttonCollapse);
+        buttons.appendChild(buttonCopy);
+        buttons.appendChild(buttonPaste);
         buttons.appendChild(labelElement);
 
         station.appendChild(buttons);
@@ -260,7 +290,7 @@ export default class Station {
         this.rerender();
     }
 
-    toJSON() {
+    toJSON(): any {
         return {
             id: this._id,
             label: this._label,

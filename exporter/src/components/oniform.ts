@@ -75,7 +75,7 @@ export default class Oniform {
         return new Oniform(json._groups, json._label);
     }
 
-    toJSON() {
+    toJSON(): any {
         return this._groups.map(group => group.toJSON());
     }
 }

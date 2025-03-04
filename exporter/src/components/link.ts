@@ -52,7 +52,7 @@ export default class Link {
         return this._id;
     }
 
-    toJSON() {
+    toJSON(): any {
         return {
             id: this._id,
             left_id: this._left.id,

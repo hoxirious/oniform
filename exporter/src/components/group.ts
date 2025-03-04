@@ -6,6 +6,8 @@ import Link from "./link.ts";
 import {generateGUID} from "../common/utility.ts";
 import minusUrl from "../../public/minus.svg";
 import plusUrl from "../../public/plus.svg";
+import copyUrl from "../../public/copy.svg";
+import pasteUrl from "../../public/paste.svg";
 import Terminal from "./terminal.ts";
 
 export class GroupButtonAdd extends ActionButton {
@@ -37,6 +39,30 @@ export class GroupButtonDelete extends ActionButton {
         super(minus, "delete-group", ["icon"], () => {
             parent.deleteGroup(self);
         });
+    }
+}
+
+export class GroupButtonCopy extends ActionButton {
+    constructor(self: Group) {
+        const copy = document.createElement("img");
+        copy.src = copyUrl as string;
+        copy.alt = "Copy";
+
+        super(copy, "copy-group", ["icon"], () => {
+            console.log("copy group");
+        }, true, undefined, "Copy Group");
+    }
+}
+
+export class GroupButtonPaste extends ActionButton {
+    constructor(self: Group) {
+        const paste = document.createElement("img");
+        paste.src = pasteUrl as string;
+        paste.alt = "Paste";
+
+        super(paste, "paste-group", ["icon"], () => {
+            console.log("paste group");
+        }, true, undefined, "Paste Group");
     }
 }
 
@@ -82,6 +108,11 @@ export default class Group {
                 const addButton = new GroupButtonAdd(this);
                 buttons.appendChild(addButton.button);
             }
+
+            const copyButton = new GroupButtonCopy(this);
+            const pasteButton = new GroupButtonPaste(this);
+            buttons.appendChild(copyButton.button);
+            buttons.appendChild(pasteButton.button);
 
             let parentLabel = this._parent.label;
             let parentSignature = "";
@@ -184,7 +215,7 @@ export default class Group {
         return this._parent;
     }
 
-    toJSON() {
+    toJSON(): any {
         return {
             id: this._id,
             label: this._label,

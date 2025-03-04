@@ -3,6 +3,8 @@ import ActionButton from "./actionButton.ts";
 import "../styles/terminal.css";
 import plusUrl from "../../public/plus.svg";
 import minusUrl from "../../public/minus.svg";
+import copyUrl from "../../public/copy.svg";
+import pasteUrl from "../../public/paste.svg";
 import Link, {Relationship} from "./link.ts";
 import Group from "./group.ts";
 import chevronDownUrl from "../../public/chevron-down.svg";
@@ -66,6 +68,30 @@ export class TerminalButtonDelete extends ActionButton {
         super(minus, "delete-terminal", ["icon"], () => {
             parent.deleteTerminal(self);
         }, true, undefined, "Delete Terminal");
+    }
+}
+
+export class TerminalButtonCopy extends ActionButton {
+    constructor(self: Terminal) {
+        const copy = document.createElement("img");
+        copy.src = copyUrl as string;
+        copy.alt = "Copy";
+
+        super(copy, "copy-terminal", ["icon"], () => {
+            console.log("copy");
+        }, true, undefined, "Copy Terminal");
+    }
+}
+
+export class TerminalButtonPaste extends ActionButton {
+    constructor(self: Terminal) {
+        const paste = document.createElement("img");
+        paste.src = pasteUrl as string;
+        paste.alt = "Paste";
+
+        super(paste, "paste-terminal", ["icon"], () => {
+            console.log("paste");
+        }, true, undefined, "Paste Terminal");
     }
 }
 
@@ -138,9 +164,13 @@ export default class Terminal {
         const deleteButton = new TerminalButtonDelete(this._prevStation, this).button;
         const collapseButton = new TerminalButtonCollapse(this).button;
         const addButton = new TerminalButtonAdd(this._prevStation, this).button;
+        const copyButton = new TerminalButtonCopy(this).button;
+        const pasteButton = new TerminalButtonPaste(this).button;
         buttons.appendChild(deleteButton);
         buttons.appendChild(addButton);
         buttons.appendChild(collapseButton);
+        buttons.appendChild(copyButton);
+        buttons.appendChild(pasteButton);
         buttons.appendChild(labelElement);
 
         terminalElement.appendChild(buttons);
@@ -222,7 +252,7 @@ export default class Terminal {
         this.prevStation.groupOwner.rerender();
     }
 
-    toJSON() {
+    toJSON(): any {
         return {
             id: this._id,
             label: this._label,
