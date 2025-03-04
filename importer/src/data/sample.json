@@ -1,0 +1,125 @@
+[
+  {
+    "id": "group-e6b037f8-f541-4f4a-862a-e66b5caf32a1",
+    "label": "Group 1",
+    "stations": [
+      {
+        "id": "station-a045dd84-30fe-437d-b459-9bc0e810c008",
+        "label": "Station 1",
+        "value": "What is your age?",
+        "terminals": [
+          {
+            "id": "terminal-080a5f5a-20a9-4905-900c-d530775bc97e",
+            "label": "Terminal Station 1-1",
+            "value": "Under 18",
+            "links": [
+              {
+                "id": "link-1",
+                "left_id": "terminal-080a5f5a-20a9-4905-900c-d530775bc97e",
+                "right": {
+                  "id": "group-956c56a0-7056-45fb-b29d-ed9bd9d434b7",
+                  "label": "Group 1T",
+                  "stations": [
+                    {
+                      "id": "station-948830a0-bb44-49ca-8ee3-969f7eda96af",
+                      "label": "Station 1",
+                      "value": "What school do you take?",
+                      "terminals": [
+                        {
+                          "id": "terminal-003fe3ee-c786-40fe-b639-639a7170f124",
+                          "label": "Terminal Station 1-1",
+                          "value": "Highschool",
+                          "links": []
+                        },
+                        {
+                          "id": "terminal-5aacb744-f2df-449d-9417-f3431a950a9c",
+                          "label": "Terminal Station 1-1",
+                          "value": "University",
+                          "links": []
+                        }
+                      ],
+                      "links": [
+                        {
+                          "id": "link-2",
+                          "left_id": "station-948830a0-bb44-49ca-8ee3-969f7eda96af",
+                          "right": {
+                            "id": "group-07831cf3-dd12-47ed-b809-23060571cf32",
+                            "label": "Group 1.1S",
+                            "stations": [
+                              {
+                                "id": "station-3a327d9f-7d1e-4b0a-bf9e-a87c2f8ad143",
+                                "label": "Station 1",
+                                "value": "When do you expect to graduate?",
+                                "terminals": [
+                                  {
+                                    "id": "terminal-f544745f-76b9-4578-8d85-a78e4b8540b1",
+                                    "label": "Terminal Station 1-1",
+                                    "value": "Spring 2024",
+                                    "links": []
+                                  },
+                                  {
+                                    "id": "terminal-59417b51-870d-4692-bb79-e92672f8a788",
+                                    "label": "Terminal Station 1-1",
+                                    "value": "Winter 2024",
+                                    "links": []
+                                  }
+                                ]
+                              }
+                            ],
+                            "links": []
+                          },
+                          "relationship": "dependant"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "relationship": "dependant"
+              }
+            ]
+          },
+          {
+            "id": "terminal-a57c6f38-aa4a-4359-9cd3-6bce3c26a96c",
+            "label": "Terminal Station 1-1",
+            "value": "18 or higher",
+            "links": [
+              {
+                "id": "link-3",
+                "left_id": "terminal-a57c6f38-aa4a-4359-9cd3-6bce3c26a96c",
+                "right": {
+                  "id": "group-5f6708b4-8cdc-4b07-b10d-1bf7dc09f8cf",
+                  "label": "Group 1T",
+                  "stations": [
+                    {
+                      "id": "station-0405dfcb-61e8-4afe-87d7-49c55b08d793",
+                      "label": "Station 1",
+                      "value": "Are you single?",
+                      "terminals": [
+                        {
+                          "id": "terminal-95a38b03-c8d2-40ce-ad79-8892d95c8676",
+                          "label": "Terminal Station 1-1",
+                          "value": "Yes",
+                          "links": []
+                        },
+                        {
+                          "id": "terminal-5adfe8e4-3b47-4913-af7d-c70003ddc34b",
+                          "label": "Terminal Station 1-1",
+                          "value": "No",
+                          "links": []
+                        }
+                      ],
+                      "links": []
+                    }
+                  ],
+                  "links": []
+                },
+                "relationship": "dependant"
+              }
+            ]
+          }
+        ],
+        "links": []
+      }
+    ]
+  }
+]
