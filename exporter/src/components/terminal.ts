@@ -1,14 +1,15 @@
 import Station from "./station.ts";
 import ActionButton from "./actionButton.ts";
 import "../styles/terminal.css";
-import plusUrl from "../../public/plus.svg";
-import minusUrl from "../../public/minus.svg";
-import copyUrl from "../../public/copy.svg";
-import pasteUrl from "../../public/paste.svg";
+import plusUrl from "../static/plus.svg";
+import minusUrl from "../static/minus.svg";
+import copyUrl from "../static/copy.svg";
+import pasteUrl from "../static/paste.svg";
 import Link, {Relationship} from "./link.ts";
 import Group from "./group.ts";
-import chevronDownUrl from "../../public/chevron-down.svg";
-import chevronRightUrl from "../../public/chevron-right.svg";
+import Clipboard from "./clipboard.ts";
+import chevronDownUrl from "../static/chevron-down.svg";
+import chevronRightUrl from "../static/chevron-right.svg";
 import {generateGUID} from "../common/utility.ts";
 
 export class TerminalButtonAdd extends ActionButton {
@@ -78,7 +79,7 @@ export class TerminalButtonCopy extends ActionButton {
         copy.alt = "Copy";
 
         super(copy, "copy-terminal", ["icon"], () => {
-            console.log("copy");
+            Clipboard.instance.copiedObject = self.clone();
         }, true, undefined, "Copy Terminal");
     }
 }
@@ -136,6 +137,7 @@ export default class Terminal {
         private _value: string = "",
         private _links: Link[] = [],
         private _html: HTMLDivElement = document.createElement("div"),
+        private _isClone: boolean = false,
         private _id: string = `terminal-${generateGUID()}`
     ) {
         this.render();
@@ -161,16 +163,18 @@ export default class Terminal {
 
         const buttons = document.createElement("div");
         buttons.classList.add("buttons");
-        const deleteButton = new TerminalButtonDelete(this._prevStation, this).button;
-        const collapseButton = new TerminalButtonCollapse(this).button;
-        const addButton = new TerminalButtonAdd(this._prevStation, this).button;
-        const copyButton = new TerminalButtonCopy(this).button;
-        const pasteButton = new TerminalButtonPaste(this).button;
-        buttons.appendChild(deleteButton);
-        buttons.appendChild(addButton);
-        buttons.appendChild(collapseButton);
-        buttons.appendChild(copyButton);
-        buttons.appendChild(pasteButton);
+        if (!this._isClone) {
+            const deleteButton = new TerminalButtonDelete(this._prevStation, this).button;
+            const collapseButton = new TerminalButtonCollapse(this).button;
+            const addButton = new TerminalButtonAdd(this._prevStation, this).button;
+            const copyButton = new TerminalButtonCopy(this).button;
+            const pasteButton = new TerminalButtonPaste(this).button;
+            buttons.appendChild(deleteButton);
+            buttons.appendChild(addButton);
+            buttons.appendChild(collapseButton);
+            buttons.appendChild(copyButton);
+            buttons.appendChild(pasteButton);
+        }
         buttons.appendChild(labelElement);
 
         terminalElement.appendChild(buttons);
@@ -202,6 +206,12 @@ export default class Terminal {
     public rerender() {
         this._html.innerHTML = "";
         this.render();
+    }
+
+    public clone(): Terminal {
+        const terminalClone = new Terminal(this._prevStation, this._label, this._root, this._value, [], undefined, true);
+        this._links.map(link => link.clone(terminalClone)).forEach(link => terminalClone.addLink(link));
+        return terminalClone;
     }
 
     get label(): string {

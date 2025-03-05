@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="Add README.md">
+    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="Refactor static assets and implement Clipboard functionality">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +32,7 @@
   }
 }</component>
   <component name="GithubDefaultAccount">
-    <option name="defaultAccountId" value="ee1c8fed-44e7-462d-9f8d-d30577377815" />
+    <option name="defaultAccountId" value="b815287a-a6c5-4b76-90f9-585695594626" />
   </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
@@ -66,8 +66,9 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_interpreter_path": "node",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "sshConsole",
-    "ts.external.directory.path": "C:\\Users\\giahy\\WebstormProjects\\oniform\\exporter\\node_modules\\typescript\\lib",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "/home/hoxirious/WebstormProjects/oniform/exporter/node_modules/typescript/lib",
+    "ts.rename.search.for.dynamic.occurrences": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -76,6 +77,7 @@
       <recent name="$PROJECT_DIR$/importer/src/data" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/exporter/src/static" />
       <recent name="$PROJECT_DIR$/exporter" />
       <recent name="$PROJECT_DIR$/src/data" />
       <recent name="$PROJECT_DIR$/src/components" />
@@ -439,7 +441,39 @@
       <option name="project" value="LOCAL" />
       <updated>1741107943803</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="Refactor static assets and implement Clipboard functionality">
+      <option name="closed" value="true" />
+      <created>1741146845429</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1741146845429</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Refactor static assets and implement Clipboard functionality">
+      <option name="closed" value="true" />
+      <created>1741146920193</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1741146920193</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Refactor static assets and implement Clipboard functionality">
+      <option name="closed" value="true" />
+      <created>1741146983195</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1741146983195</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Refactor static assets and implement Clipboard functionality">
+      <option name="closed" value="true" />
+      <created>1741147008083</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1741147008083</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -469,7 +503,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add New Group button" />
     <MESSAGE value="Added sub action buttons and style" />
     <MESSAGE value="Add terminal, connector html" />
     <MESSAGE value="new connector logic and button position style" />
@@ -494,6 +527,7 @@
     <MESSAGE value="Refactor station and group components for improved layout and styling; adjust button placements and CSS properties" />
     <MESSAGE value="Init importer" />
     <MESSAGE value="Add README.md" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add README.md" />
+    <MESSAGE value="Refactor static assets and implement Clipboard functionality" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor static assets and implement Clipboard functionality" />
   </component>
 </project>

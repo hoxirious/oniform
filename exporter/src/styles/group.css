@@ -3,7 +3,7 @@
     padding-left: 1rem;
 }
 
-.group_container .buttons {
+.group_container .buttons, .station_container .buttons, .terminal_container .buttons {
     margin: 0 0.5rem;
     display: flex;
 }

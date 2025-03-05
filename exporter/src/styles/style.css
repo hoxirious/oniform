@@ -52,3 +52,7 @@ input:focus, textarea:focus {
   height: 100vh;
   padding: 2rem;
 }
+
+#exporter {
+  display: flex;
+}

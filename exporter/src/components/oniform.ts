@@ -6,7 +6,8 @@ export default class Oniform {
     static instance = new Oniform([]);
     private constructor(
         private _groups: Group[],
-        private _label: string = ""
+        private _label: string = "",
+        private _html: HTMLFormElement = document.createElement("form")
     ) {}
 
     get groups(): Group[] {
@@ -17,9 +18,12 @@ export default class Oniform {
         return this._label;
     }
 
+    get html(): HTMLFormElement {
+        return this._html;
+    }
+
     render() {
         const form = document.createElement("form");
-        form.id = "oniform";
         form.classList.add("oniform");
         form.innerHTML = `
             <h1>Oniform</h1>
@@ -41,13 +45,16 @@ export default class Oniform {
             form.appendChild(newGroupButton.button);
         }
 
-        return form;
+        this._html = form;
     }
 
     rerender() {
-        const app = document.getElementById("app");
-        app!.innerHTML = "";
-        app!.appendChild(this.render());
+        const oniform = document.getElementById("oniform");
+        if (oniform) {
+            this.render();
+            if (oniform.firstChild)
+                oniform!.replaceChild(this.html, oniform.firstChild);
+        }
     }
 
     addGroup(prevGroup?: Group) {

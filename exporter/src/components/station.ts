@@ -1,13 +1,14 @@
 import Terminal, {TerminalButtonAdd} from "./terminal.ts";
 import ActionButton from "./actionButton.ts";
 import "../styles/station.css";
-import plusUrl from "../../public/plus.svg";
-import minusUrl from "../../public/minus.svg";
-import chevronDownUrl from "../../public/chevron-down.svg";
-import chevronRightUrl from "../../public/chevron-right.svg";
-import copyUrl from "../../public/copy.svg";
-import pasteUrl from "../../public/paste.svg";
+import plusUrl from "../static/plus.svg";
+import minusUrl from "../static/minus.svg";
+import chevronDownUrl from "../static/chevron-down.svg";
+import chevronRightUrl from "../static/chevron-right.svg";
+import copyUrl from "../static/copy.svg";
+import pasteUrl from "../static/paste.svg";
 import Group from "./group.ts";
+import Clipboard from "./clipboard.ts";
 import Link, {Relationship} from "./link.ts";
 import {generateGUID} from "../common/utility.ts";
 
@@ -105,7 +106,7 @@ export class StationButtonCopy extends ActionButton {
         copy.alt = "Copy";
 
         super(copy, "copy-station", ["icon"], () => {
-            console.log("copy")
+            Clipboard.instance.copiedObject = self.clone();
         }, true, undefined, "Copy Station");
     }
 }
@@ -138,6 +139,7 @@ export default class Station {
         private _nextTerminals: Terminal[] = [],
         private _links: Link[] = [],
         private _html: HTMLDivElement = document.createElement("div"),
+        private _isClone: boolean = false,
         private _id: string = `station-${generateGUID()}`
     ) {
         this.render();
@@ -171,13 +173,14 @@ export default class Station {
         const buttonDelete = new StationButtonDelete(this).button;
         const buttonCopy = new StationButtonCopy(this).button;
         const buttonPaste = new StationButtonPaste(this).button;
-        buttons.appendChild(buttonDelete);
-        buttons.appendChild(buttonAdd);
-        buttons.appendChild(buttonCollapse);
-        buttons.appendChild(buttonCopy);
-        buttons.appendChild(buttonPaste);
-        buttons.appendChild(labelElement);
-
+        if(!this._isClone) {
+            buttons.appendChild(buttonDelete);
+            buttons.appendChild(buttonAdd);
+            buttons.appendChild(buttonCollapse);
+            buttons.appendChild(buttonCopy);
+            buttons.appendChild(buttonPaste);
+        }
+            buttons.appendChild(labelElement);
         station.appendChild(buttons);
 
         const textareaElement = document.createElement("textarea");
@@ -195,7 +198,9 @@ export default class Station {
             const terminalElement = document.createElement("div");
             terminalElement.classList.add("terminal");
             terminalElement.appendChild(new TerminalButtonAdd(this).button);
-            this._html.appendChild(terminalElement);
+            if(!this._isClone) {
+                this._html.appendChild(terminalElement);
+            }
         }
         else  {
             const terminals = document.createElement("div");
@@ -213,6 +218,17 @@ export default class Station {
 
     rerender() {
         this.render();
+    }
+
+    clone(): Station {
+        const stationClone = new Station(
+            this._groupOwner,
+            this._root, this._value, this._label,
+            this._nextTerminals.map(terminal => terminal.clone()),
+            [], undefined, true);
+
+        this._links.map(link => link.clone(stationClone)).forEach(link => stationClone.addLink(link));
+        return stationClone;
     }
 
     get root(): Station {

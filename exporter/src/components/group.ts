@@ -2,12 +2,13 @@ import Station, {StationButtonAdd} from "./station.ts";
 import '../styles/group.css';
 import ActionButton from "./actionButton.ts";
 import Oniform from "./oniform.ts";
-import Link from "./link.ts";
+import Clipboard from "./clipboard.ts";
+// import Link from "./link.ts";
 import {generateGUID} from "../common/utility.ts";
-import minusUrl from "../../public/minus.svg";
-import plusUrl from "../../public/plus.svg";
-import copyUrl from "../../public/copy.svg";
-import pasteUrl from "../../public/paste.svg";
+import minusUrl from "../static/minus.svg";
+import plusUrl from "../static/plus.svg";
+import copyUrl from "../static/copy.svg";
+import pasteUrl from "../static/paste.svg";
 import Terminal from "./terminal.ts";
 
 export class GroupButtonAdd extends ActionButton {
@@ -49,7 +50,7 @@ export class GroupButtonCopy extends ActionButton {
         copy.alt = "Copy";
 
         super(copy, "copy-group", ["icon"], () => {
-            console.log("copy group");
+            Clipboard.instance.copiedObject = self.clone();
         }, true, undefined, "Copy Group");
     }
 }
@@ -70,12 +71,13 @@ export default class Group {
     private readonly _html: HTMLDivElement = document.createElement("div");
 
     constructor(
-        private readonly _parent?: Oniform|Station|Terminal,
+        private readonly _parent: Oniform|Station|Terminal,
         private _label: string = "Group 1",
         private readonly _stations: Station[] = [],
         private readonly _scoreExpression: string = "",
         private _score: number = 0,
-        private readonly _links: Link[] = [],
+        // private readonly _links: Link[] = [],
+        private readonly _isClone: boolean = false,
         private readonly _id: string = `group-${generateGUID()}`
     ) {
         this.render();
@@ -101,19 +103,20 @@ export default class Group {
         });
 
         if (this._parent) {
-            const deleteButton = new GroupButtonDelete(this._parent, this);
-            buttons.appendChild(deleteButton.button);
+            if(!this._isClone) {
+                const deleteButton = new GroupButtonDelete(this._parent, this);
+                buttons.appendChild(deleteButton.button);
 
-            if (this._parent instanceof Oniform) {
-                const addButton = new GroupButtonAdd(this);
-                buttons.appendChild(addButton.button);
+                if (this._parent instanceof Oniform) {
+                    const addButton = new GroupButtonAdd(this);
+                    buttons.appendChild(addButton.button);
+                }
+
+                const copyButton = new GroupButtonCopy(this);
+                const pasteButton = new GroupButtonPaste(this);
+                buttons.appendChild(copyButton.button);
+                buttons.appendChild(pasteButton.button);
             }
-
-            const copyButton = new GroupButtonCopy(this);
-            const pasteButton = new GroupButtonPaste(this);
-            buttons.appendChild(copyButton.button);
-            buttons.appendChild(pasteButton.button);
-
             let parentLabel = this._parent.label;
             let parentSignature = "";
 
@@ -140,7 +143,7 @@ export default class Group {
 
         const stationDiv = document.createElement("div");
         stationDiv.classList.add("stations");
-        if(this._stations.length == 0) {
+        if(this._stations.length == 0 && !this._isClone) {
             group.appendChild(new StationButtonAdd(this).button);
         }
         this._stations.forEach(station => {
@@ -155,6 +158,11 @@ export default class Group {
     rerender() {
         this._html.innerHTML = "";
         this.render();
+    }
+
+    clone(): Group {
+        const clonedStations: Station[] = this._stations.map(station => station.clone());
+        return new Group(this._parent, this._label, clonedStations, this._scoreExpression, this._score, true);
     }
 
     addStation(prevStation?: Station) {
@@ -207,9 +215,9 @@ export default class Group {
         return this._html;
     }
 
-    get links(): Link[] {
-        return this._links;
-    }
+    // get links(): Link[] {
+    //     return this._links;
+    // }
 
     get parent(): Oniform|Station|Terminal|undefined {
         return this._parent;
@@ -220,7 +228,7 @@ export default class Group {
             id: this._id,
             label: this._label,
             stations: this._stations.map(station => station.toJSON()),
-            links: this._links.map(link => link.toJSON())
+            // links: this._links.map(link => link.toJSON())
         }
     }
 }
