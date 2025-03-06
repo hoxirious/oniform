@@ -139,7 +139,7 @@ export default class Station {
         private _nextTerminals: Terminal[] = [],
         private _links: Link[] = [],
         private _html: HTMLDivElement = document.createElement("div"),
-        private _isClone: boolean = false,
+        private _editable: boolean = true,
         private _id: string = `station-${generateGUID()}`
     ) {
         this.render();
@@ -173,7 +173,7 @@ export default class Station {
         const buttonDelete = new StationButtonDelete(this).button;
         const buttonCopy = new StationButtonCopy(this).button;
         const buttonPaste = new StationButtonPaste(this).button;
-        if(!this._isClone) {
+        if(this._editable) {
             buttons.appendChild(buttonDelete);
             buttons.appendChild(buttonAdd);
             buttons.appendChild(buttonCollapse);
@@ -198,7 +198,7 @@ export default class Station {
             const terminalElement = document.createElement("div");
             terminalElement.classList.add("terminal");
             terminalElement.appendChild(new TerminalButtonAdd(this).button);
-            if(!this._isClone) {
+            if(this._editable) {
                 this._html.appendChild(terminalElement);
             }
         }
@@ -225,7 +225,7 @@ export default class Station {
             this._groupOwner,
             this._root, this._value, this._label,
             this._nextTerminals.map(terminal => terminal.clone()),
-            [], undefined, true);
+            [], undefined, false);
 
         this._links.map(link => link.clone(stationClone)).forEach(link => stationClone.addLink(link));
         return stationClone;

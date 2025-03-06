@@ -77,7 +77,7 @@ export default class Group {
         private readonly _scoreExpression: string = "",
         private _score: number = 0,
         // private readonly _links: Link[] = [],
-        private readonly _isClone: boolean = false,
+        private readonly _editable: boolean = true,
         private readonly _id: string = `group-${generateGUID()}`
     ) {
         this.render();
@@ -103,7 +103,7 @@ export default class Group {
         });
 
         if (this._parent) {
-            if(!this._isClone) {
+            if(this._editable) {
                 const deleteButton = new GroupButtonDelete(this._parent, this);
                 buttons.appendChild(deleteButton.button);
 
@@ -143,7 +143,7 @@ export default class Group {
 
         const stationDiv = document.createElement("div");
         stationDiv.classList.add("stations");
-        if(this._stations.length == 0 && !this._isClone) {
+        if(this._stations.length == 0 && this._editable) {
             group.appendChild(new StationButtonAdd(this).button);
         }
         this._stations.forEach(station => {
@@ -162,7 +162,7 @@ export default class Group {
 
     clone(): Group {
         const clonedStations: Station[] = this._stations.map(station => station.clone());
-        return new Group(this._parent, this._label, clonedStations, this._scoreExpression, this._score, true);
+        return new Group(this._parent, this._label, clonedStations, this._scoreExpression, this._score, false);
     }
 
     addStation(prevStation?: Station) {

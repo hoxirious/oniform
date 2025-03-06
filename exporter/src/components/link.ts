@@ -16,7 +16,7 @@ export default class Link {
         private readonly _left: Station | Terminal,
         private readonly _right: Station | Group,
         private readonly _relationship: Relationship,
-        private readonly _isClone: boolean = false,
+        private readonly _editable: boolean = true,
         private readonly _id: string = `link-${generateGUID()}`
     ) {
         this.render();
@@ -35,7 +35,7 @@ export default class Link {
 
     clone(leftClone: Station|Terminal): Link {
         const rightClone = this._right.clone();
-        return new Link(leftClone, rightClone, this._relationship, true);
+        return new Link(leftClone, rightClone, this._relationship, false);
     }
 
 

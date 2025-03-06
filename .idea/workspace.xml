@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="Refactor static assets and implement Clipboard functionality">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/components/group.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/group.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/components/link.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/link.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/components/station.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/station.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/components/terminal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/terminal.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,12 +37,12 @@
   <component name="GithubDefaultAccount">
     <option name="defaultAccountId" value="b815287a-a6c5-4b76-90f9-585695594626" />
   </component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/hoxirious/oniform.git&quot;,
-    &quot;accountId&quot;: &quot;b815287a-a6c5-4b76-90f9-585695594626&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:hoxirious/oniform.git",
+    "accountId": "b815287a-a6c5-4b76-90f9-585695594626"
   }
-}</component>
+}]]></component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -52,26 +55,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JavaScript Debug.localhost:5173.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "ignore_missing_gitignore": "true",
-    "last_opened_file_path": "C:/Users/i60860/WebstormProjects/oniform",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "/home/hoxirious/WebstormProjects/oniform/exporter/node_modules/typescript/lib",
-    "ts.rename.search.for.dynamic.occurrences": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.localhost:5173.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore_missing_gitignore&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/i60860/WebstormProjects/oniform&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/hoxirious/WebstormProjects/oniform/exporter/node_modules/typescript/lib&quot;,
+    &quot;ts.rename.search.for.dynamic.occurrences&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/importer/src/data" />
@@ -128,6 +131,7 @@
       <workItem from="1741051844059" duration="4251000" />
       <workItem from="1741059648343" duration="2007000" />
       <workItem from="1741106859785" duration="1561000" />
+      <workItem from="1741224639724" duration="528000" />
     </task>
     <task id="LOCAL-00001" summary="Init barebone">
       <option name="closed" value="true" />

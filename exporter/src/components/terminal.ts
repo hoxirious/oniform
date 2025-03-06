@@ -137,7 +137,7 @@ export default class Terminal {
         private _value: string = "",
         private _links: Link[] = [],
         private _html: HTMLDivElement = document.createElement("div"),
-        private _isClone: boolean = false,
+        private _editable: boolean = true,
         private _id: string = `terminal-${generateGUID()}`
     ) {
         this.render();
@@ -163,7 +163,7 @@ export default class Terminal {
 
         const buttons = document.createElement("div");
         buttons.classList.add("buttons");
-        if (!this._isClone) {
+        if (this._editable) {
             const deleteButton = new TerminalButtonDelete(this._prevStation, this).button;
             const collapseButton = new TerminalButtonCollapse(this).button;
             const addButton = new TerminalButtonAdd(this._prevStation, this).button;
@@ -209,7 +209,7 @@ export default class Terminal {
     }
 
     public clone(): Terminal {
-        const terminalClone = new Terminal(this._prevStation, this._label, this._root, this._value, [], undefined, true);
+        const terminalClone = new Terminal(this._prevStation, this._label, this._root, this._value, [], undefined, false);
         this._links.map(link => link.clone(terminalClone)).forEach(link => terminalClone.addLink(link));
         return terminalClone;
     }
