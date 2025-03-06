@@ -214,21 +214,23 @@ export default class Station {
             );
             this._html.appendChild(terminals);
         }
-        this._links.forEach(link => this._html.appendChild(link.html));
+        this._links.forEach(link => {
+            link.right.rerender();
+            this._html.appendChild(link.html)
+        });
     }
 
     rerender() {
         this.render();
     }
 
-    clone(editable: boolean = false): Station {
-        const dumbGroupOwner = new Group(Oniform.instance);
+    clone(editable: boolean = false, cloneGroupOwner?: Group): Station {
         const stationClone = new Station(
-            dumbGroupOwner,
+            cloneGroupOwner ?? new Group(Oniform.instance),
             this._root, this._value, this._label,
             [], [], undefined, editable);
 
-        this._nextTerminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.addExistingTerminal(terminal));
+        this._nextTerminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal));
         this._links.map(link => link.clone(stationClone, editable))
         return stationClone;
     }
@@ -244,10 +246,11 @@ export default class Station {
             this.groupOwner.addStationAfterReference(this, copiedObject);
         }
         else if (copiedObject instanceof Group) {
+            copiedObject.parent = this;
             new Link(this, copiedObject, Relationship.DEPENDANT);
         }
         else {
-            this.addExistingTerminal(copiedObject);
+            this.appendExistingTerminal(copiedObject);
         }
 
         this.rerender();
@@ -297,9 +300,16 @@ export default class Station {
         this.rerender();
     }
 
-    addExistingTerminal(terminal: Terminal) {
+    appendExistingTerminal(terminal: Terminal) {
         terminal.prevStation = this;
         this._nextTerminals.push(terminal);
+        this.rerender();
+    }
+
+    addTerminalAfterReference(refTerminal: Terminal, newTerminal: Terminal) {
+        newTerminal.prevStation = this;
+        const prevTerminalIndex = this.findTerminalIndex(refTerminal);
+        this._nextTerminals.splice(prevTerminalIndex, 0, newTerminal);
         this.rerender();
     }
 
@@ -329,8 +339,7 @@ export default class Station {
     }
 
     addLink(link: Link) {
-        const linkIndex = this._links.findIndex(l => l.relationship === Relationship.DEPENDANT);
-        this._links.splice(linkIndex, 0, link);
+        this._links.push(link);
         this.rerender();
     }
 

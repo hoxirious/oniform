@@ -92,7 +92,7 @@ export class TerminalButtonPaste extends ActionButton {
         paste.alt = "Paste";
 
         super(paste, "paste-terminal", ["icon"], () => {
-            console.log("paste");
+            self.paste();
         }, true, undefined, "Paste Terminal");
     }
 }
@@ -152,7 +152,11 @@ export default class Terminal {
         const terminalElement = this.createTerminalElement();
         this._html.appendChild(terminalElement);
 
-        this._links.forEach(link => this._html.appendChild(link.html));
+        this._links.forEach(link =>
+        {
+            link.right.rerender();
+            this._html.appendChild(link.html);
+        });
     }
 
     private createTerminalElement(): HTMLDivElement {
@@ -216,6 +220,24 @@ export default class Terminal {
         return terminalClone;
     }
 
+    public paste(): void {
+        const copiedObject = Clipboard.instance.cloneCopiedObject();
+        if(!copiedObject) {
+            console.log("Nothing to paste");
+            return;
+        }
+        if(copiedObject instanceof Terminal) {
+            const newTerminal = copiedObject.clone(true, this._prevStation);
+            this._prevStation.addTerminalAfterReference(this, newTerminal);
+        }
+        else if(copiedObject instanceof Group) {
+            copiedObject.parent = this;
+            new Link(this, copiedObject, Relationship.DEPENDANT);
+        }
+
+        this.rerender();
+    }
+
     get label(): string {
         return this._label;
     }
@@ -258,8 +280,7 @@ export default class Terminal {
     }
 
     public addLink(link: Link) {
-        const linkIndex = this._links.findIndex(l => l.relationship === Relationship.DEPENDANT);
-        this._links.splice(linkIndex, 0, link);
+        this._links.push(link);
         this.rerender();
         this.prevStation.groupOwner.rerender();
     }

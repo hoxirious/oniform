@@ -69,6 +69,7 @@ export default class Oniform {
     }
 
     addGroupAfterReference(prevGroup: Group, newGroup: Group) {
+        newGroup.parent = this;
         const prevGroupIndex = this.findGroupIndex(prevGroup);
         this._groups.splice(prevGroupIndex, 0, newGroup);
         this.rerender();

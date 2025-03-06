@@ -72,7 +72,7 @@ export default class Group {
     private readonly _html: HTMLDivElement = document.createElement("div");
 
     constructor(
-        private readonly _parent: Oniform|Station|Terminal,
+        private _parent: Oniform|Station|Terminal,
         private _label: string = "Group 1",
         private readonly _stations: Station[] = [],
         private readonly _scoreExpression: string = "",
@@ -162,8 +162,10 @@ export default class Group {
     }
 
     clone(editable: boolean = false): Group {
-        const clonedStations: Station[] = this._stations.map(station => station.clone(editable));
-        return new Group(this._parent, this._label, clonedStations, this._scoreExpression, this._score, editable);
+        const cloneGroup = new Group(this._parent, this._label, [], this._scoreExpression, this._score, editable);
+        this._stations.map(station => station.clone(editable, cloneGroup)).forEach(station => cloneGroup.appendExistingStation(station));
+
+        return cloneGroup;
     }
 
     paste(): void {
@@ -177,6 +179,7 @@ export default class Group {
                 this._parent.addGroupAfterReference(this, copiedObject);
             }
             else {
+                copiedObject.parent = this._parent;
                 new Link(this._parent, copiedObject, Relationship.DEPENDANT);
             }
         }
@@ -259,6 +262,10 @@ export default class Group {
 
     get parent(): Oniform|Station|Terminal|undefined {
         return this._parent;
+    }
+
+    set parent(parent: Oniform|Station|Terminal) {
+        this._parent = parent;
     }
 
     toJSON(): any {
