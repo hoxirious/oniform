@@ -10,6 +10,7 @@ import plusUrl from "../static/plus.svg";
 import copyUrl from "../static/copy.svg";
 import pasteUrl from "../static/paste.svg";
 import Terminal from "./terminal.ts";
+import Link, {Relationship} from "./link.ts";
 
 export class GroupButtonAdd extends ActionButton {
     constructor(self?: Group) {
@@ -62,7 +63,7 @@ export class GroupButtonPaste extends ActionButton {
         paste.alt = "Paste";
 
         super(paste, "paste-group", ["icon"], () => {
-            console.log("paste group");
+            self.paste();
         }, true, undefined, "Paste Group");
     }
 }
@@ -160,12 +161,36 @@ export default class Group {
         this.render();
     }
 
-    clone(): Group {
-        const clonedStations: Station[] = this._stations.map(station => station.clone());
-        return new Group(this._parent, this._label, clonedStations, this._scoreExpression, this._score, false);
+    clone(editable: boolean = false): Group {
+        const clonedStations: Station[] = this._stations.map(station => station.clone(editable));
+        return new Group(this._parent, this._label, clonedStations, this._scoreExpression, this._score, editable);
     }
 
-    addStation(prevStation?: Station) {
+    paste(): void {
+        const copiedObject = Clipboard.instance.cloneCopiedObject();
+        if(!copiedObject) {
+            console.log("Nothing to paste");
+            return;
+        }
+        if(copiedObject instanceof Group) {
+            if(this._parent instanceof Oniform) {
+                this._parent.addGroupAfterReference(this, copiedObject);
+            }
+            else {
+                new Link(this._parent, copiedObject, Relationship.DEPENDANT);
+            }
+        }
+        else if(copiedObject instanceof Station) {
+            this.addExistingStation(copiedObject);
+        }
+        else {
+            console.error("Invalid object to paste");
+            return;
+        }
+        this.rerender();
+    }
+
+    addEmptyStation(prevStation?: Station) {
         if(prevStation) {
             const stationIndex = this.findStationIndex(prevStation);
             const station = new Station(this, prevStation, "",`Station ${stationIndex + 1}`);
@@ -174,6 +199,11 @@ export default class Group {
         else {
             this._stations.push(new Station(this));
         }
+        this.rerender();
+    }
+
+    addExistingStation(station: Station) {
+        this._stations.push(station);
         this.rerender();
     }
 

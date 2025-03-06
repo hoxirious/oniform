@@ -20,7 +20,7 @@ export class StationButtonAdd extends ActionButton {
 
         if (!self) {
             super("New Station", "new-station", ["button"], () => {
-                group.addStation();
+                group.addEmptyStation();
             }, true, undefined, "New Station");
         }
         else {
@@ -28,7 +28,7 @@ export class StationButtonAdd extends ActionButton {
             actionItems.classList.add("action_items");
 
             const siblingButton = new ActionButton("Sibling", "station-sibling", ["add_station_button"], () => {
-                group.addStation(self);
+                group.addEmptyStation(self);
             }, true, undefined, "New Station").button;
             const dependantButton = new ActionButton("Dependant", "station-dependant", ["add_station_button"], () => {
                 const newGroup = new Group(self);
@@ -220,14 +220,14 @@ export default class Station {
         this.render();
     }
 
-    clone(): Station {
+    clone(editable: boolean = false): Station {
         const stationClone = new Station(
             this._groupOwner,
             this._root, this._value, this._label,
-            this._nextTerminals.map(terminal => terminal.clone()),
-            [], undefined, false);
+            this._nextTerminals.map(terminal => terminal.clone(editable)),
+            [], undefined, editable);
 
-        this._links.map(link => link.clone(stationClone)).forEach(link => stationClone.addLink(link));
+        this._links.map(link => link.clone(stationClone, editable))
         return stationClone;
     }
 
@@ -297,12 +297,8 @@ export default class Station {
     }
 
     addLink(link: Link) {
-        const siblingIndex = this._links.findIndex(l => l.relationship === Relationship.SIBLING);
-        if (siblingIndex !== -1) {
-            this._links.splice(siblingIndex, 0, link);
-        } else {
-            this._links.push(link);
-        }
+        const linkIndex = this._links.findIndex(l => l.relationship === Relationship.DEPENDANT);
+        this._links.splice(linkIndex, 0, link);
         this.rerender();
     }
 

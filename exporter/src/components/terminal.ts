@@ -208,9 +208,9 @@ export default class Terminal {
         this.render();
     }
 
-    public clone(): Terminal {
-        const terminalClone = new Terminal(this._prevStation, this._label, this._root, this._value, [], undefined, false);
-        this._links.map(link => link.clone(terminalClone)).forEach(link => terminalClone.addLink(link));
+    public clone(editable: boolean = false): Terminal {
+        const terminalClone = new Terminal(this._prevStation, this._label, this._root, this._value, [], undefined, editable);
+        this._links.map(link => link.clone(terminalClone, editable)).forEach(link => terminalClone.addLink(link));
         return terminalClone;
     }
 
@@ -252,12 +252,8 @@ export default class Terminal {
     }
 
     public addLink(link: Link) {
-        const siblingIndex = this._links.findIndex(l => l.relationship === Relationship.SIBLING);
-        if (siblingIndex !== -1) {
-            this._links.splice(siblingIndex, 0, link);
-        } else {
-            this._links.push(link);
-        }
+        const linkIndex = this._links.findIndex(l => l.relationship === Relationship.DEPENDANT);
+        this._links.splice(linkIndex, 0, link);
         this.rerender();
         this.prevStation.groupOwner.rerender();
     }

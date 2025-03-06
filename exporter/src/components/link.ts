@@ -33,9 +33,9 @@ export default class Link {
         }
     }
 
-    clone(leftClone: Station|Terminal): Link {
-        const rightClone = this._right.clone();
-        return new Link(leftClone, rightClone, this._relationship, false);
+    clone(leftClone: Station|Terminal, editable: boolean = false): Link {
+        const rightClone = this._right.clone(editable);
+        return new Link(leftClone, rightClone, this._relationship, editable);
     }
 
 

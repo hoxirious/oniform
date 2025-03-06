@@ -28,8 +28,20 @@ export default class Clipboard {
         return this._html;
     }
 
+    get copiedObject(): Group|Station|Terminal|undefined {
+        return this._copiedObject;
+    }
+
     set copiedObject(copiedObject: Group|Station|Terminal) {
         this._copiedObject = copiedObject;
         this.rerender();
     }
+
+     cloneCopiedObject(): Group|Station|Terminal|undefined {
+        if(this._copiedObject) {
+            return this._copiedObject.clone(true);
+        }
+
+        return undefined;
+     }
 }

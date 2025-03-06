@@ -68,6 +68,12 @@ export default class Oniform {
         this.rerender();
     }
 
+    addGroupAfterReference(prevGroup: Group, newGroup: Group) {
+        const prevGroupIndex = this.findGroupIndex(prevGroup);
+        this._groups.splice(prevGroupIndex, 0, newGroup);
+        this.rerender();
+    }
+
     deleteGroup(group: Group) {
         const groupIndex = this.findGroupIndex(group) - 1;
         this._groups.splice(groupIndex, 1);
