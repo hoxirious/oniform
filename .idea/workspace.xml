@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="Editable flag instead of isClone">
+    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="paste station">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/components/clipboard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/clipboard.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/exporter/src/components/group.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/group.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/components/link.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/link.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/components/oniform.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/oniform.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/exporter/src/components/station.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/station.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/components/terminal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/terminal.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +129,7 @@
       <workItem from="1741051844059" duration="4251000" />
       <workItem from="1741059648343" duration="2007000" />
       <workItem from="1741106859785" duration="1561000" />
-      <workItem from="1741224639724" duration="5792000" />
+      <workItem from="1741224639724" duration="9329000" />
     </task>
     <task id="LOCAL-00001" summary="Init barebone">
       <option name="closed" value="true" />
@@ -487,7 +483,23 @@
       <option name="project" value="LOCAL" />
       <updated>1741225222227</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="paste group">
+      <option name="closed" value="true" />
+      <created>1741231684274</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1741231684274</updated>
+    </task>
+    <task id="LOCAL-00046" summary="paste station">
+      <option name="closed" value="true" />
+      <created>1741235753362</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1741235753362</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -517,8 +529,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add terminal, connector html" />
-    <MESSAGE value="new connector logic and button position style" />
     <MESSAGE value="Add new terminal" />
     <MESSAGE value="Restructure components" />
     <MESSAGE value="Simplify button" />
@@ -542,6 +552,8 @@
     <MESSAGE value="Add README.md" />
     <MESSAGE value="Refactor static assets and implement Clipboard functionality" />
     <MESSAGE value="Editable flag instead of isClone" />
-    <option name="LAST_COMMIT_MESSAGE" value="Editable flag instead of isClone" />
+    <MESSAGE value="paste group" />
+    <MESSAGE value="paste station" />
+    <option name="LAST_COMMIT_MESSAGE" value="paste station" />
   </component>
 </project>

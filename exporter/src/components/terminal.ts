@@ -11,13 +11,14 @@ import Clipboard from "./clipboard.ts";
 import chevronDownUrl from "../static/chevron-down.svg";
 import chevronRightUrl from "../static/chevron-right.svg";
 import {generateGUID} from "../common/utility.ts";
+import Oniform from "./oniform.ts";
 
 export class TerminalButtonAdd extends ActionButton {
     constructor(parent: Station, self?: Terminal) {
         const plus = createPlusIcon();
         if(!self) {
             super("New Terminal", "new-terminal", ["button"], () => {
-                    parent.addTerminal();
+                    parent.addEmptyTerminal();
                 },
                 true,
                 undefined,
@@ -101,7 +102,7 @@ function createActionItems(parent: Station, self: Terminal): HTMLUListElement {
     actionItems.classList.add("action_items");
 
     const siblingButton = new ActionButton("Sibling", "terminal-sibling", ["add_terminal_button"], () => {
-        parent.addTerminal(self);
+        parent.addEmptyTerminal(self);
         parent.rerender();
     }).button;
 
@@ -187,6 +188,7 @@ export default class Terminal {
         const labelElement = document.createElement("input");
         labelElement.disabled = true;
         const stationLabelSplit = this._prevStation.label.split(" ");
+        console.log(stationLabelSplit);
         const stationIndex = stationLabelSplit[stationLabelSplit.length-1];
         labelElement.value = `Terminal ${stationIndex}-${this.prevStation.findTerminalIndex(this).toString()}`;
         labelElement.classList.add("terminal_label");
@@ -208,8 +210,8 @@ export default class Terminal {
         this.render();
     }
 
-    public clone(editable: boolean = false): Terminal {
-        const terminalClone = new Terminal(this._prevStation, this._label, this._root, this._value, [], undefined, editable);
+    public clone(editable: boolean = false, dumbStation?: Station): Terminal {
+        const terminalClone = new Terminal(dumbStation ?? new Station(new Group(Oniform.instance)), this._label, this._root, this._value, [], undefined, editable);
         this._links.map(link => link.clone(terminalClone, editable)).forEach(link => terminalClone.addLink(link));
         return terminalClone;
     }
@@ -228,6 +230,10 @@ export default class Terminal {
 
     get prevStation(): Station {
         return this._prevStation;
+    }
+
+    set prevStation(station: Station) {
+        this._prevStation = station;
     }
 
     get id(): string {

@@ -11,6 +11,7 @@ import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import Link, {Relationship} from "./link.ts";
 import {generateGUID} from "../common/utility.ts";
+import Oniform from "./oniform.ts";
 
 export class StationButtonAdd extends ActionButton {
     constructor(group: Group, self?: Station) {
@@ -118,7 +119,7 @@ export class StationButtonPaste extends ActionButton {
         paste.alt = "Paste";
 
         super(paste, "paste-station", ["icon"], () => {
-            console.log("paste")
+            self.paste();
         }, true, undefined, "Paste Station");
     }
 }
@@ -221,14 +222,35 @@ export default class Station {
     }
 
     clone(editable: boolean = false): Station {
+        const dumbGroupOwner = new Group(Oniform.instance);
         const stationClone = new Station(
-            this._groupOwner,
+            dumbGroupOwner,
             this._root, this._value, this._label,
-            this._nextTerminals.map(terminal => terminal.clone(editable)),
-            [], undefined, editable);
+            [], [], undefined, editable);
 
+        this._nextTerminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.addExistingTerminal(terminal));
         this._links.map(link => link.clone(stationClone, editable))
         return stationClone;
+    }
+
+    paste(): void {
+        const copiedObject = Clipboard.instance.cloneCopiedObject();
+        if(!copiedObject) {
+            console.log("Nothing to paste");
+            return;
+        }
+
+        if(copiedObject instanceof Station) {
+            this.groupOwner.addStationAfterReference(this, copiedObject);
+        }
+        else if (copiedObject instanceof Group) {
+            new Link(this, copiedObject, Relationship.DEPENDANT);
+        }
+        else {
+            this.addExistingTerminal(copiedObject);
+        }
+
+        this.rerender();
     }
 
     get root(): Station {
@@ -251,6 +273,10 @@ export default class Station {
         return this._nextTerminals;
     }
 
+    set nextTerminals(terminals: Terminal[]) {
+        this._nextTerminals = terminals;
+    }
+
     get groupOwner(): Group {
         return this._groupOwner;
     }
@@ -259,7 +285,7 @@ export default class Station {
         return this._links;
     }
 
-    addTerminal(prevTerminal?: Terminal) {
+    addEmptyTerminal(prevTerminal?: Terminal) {
         if(prevTerminal) {
             const terminalIndex = this.findTerminalIndex(prevTerminal);
             const terminal = new Terminal(this);
@@ -268,6 +294,12 @@ export default class Station {
         else {
             this.nextTerminals.push(new Terminal(this));
         }
+        this.rerender();
+    }
+
+    addExistingTerminal(terminal: Terminal) {
+        terminal.prevStation = this;
+        this._nextTerminals.push(terminal);
         this.rerender();
     }
 
@@ -300,6 +332,10 @@ export default class Station {
         const linkIndex = this._links.findIndex(l => l.relationship === Relationship.DEPENDANT);
         this._links.splice(linkIndex, 0, link);
         this.rerender();
+    }
+
+    set groupOwner(group: Group) {
+        this._groupOwner = group;
     }
 
     toJSON(): any {

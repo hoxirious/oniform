@@ -181,7 +181,7 @@ export default class Group {
             }
         }
         else if(copiedObject instanceof Station) {
-            this.addExistingStation(copiedObject);
+            this.appendExistingStation(copiedObject);
         }
         else {
             console.error("Invalid object to paste");
@@ -202,8 +202,16 @@ export default class Group {
         this.rerender();
     }
 
-    addExistingStation(station: Station) {
+    appendExistingStation(station: Station) {
+        station.groupOwner = this;
         this._stations.push(station);
+        this.rerender();
+    }
+
+    addStationAfterReference(refStation: Station, newStation: Station) {
+        newStation.groupOwner = this;
+        const prevStationIndex = this.findStationIndex(refStation);
+        this._stations.splice(prevStationIndex, 0, newStation);
         this.rerender();
     }
 
