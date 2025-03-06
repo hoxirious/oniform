@@ -192,7 +192,6 @@ export default class Terminal {
         const labelElement = document.createElement("input");
         labelElement.disabled = true;
         const stationLabelSplit = this._prevStation.label.split(" ");
-        console.log(stationLabelSplit);
         const stationIndex = stationLabelSplit[stationLabelSplit.length-1];
         labelElement.value = `Terminal ${stationIndex}-${this.prevStation.findTerminalIndex(this).toString()}`;
         labelElement.classList.add("terminal_label");
@@ -216,7 +215,7 @@ export default class Terminal {
 
     public clone(editable: boolean = false, dumbStation?: Station): Terminal {
         const terminalClone = new Terminal(dumbStation ?? new Station(new Group(Oniform.instance)), this._label, this._root, this._value, [], undefined, editable);
-        this._links.map(link => link.clone(terminalClone, editable)).forEach(link => terminalClone.addLink(link));
+        this._links.forEach(link => link.clone(terminalClone, editable));
         return terminalClone;
     }
 
@@ -280,6 +279,7 @@ export default class Terminal {
     }
 
     public addLink(link: Link) {
+        link.left = this;
         this._links.push(link);
         this.rerender();
         this.prevStation.groupOwner.rerender();

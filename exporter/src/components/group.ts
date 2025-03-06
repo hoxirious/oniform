@@ -161,10 +161,9 @@ export default class Group {
         this.render();
     }
 
-    clone(editable: boolean = false): Group {
-        const cloneGroup = new Group(this._parent, this._label, [], this._scoreExpression, this._score, editable);
+    clone(editable: boolean = false, parentClone?: Station|Terminal): Group {
+        const cloneGroup = new Group(parentClone ?? Oniform.instance, this._label, [], this._scoreExpression, this._score, editable);
         this._stations.map(station => station.clone(editable, cloneGroup)).forEach(station => cloneGroup.appendExistingStation(station));
-
         return cloneGroup;
     }
 

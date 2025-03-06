@@ -13,8 +13,8 @@ export default class Link {
     private readonly _html: HTMLDivElement = document.createElement("div");
 
     constructor(
-        private readonly _left: Station | Terminal,
-        private readonly _right: Station | Group,
+        private _left: Station | Terminal,
+        private readonly _right: Group,
         private readonly _relationship: Relationship,
         private readonly _editable: boolean = true,
         private readonly _id: string = `link-${generateGUID()}`
@@ -34,13 +34,17 @@ export default class Link {
     }
 
     clone(leftClone: Station|Terminal, editable: boolean = false): Link {
-        const rightClone = this._right.clone(editable);
+        const rightClone = this._right.clone(editable, leftClone);
         return new Link(leftClone, rightClone, this._relationship, editable);
     }
 
 
     get left(): Station | Terminal {
         return this._left;
+    }
+
+    set left(left: Station | Terminal) {
+        this._left = left;
     }
 
     get right(): Station | Group {

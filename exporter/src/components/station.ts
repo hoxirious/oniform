@@ -231,7 +231,7 @@ export default class Station {
             [], [], undefined, editable);
 
         this._nextTerminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal));
-        this._links.map(link => link.clone(stationClone, editable))
+        this._links.forEach(link => link.clone(stationClone, editable))
         return stationClone;
     }
 
@@ -326,6 +326,8 @@ export default class Station {
     }
 
     deleteGroup(group: Group) {
+        this.links.forEach(link => console.log(link.right.id));
+        console.log(group.id);
         const linkIndex = this.links.findIndex(g => g.right.id === group.id);
         this.links[linkIndex].html.remove();
         this.links.splice(linkIndex, 1);
@@ -339,7 +341,7 @@ export default class Station {
     }
 
     addLink(link: Link) {
-        this._links.push(link);
+        this.links.push(link);
         this.rerender();
     }
 
