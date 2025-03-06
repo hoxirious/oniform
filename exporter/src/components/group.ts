@@ -256,10 +256,6 @@ export default class Group {
         return this._html;
     }
 
-    // get links(): Link[] {
-    //     return this._links;
-    // }
-
     get parent(): Oniform|Station|Terminal|undefined {
         return this._parent;
     }

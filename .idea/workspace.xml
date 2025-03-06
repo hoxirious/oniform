@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="paste station">
+    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="paste terminal">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/exporter/src/components/group.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/group.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/components/oniform.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/oniform.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/components/station.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/station.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/components/terminal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/terminal.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +129,7 @@
       <workItem from="1741051844059" duration="4251000" />
       <workItem from="1741059648343" duration="2007000" />
       <workItem from="1741106859785" duration="1561000" />
-      <workItem from="1741224639724" duration="11547000" />
+      <workItem from="1741224639724" duration="11968000" />
     </task>
     <task id="LOCAL-00001" summary="Init barebone">
       <option name="closed" value="true" />
@@ -509,7 +507,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741236055492</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="paste terminal">
+      <option name="closed" value="true" />
+      <created>1741238479332</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1741238479332</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -539,7 +545,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add new terminal" />
     <MESSAGE value="Restructure components" />
     <MESSAGE value="Simplify button" />
     <MESSAGE value="Organize Link relationship position" />
@@ -564,6 +569,7 @@
     <MESSAGE value="Editable flag instead of isClone" />
     <MESSAGE value="paste group" />
     <MESSAGE value="paste station" />
-    <option name="LAST_COMMIT_MESSAGE" value="paste station" />
+    <MESSAGE value="paste terminal" />
+    <option name="LAST_COMMIT_MESSAGE" value="paste terminal" />
   </component>
 </project>
