@@ -46,12 +46,13 @@ export class TerminalButtonCollapse extends ActionButton {
         chevronRight.alt = "Expand All";
 
         super(chevronDown, "collapse-stations", ["icon"], () => {
-            const links = self.html.getElementsByClassName(`link ${Relationship.DEPENDANT}`);
-            for (let i = 0; i < links.length; i++) {
-                links[i].classList.toggle("collapse");
+            const expandedlinks = self.html.getElementsByClassName(`link ${Relationship.DEPENDANT}`);
+            for (let i = 0; i < expandedlinks.length; i++) {
+                expandedlinks[i].classList.toggle("collapse");
             }
 
-            if (links.length > 0 && links[0].classList.contains("collapse")) {
+
+            if (expandedlinks.length > 0 && expandedlinks[0].classList.contains("collapse")) {
                 this.button.replaceChild(chevronRight, this.button.firstChild!);
             }
             else {
@@ -172,6 +173,7 @@ export default class Terminal {
 
         this._links.forEach(link =>
         {
+            link.html.classList.remove("collapse");
             link.right.rerender();
             this._html.appendChild(link.html);
         });

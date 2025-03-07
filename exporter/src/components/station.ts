@@ -230,6 +230,7 @@ export default class Station {
             this._html.appendChild(terminals);
         }
         this._links.forEach(link => {
+            link.html.classList.remove("collapse");
             link.right.rerender();
             this._html.appendChild(link.html)
         });
