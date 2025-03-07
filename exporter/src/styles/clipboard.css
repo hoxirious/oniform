@@ -3,17 +3,23 @@
     position: fixed;
     top: 0;
     right: 2.5rem;
-    width: 50rem;
+    width: 40%;
     height: 90%;
     background-color: rgb(23,23,23);
     z-index: 999;
     overflow: auto;
+    resize: horizontal;
+    direction: rtl;
     padding-left: 1rem;
     padding-right: 2rem;
     border-width: 0.1rem;
     border-color: rgba(224, 224, 224, 0.5);
     border-radius: 0.5rem;
     margin-top: 2rem;
+}
+
+#clipboard > * {
+    direction: ltr;
 }
 
 #clipboard.show {
