@@ -55,9 +55,12 @@ input:focus, textarea:focus {
 #exporter {
   display: flex;
   height: 100%;
+  overflow: auto;
 }
 
 #toolbar {
   margin: auto 0 auto auto;
   width: 2rem;
+  position: sticky;
+  top: 1rem;
 }
