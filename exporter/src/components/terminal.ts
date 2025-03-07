@@ -10,7 +10,7 @@ import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import chevronDownUrl from "../static/chevron-down.svg";
 import chevronRightUrl from "../static/chevron-right.svg";
-import {generateGUID, showErrorPopup} from "../common/utility.ts";
+import {generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 
 export class TerminalButtonAdd extends ActionButton {
@@ -86,6 +86,7 @@ export class TerminalButtonCopy extends ActionButton {
             }
 
             Clipboard.instance.copiedObject = self.clone();
+            showSuccessPopup("Option copied to clipboard", 1500);
             self.html.classList.add("selected");
 
             const removeSelection = (event: Event) => {

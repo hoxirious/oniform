@@ -41,6 +41,42 @@ export function showErrorPopup(message: string, duration: number = 1000) {
     }, duration);
 }
 
+
+export function showSuccessPopup(message: string, duration: number = 1000) {
+    const successPopup = document.createElement("div");
+    successPopup.textContent = message;
+    successPopup.style.position = "fixed";
+    successPopup.style.right = "2rem";
+    successPopup.style.padding = "0.5rem";
+    successPopup.style.backgroundColor = "#259620";
+    successPopup.style.color = "white";
+    successPopup.style.borderRadius = "0.25rem";
+    successPopup.style.boxShadow = "0px 2px 5px rgba(0,0,0,0.3)";
+    successPopup.style.opacity = "0";
+    successPopup.style.zIndex = "1000";
+    successPopup.style.transition = "top 0.75s ease-in-out, opacity 0.25s ease-in-out";
+
+    // Find existing error popups and stack them
+    const existingPopups = document.querySelectorAll(".successPopup");
+    const offset = existingPopups.length * 3; // Stack with spacing
+    successPopup.style.top = `${1 + offset}rem`;
+    successPopup.classList.add("successPopup");
+
+    document.body.appendChild(successPopup);
+
+    setTimeout(() => {
+        successPopup.style.opacity = "1";
+    }, 10);
+
+    setTimeout(() => {
+        successPopup.style.top = "-3rem"; // Slide up when disappearing
+        successPopup.style.opacity = "0";
+        setTimeout(() => {
+            document.body.removeChild(successPopup);
+        }, 500); // Ensure the transition completes before removal
+    }, duration);
+}
+
 export function createListItem(button: HTMLButtonElement): HTMLLIElement {
     const listItem = document.createElement("li");
     listItem.appendChild(button);

@@ -10,7 +10,7 @@ import pasteUrl from "../static/paste.svg";
 import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import Link, {Relationship} from "./link.ts";
-import {createListItem, generateGUID, showErrorPopup} from "../common/utility.ts";
+import {createListItem, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 
 export class StationButtonAdd extends ActionButton {
@@ -118,6 +118,7 @@ export class StationButtonCopy extends ActionButton {
                 previouslySelected.classList.remove("selected");
             }
             Clipboard.instance.copiedObject = self.clone();
+            showSuccessPopup("Question copied to clipboard", 1500);
             self.html.classList.add("selected");
 
             const removeSelection = (event: Event) => {

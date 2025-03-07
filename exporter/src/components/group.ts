@@ -4,7 +4,7 @@ import ActionButton from "./actionButton.ts";
 import Oniform from "./oniform.ts";
 import Clipboard from "./clipboard.ts";
 // import Link from "./link.ts";
-import {createListItem, generateGUID, showErrorPopup} from "../common/utility.ts";
+import {createListItem, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import minusUrl from "../static/minus.svg";
 import plusUrl from "../static/plus.svg";
 import copyUrl from "../static/copy.svg";
@@ -70,6 +70,7 @@ export class GroupButtonCopy extends ActionButton {
                 previouslySelected.classList.remove("selected");
             }
             Clipboard.instance.copiedObject = self.clone();
+            showSuccessPopup("Group copied to clipboard");
             self.html.classList.add("selected");
 
             const removeSelection = (event: Event) => {
