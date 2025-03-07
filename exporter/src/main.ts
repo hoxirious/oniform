@@ -1,6 +1,6 @@
 import Oniform from "./components/oniform.ts";
 import Clipboard from "./components/clipboard.ts";
-import clipboard from "./static/paste.svg";
+import clipboard from "./static/clipboard.svg";
 import ActionButton from "./components/actionButton.ts";
 import "./styles/clipboard.css";
 
@@ -30,9 +30,8 @@ const initPage = () => {
             return;
         }
         clipboardElement.classList.toggle("show");
-    }, true, undefined, "Copy to Clipboard");
+    }, true, undefined, "Toggle Clipboard");
     toolbar.appendChild(clipboardButton.button);
-
 }
 
 const initForm = () => {

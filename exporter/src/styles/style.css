@@ -60,7 +60,11 @@ input:focus, textarea:focus {
 
 #toolbar {
   margin: auto 0 auto auto;
-  width: 2rem;
+  width: 3rem;
   position: sticky;
   top: 1rem;
+  background-color: rgb(63, 67, 70);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
