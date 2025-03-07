@@ -1,6 +1,7 @@
 import Group from "./group.ts";
 import Station from "./station.ts";
 import Terminal from "./terminal.ts";
+import "../styles/clipboard.css";
 
 export default class Clipboard {
     static instance = new Clipboard();
@@ -14,8 +15,10 @@ export default class Clipboard {
 
     public render() {
         this._html.innerHTML = "";
+        const clipboardTitle = document.createElement("h2");
+        clipboardTitle.textContent = "Clipboard";
+        this._html.appendChild(clipboardTitle);
         this._html.classList.add("clipboard_container");
-        this._html.id = "clipboard";
         if(this._copiedObject)
             this._html.appendChild(this._copiedObject.html);
     }

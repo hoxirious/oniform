@@ -50,9 +50,14 @@ input:focus, textarea:focus {
 #app {
   width: 100vw;
   height: 100vh;
-  padding: 2rem;
 }
 
 #exporter {
   display: flex;
+  height: 100%;
+}
+
+#toolbar {
+  margin: auto 0 auto auto;
+  width: 2rem;
 }

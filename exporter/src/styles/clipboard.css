@@ -1,0 +1,32 @@
+#clipboard {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 2.5rem;
+    width: 50rem;
+    height: 90%;
+    background: rgb(0, 0, 0);
+    z-index: 1000;
+    overflow: auto;
+    padding-left: 1rem;
+    padding-right: 2rem;
+    border: 0.1rem solid #ccc;
+    border-radius: 0.5rem;
+    margin-top: 2rem;
+}
+
+#clipboard.show {
+    display: flex;
+}
+
+.clipboard_container {
+    width: 100%;
+}
+
+.clipboard_container h2 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    font-family: monospace;
+    margin-top: 1rem;
+}
+

@@ -1,11 +1,38 @@
 import Oniform from "./components/oniform.ts";
 import Clipboard from "./components/clipboard.ts";
+import clipboard from "./static/paste.svg";
+import ActionButton from "./components/actionButton.ts";
+import "./styles/clipboard.css";
 
 declare global {
     interface Window {
         oniformInstance: Oniform;
         clipboardInstance: Clipboard;
     }
+}
+
+const initPage = () => {
+    initForm();
+    const toolbar = document.getElementById("toolbar");
+    if (!toolbar) {
+        console.error("Toolbar element not found");
+        return;
+    }
+
+    const clipboardIcon = document.createElement("img");
+    clipboardIcon.src = clipboard as string;
+    clipboardIcon.alt = "Toggle Clipboard";
+
+    const clipboardButton = new ActionButton(clipboardIcon, "toggle-clipboard", ["icon"], () => {
+        const clipboardElement = document.getElementById("clipboard");
+        if (!clipboardElement) {
+            console.error("Clipboard element not found");
+            return;
+        }
+        clipboardElement.classList.toggle("show");
+    }, true, undefined, "Copy to Clipboard");
+    toolbar.appendChild(clipboardButton.button);
+
 }
 
 const initForm = () => {
@@ -40,4 +67,4 @@ const initForm = () => {
     window.oniformInstance = form; // Attach the instance to the window object
 }
 
-document.addEventListener("DOMContentLoaded", initForm);
+document.addEventListener("DOMContentLoaded", initPage);
