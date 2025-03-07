@@ -152,11 +152,11 @@ export default class Group {
 
             if(this._parent instanceof Station) {
                 parentLabel = this._parent.groupOwner.label;
-                parentSignature = "S";
+                parentSignature = "-Q";
             }
             else if(this._parent instanceof Terminal) {
                 parentLabel = this._parent.prevStation.groupOwner.label;
-                parentSignature = "T";
+                parentSignature = "-O";
             }
             const parentLabelSplit = parentLabel.split(" ");
             let parentIndex = parentLabelSplit[parentLabelSplit.length - 1]
