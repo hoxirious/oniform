@@ -11,6 +11,8 @@ import copyUrl from "../static/copy.svg";
 import pasteUrl from "../static/paste.svg";
 import Terminal from "./terminal.ts";
 import Link, {Relationship} from "./link.ts";
+import chevronDownUrl from "../static/chevron-down.svg";
+import chevronRightUrl from "../static/chevron-right.svg";
 
 export class GroupButtonAdd extends ActionButton {
     constructor(self?: Group) {
@@ -55,6 +57,30 @@ export class GroupButtonDelete extends ActionButton {
         super(minus, "delete-group", ["icon"], () => {
             parent.deleteGroup(self);
         });
+    }
+}
+
+export class GroupButtonCollapse extends ActionButton {
+    constructor(self: Group) {
+        const chevronDown = document.createElement("img");
+        chevronDown.src = chevronDownUrl as string;
+        chevronDown.alt = "Collapse All";
+
+        const chevronRight = document.createElement("img");
+        chevronRight.src = chevronRightUrl as string;
+        chevronRight.alt = "Expand All";
+
+        super(chevronDown, "collapse-stations", ["icon"], () => {
+            const stations = self.html.getElementsByClassName(`stations`);
+            stations[0].classList.toggle("collapse");
+
+            if ((stations.length > 0 && stations[0].classList.contains("collapse"))) {
+                this.button.replaceChild(chevronRight, this.button.firstChild!);
+            }
+            else {
+                this.button.replaceChild(chevronDown, this.button.firstChild!);
+            }
+        }, true, undefined, "Collapse Dependants");
     }
 }
 
@@ -144,6 +170,8 @@ export default class Group {
 
                 const copyButton = new GroupButtonCopy(this);
                 const pasteButton = new GroupButtonPaste(this);
+                const collapseButton = new GroupButtonCollapse(this);
+                buttons.appendChild(collapseButton.button);
                 buttons.appendChild(copyButton.button);
                 buttons.appendChild(pasteButton.button);
             }
