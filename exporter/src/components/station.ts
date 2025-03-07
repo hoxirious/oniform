@@ -10,7 +10,7 @@ import pasteUrl from "../static/paste.svg";
 import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import Link, {Relationship} from "./link.ts";
-import {generateGUID, showErrorPopup} from "../common/utility.ts";
+import {createListItem, generateGUID, showErrorPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 
 export class StationButtonAdd extends ActionButton {
@@ -20,22 +20,28 @@ export class StationButtonAdd extends ActionButton {
         plus.alt = "Plus";
 
         if (!self) {
-            super("New Station", "new-station", ["button"], () => {
+            super("New Question", "new-station", ["button"], () => {
                 group.addEmptyStation();
-            }, true, undefined, "New Station");
+            }, true, undefined, "New Question");
         }
         else {
             const actionItems = document.createElement("ul");
             actionItems.classList.add("action_items");
 
-            const siblingButton = new ActionButton("New Station", "station-sibling", ["add_station_button"], () => {
+            const siblingButton = new ActionButton("New question below", "station-sibling", ["add_station_button"], () => {
                 group.addEmptyStation(self);
-            }, true, undefined, "New Station").button;
-            const dependantButton = new ActionButton("New Group", "station-dependant", ["add_station_button"], () => {
+            }, true, undefined, "New Question").button;
+            const dependantButton = new ActionButton("New sub-question", "station-dependant", ["add_station_button"], () => {
                 const newGroup = new Group(self);
+                newGroup.addEmptyStation();
+                newGroup.stations[0].addEmptyTerminal();
                 new Link(self, newGroup, Relationship.DEPENDANT);
-            }, true, undefined, "New Dependant Group").button;
+            }, true, undefined, "New Dependant Question").button;
+            const terminalButton = new ActionButton("New option", "terminal-sibling", ["add_terminal_button"], () => {
+                self.addEmptyTerminal();
+            }, true, undefined, "New Option").button;
 
+            actionItems.appendChild(createListItem(terminalButton));
             actionItems.appendChild(createListItem(siblingButton));
             actionItems.appendChild(createListItem(dependantButton));
 
@@ -138,13 +144,6 @@ export class StationButtonPaste extends ActionButton {
     }
 }
 
-
-function createListItem(button: HTMLButtonElement): HTMLLIElement {
-    const listItem = document.createElement("li");
-    listItem.appendChild(button);
-    return listItem;
-}
-
 export default class Station {
     constructor(
         private _groupOwner: Group,
@@ -172,7 +171,7 @@ export default class Station {
         labelElement.disabled = true;
         const stationIndex = this.groupOwner.findStationIndex(this).toString();
         if(!this._label || this._label != `Station ${stationIndex}`)
-            this._label = `Station ${stationIndex}`;
+            this._label = `Question ${stationIndex}`;
         labelElement.value = this._label;
         labelElement.classList.add("station_label");
 

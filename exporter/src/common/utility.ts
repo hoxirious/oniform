@@ -40,3 +40,9 @@ export function showErrorPopup(message: string, duration: number = 1000) {
         }, 500); // Ensure the transition completes before removal
     }, duration);
 }
+
+export function createListItem(button: HTMLButtonElement): HTMLLIElement {
+    const listItem = document.createElement("li");
+    listItem.appendChild(button);
+    return listItem;
+}

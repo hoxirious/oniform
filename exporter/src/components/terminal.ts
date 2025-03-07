@@ -17,7 +17,7 @@ export class TerminalButtonAdd extends ActionButton {
     constructor(parent: Station, self?: Terminal) {
         const plus = createPlusIcon();
         if(!self) {
-            super("New Terminal", "new-terminal", ["button"], () => {
+            super("New Option", "new-terminal", ["button"], () => {
                     parent.addEmptyTerminal();
                 },
                 true,
@@ -30,7 +30,7 @@ export class TerminalButtonAdd extends ActionButton {
             const actionItems = createActionItems(parent, self);
             super(plus, "new-terminal", ["icon"], () => {
                 actionItems.classList.toggle("show");
-            }, true, actionItems, "New Terminal");
+            }, true, actionItems, "New Option");
         }
     }
 }
@@ -116,13 +116,15 @@ function createActionItems(parent: Station, self: Terminal): HTMLUListElement {
     const actionItems = document.createElement("ul");
     actionItems.classList.add("action_items");
 
-    const siblingButton = new ActionButton("New Terminal", "terminal-sibling", ["add_terminal_button"], () => {
+    const siblingButton = new ActionButton("New option below", "terminal-sibling", ["add_terminal_button"], () => {
         parent.addEmptyTerminal(self);
         parent.rerender();
     }).button;
 
-    const dependantButton = new ActionButton("New Group", "terminal-dependant", ["add_terminal_button"], () => {
+    const dependantButton = new ActionButton("New sub-question", "terminal-dependant", ["add_terminal_button"], () => {
         const newGroup = new Group(self);
+        newGroup.addEmptyStation();
+        newGroup.stations[0].addEmptyTerminal();
         new Link(self, newGroup, Relationship.DEPENDANT);
     }).button;
 
@@ -148,7 +150,7 @@ function createPlusIcon(): HTMLImageElement {
 export default class Terminal {
     constructor(
         private _prevStation: Station,
-        private _label: string = `Terminal ${_prevStation.label}-1`,
+        private _label: string = `Option ${_prevStation.label}-1`,
         private _root: Terminal = this,
         private _value: string = "",
         private _links: Link[] = [],
@@ -208,7 +210,7 @@ export default class Terminal {
         labelElement.disabled = true;
         const stationLabelSplit = this._prevStation.label.split(" ");
         const stationIndex = stationLabelSplit[stationLabelSplit.length-1];
-        labelElement.value = `Terminal ${stationIndex}-${this.prevStation.findTerminalIndex(this).toString()}`;
+        labelElement.value = `Option ${stationIndex}-${this.prevStation.findTerminalIndex(this).toString()}`;
         labelElement.classList.add("terminal_label");
         return labelElement;
     }
@@ -250,8 +252,9 @@ export default class Terminal {
             new Link(this, copiedObject, Relationship.DEPENDANT);
         }
         else {
-            showErrorPopup("Only Group and Terminal can be pasted into Terminal.", 2000);
-            return;
+            const newGroup = new Group(this);
+            newGroup.appendExistingStation(copiedObject);
+            new Link(this, newGroup, Relationship.DEPENDANT);
         }
 
         this.rerender();

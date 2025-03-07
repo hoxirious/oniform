@@ -4,7 +4,7 @@ import ActionButton from "./actionButton.ts";
 import Oniform from "./oniform.ts";
 import Clipboard from "./clipboard.ts";
 // import Link from "./link.ts";
-import {generateGUID, showErrorPopup} from "../common/utility.ts";
+import {createListItem, generateGUID, showErrorPopup} from "../common/utility.ts";
 import minusUrl from "../static/minus.svg";
 import plusUrl from "../static/plus.svg";
 import copyUrl from "../static/copy.svg";
@@ -20,13 +20,27 @@ export class GroupButtonAdd extends ActionButton {
             });
         }
         else {
+            const actionItems = document.createElement("ul");
+            actionItems.classList.add("action_items");
+
+            const groupButton = new ActionButton("New group below", "new-group", ["add-group"], () => {
+                Oniform.instance.addGroup(self);
+            }, true, undefined, "New Group").button;
+            const stationButton = new ActionButton("New question", "station-dependant", ["add_station_button"], () => {
+                self.addEmptyStation();
+                self.stations[self.stations.length - 1].addEmptyTerminal();
+            }, true, undefined, "New Question").button;
+
+            actionItems.appendChild(createListItem(groupButton));
+            actionItems.appendChild(createListItem(stationButton));
+
             const plus = document.createElement("img");
             plus.src = plusUrl as string;
             plus.alt = "Plus";
 
             super(plus, "new-group", ["icon"], () => {
-                Oniform.instance.addGroup(self);
-            });
+                actionItems.classList.toggle("show");
+            }, true, actionItems, "New Group");
         }
     }
 }
@@ -200,7 +214,7 @@ export default class Group {
             this.appendExistingStation(copiedObject);
         }
         else {
-            showErrorPopup("Only Group and Station can be pasted into Group.", 2000);
+            showErrorPopup("Cannot copy Option in Group.", 2000);
             return;
         }
         this.rerender();
