@@ -134,7 +134,7 @@ export class StationButtonPaste extends ActionButton {
 
         super(paste, "paste-station", ["icon"], () => {
             self.paste();
-        }, true, undefined, "Paste Station");
+        }, true, undefined, "Paste");
     }
 }
 
@@ -201,6 +201,7 @@ export default class Station {
         const textareaElement = document.createElement("textarea");
         textareaElement.classList.add("station_textarea");
         textareaElement.value = this._value;
+        textareaElement.placeholder = "Enter question here";
         textareaElement.addEventListener("input", (event) => {
             this._value = (event.target as HTMLTextAreaElement).value;
         });
@@ -300,6 +301,10 @@ export default class Station {
 
     get links(): Link[] {
         return this._links;
+    }
+
+    set value(value: string) {
+        this._value = value;
     }
 
     addEmptyTerminal(prevTerminal?: Terminal) {

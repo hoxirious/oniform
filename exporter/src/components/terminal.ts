@@ -108,7 +108,7 @@ export class TerminalButtonPaste extends ActionButton {
 
         super(paste, "paste-terminal", ["icon"], () => {
             self.paste();
-        }, true, undefined, "Paste Terminal");
+        }, true, undefined, "Paste");
     }
 }
 
@@ -116,12 +116,12 @@ function createActionItems(parent: Station, self: Terminal): HTMLUListElement {
     const actionItems = document.createElement("ul");
     actionItems.classList.add("action_items");
 
-    const siblingButton = new ActionButton("Sibling", "terminal-sibling", ["add_terminal_button"], () => {
+    const siblingButton = new ActionButton("New Terminal", "terminal-sibling", ["add_terminal_button"], () => {
         parent.addEmptyTerminal(self);
         parent.rerender();
     }).button;
 
-    const dependantButton = new ActionButton("Dependant", "terminal-dependant", ["add_terminal_button"], () => {
+    const dependantButton = new ActionButton("New Group", "terminal-dependant", ["add_terminal_button"], () => {
         const newGroup = new Group(self);
         new Link(self, newGroup, Relationship.DEPENDANT);
     }).button;
@@ -217,6 +217,7 @@ export default class Terminal {
         const inputElement = document.createElement("input");
         inputElement.classList.add("terminal_input");
         inputElement.value = this._value;
+        inputElement.placeholder = "Enter option here";
         inputElement.addEventListener("input", (event) => {
             this._value = (event.target as HTMLInputElement).value;
         });

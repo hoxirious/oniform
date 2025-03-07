@@ -78,7 +78,7 @@ export class GroupButtonPaste extends ActionButton {
 
         super(paste, "paste-group", ["icon"], () => {
             self.paste();
-        }, true, undefined, "Paste Group");
+        }, true, undefined, "Paste");
     }
 }
 

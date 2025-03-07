@@ -3,7 +3,6 @@
 .stations {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
 }
 
 .station_container {
@@ -11,21 +10,9 @@
     flex-direction: column;
     min-width: 30rem;
     width: fit-content;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
     padding: 1rem;
     position: relative;
 }
-
-/*.station_container:after{*/
-/*    content: "";*/
-/*    position: absolute;*/
-/*    top: 0.25rem;*/
-/*    left: 0;*/
-/*    height: 100%;*/
-/*    width: 0.15rem;*/
-/*    background-color: #cade8d;*/
-/*}*/
 
 .station {
     position: relative;

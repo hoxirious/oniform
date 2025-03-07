@@ -4,14 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="Hightlight when copy">
+    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="Enhance clipboard functionality with error popups and style updates">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter/src/common/utility.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/common/utility.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/exporter/src/components/group.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/group.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/exporter/src/components/station.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/station.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/exporter/src/components/terminal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/terminal.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/exporter/src/styles/action-button.css" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/styles/action-button.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/exporter/src/styles/clipboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/styles/clipboard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/styles/group.css" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/styles/group.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/styles/station.css" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/styles/station.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/styles/terminal.css" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/styles/terminal.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,15 +134,7 @@
       <workItem from="1741106859785" duration="1561000" />
       <workItem from="1741224639724" duration="15663000" />
       <workItem from="1741303392783" duration="5174000" />
-      <workItem from="1741310366623" duration="7106000" />
-    </task>
-    <task id="LOCAL-00005" summary="Added sub action buttons and style">
-      <option name="closed" value="true" />
-      <created>1740357898156</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1740357898156</updated>
+      <workItem from="1741310366623" duration="9374000" />
     </task>
     <task id="LOCAL-00006" summary="Added sub action buttons and style">
       <option name="closed" value="true" />
@@ -526,7 +520,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741315264507</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Enhance clipboard functionality with error popups and style updates">
+      <option name="closed" value="true" />
+      <created>1741320864723</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1741320864723</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -556,7 +558,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add label for terminal and station" />
     <MESSAGE value="Resizable group" />
     <MESSAGE value="Optimize code" />
     <MESSAGE value="Change style" />
@@ -581,6 +582,7 @@
     <MESSAGE value="add clipboard sidebar" />
     <MESSAGE value="update .gitignore" />
     <MESSAGE value="Hightlight when copy" />
-    <option name="LAST_COMMIT_MESSAGE" value="Hightlight when copy" />
+    <MESSAGE value="Enhance clipboard functionality with error popups and style updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Enhance clipboard functionality with error popups and style updates" />
   </component>
 </project>
