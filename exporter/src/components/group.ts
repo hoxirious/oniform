@@ -51,7 +51,21 @@ export class GroupButtonCopy extends ActionButton {
         copy.alt = "Copy";
 
         super(copy, "copy-group", ["icon"], () => {
+            const previouslySelected = document.querySelector(".selected");
+            if (previouslySelected) {
+                previouslySelected.classList.remove("selected");
+            }
             Clipboard.instance.copiedObject = self.clone();
+            self.html.classList.add("selected");
+
+            const removeSelection = (event: Event) => {
+                if (event instanceof KeyboardEvent && event.key === "Escape") {
+                    self.html.classList.remove("selected");
+                    document.removeEventListener("keydown", removeSelection);
+                }
+            };
+
+            document.addEventListener("keydown", removeSelection);
         }, true, undefined, "Copy Group");
     }
 }

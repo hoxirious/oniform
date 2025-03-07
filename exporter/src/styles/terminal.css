@@ -16,18 +16,8 @@
     flex-direction: column;
     width: 100%;
     position: relative;
-    padding-left: 1rem;
+    padding: 1rem;
 }
-
-/*.terminal_container:after {*/
-/*    content: "";*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    left: 0;*/
-/*    height: 95%;*/
-/*    width: 0.15rem;*/
-/*    background-color: #ff9898;*/
-/*}*/
 
 .terminal {
     display: flex;

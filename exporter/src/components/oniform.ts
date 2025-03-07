@@ -1,6 +1,5 @@
 import Group, {GroupButtonAdd} from "./group.ts";
 import "../styles/oniform.css";
-import ActionButton from "./actionButton.ts";
 
 export default class Oniform {
     static instance = new Oniform([]);
@@ -25,15 +24,6 @@ export default class Oniform {
     render() {
         const form = document.createElement("form");
         form.classList.add("oniform");
-        form.innerHTML = `
-            <h1>Oniform</h1>
-        `;
-        const exportButton = new ActionButton("Export Json", "export-json", ["button"], () => {
-            const json = this.toJSON();
-            console.log(json);
-        });
-        form.appendChild(exportButton.button);
-
         this._groups.forEach(group => {
             group.rerender();
             const groupDiv = group.html;

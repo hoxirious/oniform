@@ -1,6 +1,6 @@
 .group_container {
     margin-top: 1rem;
-    padding-left: 1rem;
+    padding: 1rem;
 }
 
 .group_container .buttons, .station_container .buttons, .terminal_container .buttons {

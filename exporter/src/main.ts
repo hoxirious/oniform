@@ -38,6 +38,12 @@ const initPage = () => {
 const initForm = () => {
     const form = Oniform.instance;
     form.render();
+
+    // default form
+    form.addGroup();
+    form.groups[0].addEmptyStation();
+    form.groups[0].stations[0].addEmptyTerminal();
+
     const oniformElement = document.getElementById("oniform");
     if (!oniformElement) {
         console.error("Oniform element not found");

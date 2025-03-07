@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="add clipboard sidebar">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="09714b33-ba1d-4718-ba9d-519aac14d266" name="Changes" comment="update .gitignore">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/components/group.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/group.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/components/oniform.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/oniform.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/components/station.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/station.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/components/terminal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/components/terminal.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/styles/action-button.css" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/styles/action-button.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/styles/group.css" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/styles/group.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/styles/station.css" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/styles/station.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter/src/styles/terminal.css" beforeDir="false" afterPath="$PROJECT_DIR$/exporter/src/styles/terminal.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,26 +57,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JavaScript Debug.localhost:5173.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "ignore_missing_gitignore": "true",
-    "last_opened_file_path": "C:/Users/i60860/WebstormProjects/oniform",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
-    "ts.external.directory.path": "/home/hoxirious/WebstormProjects/oniform/exporter/node_modules/typescript/lib",
-    "ts.rename.search.for.dynamic.occurrences": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.localhost:5173.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore_missing_gitignore&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/i60860/WebstormProjects/oniform&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/hoxirious/WebstormProjects/oniform/exporter/node_modules/typescript/lib&quot;,
+    &quot;ts.rename.search.for.dynamic.occurrences&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/importer/src/data" />
@@ -127,14 +135,7 @@
       <workItem from="1741106859785" duration="1561000" />
       <workItem from="1741224639724" duration="15663000" />
       <workItem from="1741303392783" duration="5174000" />
-    </task>
-    <task id="LOCAL-00002" summary="Create structure">
-      <option name="closed" value="true" />
-      <created>1739935206175</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1739935206175</updated>
+      <workItem from="1741310366623" duration="4093000" />
     </task>
     <task id="LOCAL-00003" summary="Add New Group button">
       <option name="closed" value="true" />
@@ -520,7 +521,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741307869280</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="update .gitignore">
+      <option name="closed" value="true" />
+      <created>1741308883920</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1741308883920</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -550,7 +559,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Simplify button" />
     <MESSAGE value="Organize Link relationship position" />
     <MESSAGE value="Add label for terminal and station" />
     <MESSAGE value="Resizable group" />
@@ -575,6 +583,7 @@
     <MESSAGE value="paste station" />
     <MESSAGE value="paste terminal" />
     <MESSAGE value="add clipboard sidebar" />
-    <option name="LAST_COMMIT_MESSAGE" value="add clipboard sidebar" />
+    <MESSAGE value="update .gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="update .gitignore" />
   </component>
 </project>
