@@ -33,8 +33,8 @@ export class GroupButtonAdd extends ActionButton {
                 self.stations[self.stations.length - 1].addEmptyTerminal();
             }, true, undefined, "New Question").button;
 
-            actionItems.appendChild(createListItem(groupButton));
             actionItems.appendChild(createListItem(stationButton));
+            actionItems.appendChild(createListItem(groupButton));
 
             const plus = document.createElement("img");
             plus.src = plusUrl as string;
