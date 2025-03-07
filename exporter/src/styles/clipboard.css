@@ -6,7 +6,7 @@
     width: 50rem;
     height: 90%;
     background-color: rgb(23,23,23);
-    z-index: 1000;
+    z-index: 999;
     overflow: auto;
     padding-left: 1rem;
     padding-right: 2rem;

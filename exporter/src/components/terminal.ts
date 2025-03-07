@@ -10,7 +10,7 @@ import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import chevronDownUrl from "../static/chevron-down.svg";
 import chevronRightUrl from "../static/chevron-right.svg";
-import {generateGUID} from "../common/utility.ts";
+import {generateGUID, showErrorPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 
 export class TerminalButtonAdd extends ActionButton {
@@ -237,7 +237,7 @@ export default class Terminal {
     public paste(): void {
         const copiedObject = Clipboard.instance.cloneCopiedObject();
         if(!copiedObject) {
-            console.log("Nothing to paste");
+            showErrorPopup("Clipboard is empty");
             return;
         }
         if(copiedObject instanceof Terminal) {
@@ -247,6 +247,10 @@ export default class Terminal {
         else if(copiedObject instanceof Group) {
             copiedObject.parent = this;
             new Link(this, copiedObject, Relationship.DEPENDANT);
+        }
+        else {
+            showErrorPopup("Only Group and Terminal can be pasted into Terminal.", 2000);
+            return;
         }
 
         this.rerender();

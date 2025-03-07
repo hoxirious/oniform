@@ -10,7 +10,7 @@ import pasteUrl from "../static/paste.svg";
 import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import Link, {Relationship} from "./link.ts";
-import {generateGUID} from "../common/utility.ts";
+import {generateGUID, showErrorPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 
 export class StationButtonAdd extends ActionButton {
@@ -28,10 +28,10 @@ export class StationButtonAdd extends ActionButton {
             const actionItems = document.createElement("ul");
             actionItems.classList.add("action_items");
 
-            const siblingButton = new ActionButton("Sibling", "station-sibling", ["add_station_button"], () => {
+            const siblingButton = new ActionButton("New Station", "station-sibling", ["add_station_button"], () => {
                 group.addEmptyStation(self);
             }, true, undefined, "New Station").button;
-            const dependantButton = new ActionButton("Dependant", "station-dependant", ["add_station_button"], () => {
+            const dependantButton = new ActionButton("New Group", "station-dependant", ["add_station_button"], () => {
                 const newGroup = new Group(self);
                 new Link(self, newGroup, Relationship.DEPENDANT);
             }, true, undefined, "New Dependant Group").button;
@@ -252,7 +252,7 @@ export default class Station {
     paste(): void {
         const copiedObject = Clipboard.instance.cloneCopiedObject();
         if(!copiedObject) {
-            console.log("Nothing to paste");
+            showErrorPopup("Clipboard is empty");
             return;
         }
 

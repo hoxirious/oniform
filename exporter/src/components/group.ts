@@ -4,7 +4,7 @@ import ActionButton from "./actionButton.ts";
 import Oniform from "./oniform.ts";
 import Clipboard from "./clipboard.ts";
 // import Link from "./link.ts";
-import {generateGUID} from "../common/utility.ts";
+import {generateGUID, showErrorPopup} from "../common/utility.ts";
 import minusUrl from "../static/minus.svg";
 import plusUrl from "../static/plus.svg";
 import copyUrl from "../static/copy.svg";
@@ -184,7 +184,7 @@ export default class Group {
     paste(): void {
         const copiedObject = Clipboard.instance.cloneCopiedObject();
         if(!copiedObject) {
-            console.log("Nothing to paste");
+            showErrorPopup("Clipboard is empty");
             return;
         }
         if(copiedObject instanceof Group) {
@@ -200,7 +200,7 @@ export default class Group {
             this.appendExistingStation(copiedObject);
         }
         else {
-            console.error("Invalid object to paste");
+            showErrorPopup("Only Group and Station can be pasted into Group.", 2000);
             return;
         }
         this.rerender();
