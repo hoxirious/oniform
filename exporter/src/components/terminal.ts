@@ -301,6 +301,13 @@ export default class Terminal {
         this.rerender();
     }
 
+    deleteStation(station: Station) {
+        const linkIndex = this.links.findIndex(g => g.right.id === station.id);
+        this.links[linkIndex].html.remove();
+        this.links.splice(linkIndex, 1);
+        this.rerender();
+    }
+
     findGroupIndex(group: Group): number {
         const index = this.links.findIndex(g => g.right.id === group.id);
         if (index == -1) return 1;

@@ -98,18 +98,8 @@ export class StationButtonDelete extends ActionButton {
         minus.alt = "Delete";
 
         super(minus, "delete-station", ["icon"], () => {
-            if(self.html.parentElement && self.html.parentElement.classList.contains("link")) {
-                const toDeleteLinkIndex = self.root.links.findIndex(link => link.id === self.html.parentElement?.id);
-                if(toDeleteLinkIndex !== -1) {
-                    self.root.links[toDeleteLinkIndex].html.remove();
-                    self.root.links.splice(toDeleteLinkIndex, 1);
-                    self.root.parent.rerender();
-                }
-            }
-            else {
-                self.html.remove();
-                self.parent.deleteStation(self);
-            }
+            self.html.remove();
+            self.parent.deleteStation(self);
         }, true, undefined, "Delete Station");
     }
 }
@@ -155,8 +145,7 @@ export class StationButtonPaste extends ActionButton {
                 self.parent.addStationAfterReference(self, <Station>Clipboard.instance.cloneCopiedObject());
         }, true, undefined, "New Question").button;
         const dependantStation = new ActionButton("New sub-question", "station-dependant", ["add_station_button"], () => {
-            const newStation = new Station(self);
-            new Link(self, newStation, Relationship.DEPENDANT);
+            new Link(self, <Station>Clipboard.instance.cloneCopiedObject(), Relationship.DEPENDANT);
         }).button;
         actionItems.appendChild(createListItem(siblingButton));
         actionItems.appendChild(createListItem(dependantStation));
@@ -378,6 +367,13 @@ export default class Station {
 
     addStationAfterReference(refStation: Station, newStation: Station) {
         console.log("addStationAfterReference");
+    }
+
+    deleteStation(station: Station) {
+        const linkIndex = this.links.findIndex(g => g.right.id === station.id);
+        this.links[linkIndex].html.remove();
+        this.links.splice(linkIndex, 1);
+        this.rerender();
     }
 
     deleteGroup(group: Group) {
