@@ -22,6 +22,18 @@ const initPage = () => {
     const clipboardIcon = document.createElement("img");
     clipboardIcon.src = clipboard as string;
     clipboardIcon.alt = "Toggle Clipboard";
+    const clipboardElement = document.getElementById("clipboard");
+    if (!clipboardElement) {
+        console.error("Clipboard element not found");
+        return;
+    }
+    // Check cache for clipboard status
+    const clipboardStatus = localStorage.getItem("clipboardStatus");
+    if (clipboardStatus === "closed") {
+        clipboardElement.classList.remove("show");
+    } else {
+        clipboardElement.classList.add("show");
+    }
 
     const clipboardButton = new ActionButton(clipboardIcon, "toggle-clipboard", ["icon"], () => {
         const clipboardElement = document.getElementById("clipboard");
@@ -30,6 +42,13 @@ const initPage = () => {
             return;
         }
         clipboardElement.classList.toggle("show");
+
+        // Save the status to cache
+        if (clipboardElement.classList.contains("show")) {
+            localStorage.setItem("clipboardStatus", "open");
+        } else {
+            localStorage.setItem("clipboardStatus", "closed");
+        }
     }, true, undefined, "Toggle Clipboard");
     toolbar.appendChild(clipboardButton.button);
 }

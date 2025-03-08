@@ -14,36 +14,42 @@ import {createListItem, generateGUID, showErrorPopup, showSuccessPopup} from "..
 import Oniform from "./oniform.ts";
 
 export class StationButtonAdd extends ActionButton {
-    constructor(group: Group, self?: Station) {
+    constructor(parent: Group | Station | Terminal, self?: Station) {
         const plus = document.createElement("img");
         plus.src = plusUrl as string;
         plus.alt = "Plus";
 
         if (!self) {
             super("New Question", "new-station", ["button"], () => {
-                group.addEmptyStation();
+                parent.addEmptyStation();
             }, true, undefined, "New Question");
         }
         else {
             const actionItems = document.createElement("ul");
             actionItems.classList.add("action_items");
 
-            const siblingButton = new ActionButton("New question below", "station-sibling", ["add_station_button"], () => {
-                group.addEmptyStation(self);
+            const siblingButton = new ActionButton("New question", "station-sibling", ["add_station_button"], () => {
+                parent.addEmptyStation(self);
             }, true, undefined, "New Question").button;
-            const dependantButton = new ActionButton("New sub-question", "station-dependant", ["add_station_button"], () => {
+            const dependantGroup = new ActionButton("New sub-group", "group-dependant", ["add_station_button"], () => {
                 const newGroup = new Group(self);
                 newGroup.addEmptyStation();
                 newGroup.stations[0].addEmptyTerminal();
                 new Link(self, newGroup, Relationship.DEPENDANT);
-            }, true, undefined, "New Dependant Question").button;
+            }, true, undefined, "New Dependant Group").button;
+            const dependantStation = new ActionButton("New sub-question", "station-dependant", ["add_station_button"], () => {
+                const newStation = new Station(self);
+                newStation.addEmptyTerminal();
+                new Link(self, newStation, Relationship.DEPENDANT);
+            }).button;
             const terminalButton = new ActionButton("New option", "terminal-sibling", ["add_terminal_button"], () => {
                 self.addEmptyTerminal();
             }, true, undefined, "New Option").button;
 
             actionItems.appendChild(createListItem(terminalButton));
             actionItems.appendChild(createListItem(siblingButton));
-            actionItems.appendChild(createListItem(dependantButton));
+            actionItems.appendChild(createListItem(dependantGroup));
+            actionItems.appendChild(createListItem(dependantStation));
 
 
             super(plus, "new-station", ["icon"], () => {
@@ -68,6 +74,8 @@ export class StationButtonCollapse extends ActionButton {
             for (let i = 0; i < links.length; i++) {
                 links[i].classList.toggle("collapse");
             }
+
+            self.html.getElementsByClassName("station_textarea")[0].classList.toggle("folded");
 
             const terminals = self.html.getElementsByClassName("terminals");
             terminals[0].classList.toggle("collapse");
@@ -95,12 +103,12 @@ export class StationButtonDelete extends ActionButton {
                 if(toDeleteLinkIndex !== -1) {
                     self.root.links[toDeleteLinkIndex].html.remove();
                     self.root.links.splice(toDeleteLinkIndex, 1);
-                    self.root.groupOwner.rerender();
+                    self.root.parent.rerender();
                 }
             }
             else {
                 self.html.remove();
-                self.groupOwner.deleteStation(self);
+                self.parent.deleteStation(self);
             }
         }, true, undefined, "Delete Station");
     }
@@ -139,15 +147,29 @@ export class StationButtonPaste extends ActionButton {
         paste.src = pasteUrl as string;
         paste.alt = "Paste";
 
+        const actionItems = document.createElement("ul");
+        actionItems.classList.add("action_items");
+
+        const siblingButton = new ActionButton("New question below", "station-sibling", ["add_station_button"], () => {
+            if(self.parent instanceof Group || self.parent instanceof Station)
+                self.parent.addStationAfterReference(self, <Station>Clipboard.instance.cloneCopiedObject());
+        }, true, undefined, "New Question").button;
+        const dependantStation = new ActionButton("New sub-question", "station-dependant", ["add_station_button"], () => {
+            const newStation = new Station(self);
+            new Link(self, newStation, Relationship.DEPENDANT);
+        }).button;
+        actionItems.appendChild(createListItem(siblingButton));
+        actionItems.appendChild(createListItem(dependantStation));
+
         super(paste, "paste-station", ["icon"], () => {
-            self.paste();
-        }, true, undefined, "Paste");
+            self.paste(this);
+        }, true, actionItems, "Paste");
     }
 }
 
 export default class Station {
     constructor(
-        private _groupOwner: Group,
+        private _parent: Group | Station | Terminal,
         private _root: Station = this,
         private _value: string = "",
         private _label: string = "",
@@ -170,7 +192,10 @@ export default class Station {
 
         const labelElement = document.createElement("input");
         labelElement.disabled = true;
-        const stationIndex = this.groupOwner.findStationIndex(this).toString();
+        let stationIndex = (this.links.length - 1).toString();
+        if (this._parent instanceof Group) {
+            stationIndex = this._parent.findStationIndex(this).toString();
+        }
         if(!this._label || this._label != `Station ${stationIndex}`)
             this._label = `Question ${stationIndex}`;
         labelElement.value = this._label;
@@ -184,7 +209,7 @@ export default class Station {
         const buttons = document.createElement("div");
         buttons.classList.add("buttons");
         const buttonCollapse = new StationButtonCollapse(this).button;
-        const buttonAdd = new StationButtonAdd(this._groupOwner, this).button;
+        const buttonAdd = new StationButtonAdd(this._parent, this).button;
         const buttonDelete = new StationButtonDelete(this).button;
         const buttonCopy = new StationButtonCopy(this).button;
         const buttonPaste = new StationButtonPaste(this).button;
@@ -251,7 +276,7 @@ export default class Station {
         return stationClone;
     }
 
-    paste(): void {
+    paste(pasteButton: ActionButton): void {
         const copiedObject = Clipboard.instance.cloneCopiedObject();
         if(!copiedObject) {
             showErrorPopup("Clipboard is empty");
@@ -259,7 +284,8 @@ export default class Station {
         }
 
         if(copiedObject instanceof Station) {
-            this.groupOwner.addStationAfterReference(this, copiedObject);
+            pasteButton.actionItems?.classList.toggle("show");
+            return;
         }
         else if (copiedObject instanceof Group) {
             copiedObject.parent = this;
@@ -296,8 +322,8 @@ export default class Station {
         this._nextTerminals = terminals;
     }
 
-    get groupOwner(): Group {
-        return this._groupOwner;
+    get parent(): Group | Station | Terminal {
+        return this._parent;
     }
 
     get links(): Link[] {
@@ -345,6 +371,15 @@ export default class Station {
         return (terminalIndex + 1);
     }
 
+    addEmptyStation() {
+        const newStation = new Station(this);
+        new Link(this, newStation, Relationship.DEPENDANT);
+    }
+
+    addStationAfterReference(refStation: Station, newStation: Station) {
+        console.log("addStationAfterReference");
+    }
+
     deleteGroup(group: Group) {
         this.links.forEach(link => console.log(link.right.id));
         console.log(group.id);
@@ -365,8 +400,9 @@ export default class Station {
         this.rerender();
     }
 
-    set groupOwner(group: Group) {
-        this._groupOwner = group;
+
+    set parent(group: Group) {
+        this._parent = group;
     }
 
     toJSON(): any {
@@ -378,4 +414,5 @@ export default class Station {
             links: this._links.map(link => link.toJSON())
         };
     }
+
 }

@@ -14,7 +14,7 @@ export default class Link {
 
     constructor(
         private _left: Station | Terminal,
-        private readonly _right: Group,
+        private readonly _right: Group | Station,
         private readonly _relationship: Relationship,
         private readonly _editable: boolean = true,
         private readonly _id: string = `link-${generateGUID()}`

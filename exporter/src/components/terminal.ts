@@ -50,8 +50,7 @@ export class TerminalButtonCollapse extends ActionButton {
             for (let i = 0; i < expandedlinks.length; i++) {
                 expandedlinks[i].classList.toggle("collapse");
             }
-
-
+            self.html.getElementsByClassName("terminal_input")[0].classList.toggle("folded");
             if (expandedlinks.length > 0 && expandedlinks[0].classList.contains("collapse")) {
                 this.button.replaceChild(chevronRight, this.button.firstChild!);
             }
@@ -108,6 +107,7 @@ export class TerminalButtonPaste extends ActionButton {
         paste.src = pasteUrl as string;
         paste.alt = "Paste";
 
+
         super(paste, "paste-terminal", ["icon"], () => {
             self.paste();
         }, true, undefined, "Paste");
@@ -118,20 +118,25 @@ function createActionItems(parent: Station, self: Terminal): HTMLUListElement {
     const actionItems = document.createElement("ul");
     actionItems.classList.add("action_items");
 
-    const siblingButton = new ActionButton("New option below", "terminal-sibling", ["add_terminal_button"], () => {
+    const siblingButton = new ActionButton("New option", "terminal-sibling", ["add_terminal_button"], () => {
         parent.addEmptyTerminal(self);
         parent.rerender();
     }).button;
 
-    const dependantButton = new ActionButton("New sub-question", "terminal-dependant", ["add_terminal_button"], () => {
+    const groupDependantButton = new ActionButton("New sub-group", "terminal-group-dependant", ["add_terminal_button"], () => {
         const newGroup = new Group(self);
         newGroup.addEmptyStation();
         newGroup.stations[0].addEmptyTerminal();
         new Link(self, newGroup, Relationship.DEPENDANT);
     }).button;
 
+    const stationDependantButton = new ActionButton("New sub-question", "terminal-dependant", ["add_terminal_button"], () => {
+        new Link(self, new Station(self), Relationship.DEPENDANT);
+    }).button;
+
     actionItems.appendChild(createListItem(siblingButton));
-    actionItems.appendChild(createListItem(dependantButton));
+    actionItems.appendChild(createListItem(groupDependantButton));
+    actionItems.appendChild(createListItem(stationDependantButton));
 
     return actionItems;
 }
@@ -255,9 +260,7 @@ export default class Terminal {
             new Link(this, copiedObject, Relationship.DEPENDANT);
         }
         else {
-            const newGroup = new Group(this);
-            newGroup.appendExistingStation(copiedObject);
-            new Link(this, newGroup, Relationship.DEPENDANT);
+            new Link(this, copiedObject, Relationship.DEPENDANT);
         }
 
         this.rerender();
@@ -304,11 +307,16 @@ export default class Terminal {
         return (index+1);
     }
 
+    public addEmptyStation() {
+        const newStation = new Station(this);
+        new Link(this, newStation, Relationship.DEPENDANT);
+    }
+
     public addLink(link: Link) {
         link.left = this;
         this._links.push(link);
         this.rerender();
-        this.prevStation.groupOwner.rerender();
+        this.prevStation.parent.rerender();
     }
 
     toJSON(): any {
