@@ -10,7 +10,7 @@ import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import chevronDownUrl from "../static/chevron-down.svg";
 import chevronRightUrl from "../static/chevron-right.svg";
-import {generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {animateHighlight, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 
 export class TerminalButtonAdd extends ActionButton {
@@ -182,6 +182,7 @@ export default class Terminal {
             link.right.rerender();
             this._html.appendChild(link.html);
         });
+        this._html.scrollIntoView({ behavior: "smooth" });
     }
 
     private createTerminalElement(): HTMLDivElement {
@@ -316,6 +317,7 @@ export default class Terminal {
 
     public addEmptyStation() {
         const newStation = new Station(this);
+        animateHighlight(newStation.html);
         new Link(this, newStation, Relationship.DEPENDANT);
     }
 

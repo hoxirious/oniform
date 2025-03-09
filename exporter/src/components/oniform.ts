@@ -1,5 +1,6 @@
 import Group, {GroupButtonAdd} from "./group.ts";
 import "../styles/oniform.css";
+import {animateHighlight} from "../common/utility.ts";
 
 export default class Oniform {
     static instance = new Oniform([]);
@@ -50,10 +51,14 @@ export default class Oniform {
     addGroup(prevGroup?: Group) {
         if (prevGroup) {
             const prevGroupIndex = this.findGroupIndex(prevGroup);
-            this._groups.splice(prevGroupIndex, 0, new Group(this, `${prevGroupIndex + 1}`));
+            const group = new Group(this, `${prevGroupIndex + 1}`);
+            this._groups.splice(prevGroupIndex, 0, group);
+            animateHighlight(group.html);
         }
         else {
-            this._groups.push(new Group(this));
+            const group = new Group(this);
+            this._groups.push(group);
+            animateHighlight(group.html);
         }
         this.rerender();
     }
@@ -62,6 +67,7 @@ export default class Oniform {
         newGroup.parent = this;
         const prevGroupIndex = this.findGroupIndex(prevGroup);
         this._groups.splice(prevGroupIndex, 0, newGroup);
+        animateHighlight(newGroup.html);
         this.rerender();
     }
 

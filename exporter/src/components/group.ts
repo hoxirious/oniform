@@ -4,7 +4,7 @@ import ActionButton from "./actionButton.ts";
 import Oniform from "./oniform.ts";
 import Clipboard from "./clipboard.ts";
 // import Link from "./link.ts";
-import {createListItem, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {animateHighlight, createListItem, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import minusUrl from "../static/minus.svg";
 import plusUrl from "../static/plus.svg";
 import copyUrl from "../static/copy.svg";
@@ -212,6 +212,7 @@ export default class Group {
         group.appendChild(stationDiv);
 
         this._html.appendChild(group);
+        this._html.scrollIntoView({behavior: "smooth", block: "center"});
     }
 
     rerender() {
@@ -255,9 +256,12 @@ export default class Group {
             const stationIndex = this.findStationIndex(prevStation);
             const station = new Station(this, prevStation, "",`Station ${stationIndex + 1}`);
             this._stations.splice(stationIndex, 0, station);
+            animateHighlight(station.html);
         }
         else {
-            this._stations.push(new Station(this));
+            const station = new Station(this);
+            this._stations.push(station);
+            animateHighlight(station.html);
         }
         this.rerender();
     }
@@ -265,6 +269,7 @@ export default class Group {
     appendExistingStation(station: Station) {
         station.parent = this;
         this._stations.push(station);
+        animateHighlight(station.html);
         this.rerender();
     }
 
@@ -272,6 +277,7 @@ export default class Group {
         newStation.parent = this;
         const prevStationIndex = this.findStationIndex(refStation);
         this._stations.splice(prevStationIndex, 0, newStation);
+        animateHighlight(newStation.html);
         this.rerender();
     }
 

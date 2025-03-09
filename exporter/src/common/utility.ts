@@ -82,3 +82,13 @@ export function createListItem(button: HTMLButtonElement): HTMLLIElement {
     listItem.appendChild(button);
     return listItem;
 }
+
+export function animateHighlight(element: HTMLElement, duration: number = 500) {
+    element.animate(
+        [
+            { backgroundColor: "rgba(196,196,196,0.2)", boxShadow: "0px 3px 5px 2px rgba(169, 169, 169, 0.4)", borderRadius: "0.25rem" },
+            { backgroundColor: "transparent", boxShadow: "0px 3px 5px 2px rgba(169, 169, 169, 0)", borderRadius: "0.25rem" },
+        ],
+        { duration: duration, iterations: 1}
+    );
+}

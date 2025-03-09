@@ -10,7 +10,7 @@ import pasteUrl from "../static/paste.svg";
 import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import Link, {Relationship} from "./link.ts";
-import {createListItem, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {animateHighlight, createListItem, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 
 export class StationButtonAdd extends ActionButton {
@@ -134,18 +134,21 @@ export class StationButtonCopy extends ActionButton {
 export class StationButtonPaste extends ActionButton {
     constructor(self: Station) {
         const paste = document.createElement("img");
+
         paste.src = pasteUrl as string;
         paste.alt = "Paste";
 
         const actionItems = document.createElement("ul");
         actionItems.classList.add("action_items");
 
-        const siblingButton = new ActionButton("New question below", "station-sibling", ["add_station_button"], () => {
+        const siblingButton = new ActionButton("Paste as question", "station-sibling", ["add_station_button"], () => {
             if(self.parent instanceof Group || self.parent instanceof Station)
                 self.parent.addStationAfterReference(self, <Station>Clipboard.instance.cloneCopiedObject());
         }, true, undefined, "New Question").button;
-        const dependantStation = new ActionButton("New sub-question", "station-dependant", ["add_station_button"], () => {
-            new Link(self, <Station>Clipboard.instance.cloneCopiedObject(), Relationship.DEPENDANT);
+        const dependantStation = new ActionButton("Paste as sub-question", "station-dependant", ["add_station_button"], () => {
+            const cloneObject = <Station>Clipboard.instance.cloneCopiedObject();
+            cloneObject.parent = self;
+            new Link(self, cloneObject, Relationship.DEPENDANT);
         }).button;
         actionItems.appendChild(createListItem(siblingButton));
         actionItems.appendChild(createListItem(dependantStation));
@@ -248,15 +251,16 @@ export default class Station {
             link.right.rerender();
             this._html.appendChild(link.html)
         });
+        this._html.scrollIntoView({behavior: "smooth", block: "center"});
     }
 
     rerender() {
         this.render();
     }
 
-    clone(editable: boolean = false, cloneGroupOwner?: Group): Station {
+    clone(editable: boolean = false, parentClone?: Group | Station | Terminal): Station {
         const stationClone = new Station(
-            cloneGroupOwner ?? new Group(Oniform.instance),
+            parentClone ?? new Group(Oniform.instance),
             this._root, this._value, this._label,
             [], [], undefined, editable);
 
@@ -283,7 +287,6 @@ export default class Station {
         else {
             this.appendExistingTerminal(copiedObject);
         }
-
         this.rerender();
     }
 
@@ -328,16 +331,21 @@ export default class Station {
             const terminalIndex = this.findTerminalIndex(prevTerminal);
             const terminal = new Terminal(this);
             this.nextTerminals.splice(terminalIndex, 0, terminal);
+            animateHighlight(terminal.html);
         }
         else {
-            this.nextTerminals.push(new Terminal(this));
+            const terminal = new Terminal(this);
+            this.nextTerminals.push(terminal);
+            animateHighlight(terminal.html);
         }
+
         this.rerender();
     }
 
     appendExistingTerminal(terminal: Terminal) {
         terminal.prevStation = this;
         this._nextTerminals.push(terminal);
+        animateHighlight(terminal.html);
         this.rerender();
     }
 
@@ -345,6 +353,7 @@ export default class Station {
         newTerminal.prevStation = this;
         const prevTerminalIndex = this.findTerminalIndex(refTerminal);
         this._nextTerminals.splice(prevTerminalIndex, 0, newTerminal);
+        animateHighlight(newTerminal.html);
         this.rerender();
     }
 
@@ -362,11 +371,13 @@ export default class Station {
 
     addEmptyStation() {
         const newStation = new Station(this);
+        animateHighlight(newStation.html);
         new Link(this, newStation, Relationship.DEPENDANT);
     }
 
     addStationAfterReference(refStation: Station, newStation: Station) {
-        console.log("addStationAfterReference");
+        animateHighlight(newStation.html);
+        new Link(this, newStation, Relationship.DEPENDANT);
     }
 
     deleteStation(station: Station) {
@@ -397,8 +408,8 @@ export default class Station {
     }
 
 
-    set parent(group: Group) {
-        this._parent = group;
+    set parent(parent: Group | Station | Terminal) {
+        this._parent = parent;
     }
 
     toJSON(): any {

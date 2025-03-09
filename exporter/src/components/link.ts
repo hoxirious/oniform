@@ -31,6 +31,7 @@ export default class Link {
             this._left.addLink(this);
             this._right.rerender();
         }
+        this._html.scrollIntoView({behavior: "smooth", block: "center"});
     }
 
     clone(leftClone: Station|Terminal, editable: boolean = false): Link {
