@@ -1,8 +1,7 @@
 import "../styles/action-button.css";
 
 export default class ActionButton {
-    private readonly _button: HTMLButtonElement;
-    private _actionItems?: HTMLUListElement;
+    private _button: HTMLButtonElement = document.createElement("button");
 
     constructor(
         private readonly _label: string | HTMLElement,
@@ -12,21 +11,23 @@ export default class ActionButton {
             this._actionItems?.classList.add("show");
         },
         private readonly _isClicked: boolean = true,
-        actionItems?: HTMLUListElement,
-        tooltip?: string
+        private _actionItems?: HTMLUListElement,
+        private _tooltip?: string
     ) {
-        this._button = document.createElement("button");
+        this.render();
+    }
+
+    render(): void {
         this._button.type = "button";
         this._button.classList.add("action-button", ...this._class);
         this._button.id = this._id;
-        if(tooltip)
-            this._button.title = tooltip;
+        if(this._tooltip)
+            this._button.title = this._tooltip;
         this._button.appendChild(typeof this._label === "string" ? document.createTextNode(this._label) : this._label);
-
-        if (actionItems) {
-            this.actionItems = actionItems;
+        if(this._actionItems) {
+            this._actionItems.classList.add("action_items");
+            this._button.appendChild(this._actionItems);
         }
-
         this.addEventListeners();
     }
 
@@ -51,10 +52,11 @@ export default class ActionButton {
         return this._button;
     }
 
+    get actionItems(): HTMLUListElement {
+        return <HTMLUListElement>this._actionItems;
+    }
     set actionItems(actionItems: HTMLUListElement) {
         this._actionItems = actionItems;
-        this._actionItems.classList.add("action_items");
-        this._button.appendChild(this._actionItems);
     }
 }
 

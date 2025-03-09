@@ -4,7 +4,7 @@ import ActionButton from "./actionButton.ts";
 import Oniform from "./oniform.ts";
 import Clipboard from "./clipboard.ts";
 // import Link from "./link.ts";
-import {createListItem, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {animateHighlight, createListItem, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import minusUrl from "../static/minus.svg";
 import plusUrl from "../static/plus.svg";
 import copyUrl from "../static/copy.svg";
@@ -25,7 +25,7 @@ export class GroupButtonAdd extends ActionButton {
             const actionItems = document.createElement("ul");
             actionItems.classList.add("action_items");
 
-            const groupButton = new ActionButton("New group below", "new-group", ["add-group"], () => {
+            const groupButton = new ActionButton("New group", "new-group", ["add-group"], () => {
                 Oniform.instance.addGroup(self);
             }, true, undefined, "New Group").button;
             const stationButton = new ActionButton("New question", "station-dependant", ["add_station_button"], () => {
@@ -73,6 +73,7 @@ export class GroupButtonCollapse extends ActionButton {
         super(chevronDown, "collapse-stations", ["icon"], () => {
             const stations = self.html.getElementsByClassName(`stations`);
             stations[0].classList.toggle("collapse");
+            self.html.getElementsByClassName(`group`)[0].classList.toggle("folded");
 
             if ((stations.length > 0 && stations[0].classList.contains("collapse"))) {
                 this.button.replaceChild(chevronRight, this.button.firstChild!);
@@ -179,11 +180,11 @@ export default class Group {
             let parentSignature = "";
 
             if(this._parent instanceof Station) {
-                parentLabel = this._parent.groupOwner.label;
+                parentLabel = this._parent.parent.label;
                 parentSignature = "-Q";
             }
             else if(this._parent instanceof Terminal) {
-                parentLabel = this._parent.prevStation.groupOwner.label;
+                parentLabel = this._parent.prevStation.parent.label;
                 parentSignature = "-O";
             }
             const parentLabelSplit = parentLabel.split(" ");
@@ -211,6 +212,7 @@ export default class Group {
         group.appendChild(stationDiv);
 
         this._html.appendChild(group);
+        this._html.scrollIntoView({behavior: "smooth", block: "center"});
     }
 
     rerender() {
@@ -254,23 +256,28 @@ export default class Group {
             const stationIndex = this.findStationIndex(prevStation);
             const station = new Station(this, prevStation, "",`Station ${stationIndex + 1}`);
             this._stations.splice(stationIndex, 0, station);
+            animateHighlight(station.html);
         }
         else {
-            this._stations.push(new Station(this));
+            const station = new Station(this);
+            this._stations.push(station);
+            animateHighlight(station.html);
         }
         this.rerender();
     }
 
     appendExistingStation(station: Station) {
-        station.groupOwner = this;
+        station.parent = this;
         this._stations.push(station);
+        animateHighlight(station.html);
         this.rerender();
     }
 
     addStationAfterReference(refStation: Station, newStation: Station) {
-        newStation.groupOwner = this;
+        newStation.parent = this;
         const prevStationIndex = this.findStationIndex(refStation);
         this._stations.splice(prevStationIndex, 0, newStation);
+        animateHighlight(newStation.html);
         this.rerender();
     }
 
