@@ -184,10 +184,7 @@ export default class Station {
 
         const labelElement = document.createElement("input");
         labelElement.disabled = true;
-        let stationIndex = (this.links.length - 1).toString();
-        if (this._parent instanceof Group) {
-            stationIndex = this._parent.findStationIndex(this).toString();
-        }
+        stationIndex = this._parent.findStationIndex(this).toString();
         if(!this._label || this._label != `Station ${stationIndex}`)
             this._label = `Question ${stationIndex}`;
         labelElement.value = this._label;
@@ -398,6 +395,12 @@ export default class Station {
 
     findGroupIndex(group: Group): number {
         const index = this.links.findIndex(g => g.right.id === group.id);
+        if (index == -1) return 1;
+        return (index+1);
+    }
+
+    findStationIndex(station: Station): number {
+        const index = this.links.findIndex(g => g.right.id === station.id);
         if (index == -1) return 1;
         return (index+1);
     }

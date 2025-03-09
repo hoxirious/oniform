@@ -315,6 +315,12 @@ export default class Terminal {
         return (index+1);
     }
 
+    findStationIndex(station: Station): number {
+        const index = this.links.findIndex(g => g.right.id === station.id);
+        if (index == -1) return 1;
+        return (index+1);
+    }
+
     public addEmptyStation() {
         const newStation = new Station(this);
         animateHighlight(newStation.html);

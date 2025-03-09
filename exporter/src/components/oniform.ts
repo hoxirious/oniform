@@ -37,6 +37,7 @@ export default class Oniform {
         }
 
         this._html = form;
+        this._html.scrollIntoView({behavior: "smooth", block: "center"});
     }
 
     rerender() {
