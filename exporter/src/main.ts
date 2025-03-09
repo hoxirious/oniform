@@ -54,13 +54,22 @@ const initPage = () => {
 }
 
 const initForm = () => {
-    const form = Oniform.instance;
-    form.render();
+    let form: Oniform;
 
-    // default form
-    form.addGroup();
-    form.groups[0].addEmptyStation();
-    form.groups[0].stations[0].addEmptyTerminal();
+    const serializedForm = localStorage.getItem("oniformInstance");
+    if (serializedForm) {
+        Oniform.deserialize(serializedForm);
+        form = Oniform.instance;
+        form.render();
+    } else {
+        form = Oniform.instance;
+        form.render();
+
+        // default form
+        form.addGroup();
+        form.groups[0].addEmptyStation();
+        form.groups[0].stations[0].addEmptyTerminal();
+    }
 
     const oniformElement = document.getElementById("oniform");
     if (!oniformElement) {
@@ -68,8 +77,8 @@ const initForm = () => {
         return;
     }
 
-    if(oniformElement.firstChild)
-        oniformElement.replaceChild(form.html, oniformElement.firstChild)
+    if (oniformElement.firstChild)
+        oniformElement.replaceChild(form.html, oniformElement.firstChild);
     else
         oniformElement.appendChild(form.html);
 
@@ -82,12 +91,11 @@ const initForm = () => {
     const clipboard = Clipboard.instance;
     clipboard.render();
 
-    if(clipboardElement.firstChild)
-        clipboardElement.replaceChild(clipboard.html, clipboardElement.firstChild)
+    if (clipboardElement.firstChild)
+        clipboardElement.replaceChild(clipboard.html, clipboardElement.firstChild);
     else
         clipboardElement.appendChild(clipboard.html);
 
     window.oniformInstance = form; // Attach the instance to the window object
 }
-
 document.addEventListener("DOMContentLoaded", initPage);

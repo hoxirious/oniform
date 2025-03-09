@@ -32,10 +32,16 @@ export default class Oniform {
         form.classList.add("oniform");
 
         const exportButton = new ActionButton("Export", "export", ["button"], () => {
-            console.log(this.deserialize(this.serialize()));
+            const serializedForm = this.serialize();
+            localStorage.setItem("oniformInstance", serializedForm);
         });
 
         form.appendChild(exportButton.button);
+        const resetButton = new ActionButton("Reset", "reset", ["button"], () => {
+            this.clear();
+            localStorage.removeItem("oniformInstance");
+        });
+        form.appendChild(resetButton.button);
         this._groups.forEach(group => {
             group.rerender();
             const groupDiv = group.html;
@@ -58,6 +64,11 @@ export default class Oniform {
             if (oniform.firstChild)
                 oniform!.replaceChild(this.html, oniform.firstChild);
         }
+    }
+
+    clear() {
+        this._groups = [];
+        this.rerender();
     }
 
     addGroup(prevGroup?: Group) {
@@ -112,7 +123,7 @@ export default class Oniform {
         return JSON.stringify(this.toObj());
     }
 
-    deserialize(json: string) {
-        return Oniform.from(JSON.parse(json));
+    static deserialize(json: string) {
+        this.instance = Oniform.from(JSON.parse(json));
     }
 }

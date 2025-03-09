@@ -271,6 +271,10 @@ export default class Terminal {
         return this._label;
     }
 
+    get value(): string {
+        return this._value;
+    }
+
     get html(): HTMLDivElement {
         return this._html;
     }
