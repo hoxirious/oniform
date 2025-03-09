@@ -184,7 +184,7 @@ export default class Station {
 
         const labelElement = document.createElement("input");
         labelElement.disabled = true;
-        stationIndex = this._parent.findStationIndex(this).toString();
+        const stationIndex = this._parent.findStationIndex(this).toString();
         if(!this._label || this._label != `Station ${stationIndex}`)
             this._label = `Question ${stationIndex}`;
         labelElement.value = this._label;
