@@ -165,7 +165,7 @@ export default class Station {
         private _root: Station = this,
         private _value: string = "",
         private _label: string = "",
-        private _nextTerminals: Terminal[] = [],
+        private _terminals: Terminal[] = [],
         private _links: Link[] = [],
         private _html: HTMLDivElement = document.createElement("div"),
         private _editable: boolean = true,
@@ -223,7 +223,7 @@ export default class Station {
         station.appendChild(textareaElement);
 
         this._html.appendChild(station);
-        if(this._nextTerminals.length == 0)
+        if(this._terminals.length == 0)
         {
             const terminalElement = document.createElement("div");
             terminalElement.classList.add("terminal");
@@ -235,7 +235,7 @@ export default class Station {
         else  {
             const terminals = document.createElement("div");
             terminals.classList.add("terminals");
-            this._nextTerminals.forEach(terminal =>
+            this._terminals.forEach(terminal =>
             {
                 terminal.rerender();
                 terminals.appendChild(terminal.html);
@@ -261,7 +261,7 @@ export default class Station {
             this._root, this._value, this._label,
             [], [], undefined, editable);
 
-        this._nextTerminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal));
+        this._terminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal));
         this._links.forEach(link => link.clone(stationClone, editable))
         return stationClone;
     }
@@ -303,12 +303,12 @@ export default class Station {
         return this._id;
     }
 
-    get nextTerminals(): Terminal[] {
-        return this._nextTerminals;
+    get terminals(): Terminal[] {
+        return this._terminals;
     }
 
-    set nextTerminals(terminals: Terminal[]) {
-        this._nextTerminals = terminals;
+    set terminals(terminals: Terminal[]) {
+        this._terminals = terminals;
     }
 
     get parent(): Group | Station | Terminal {
@@ -319,6 +319,10 @@ export default class Station {
         return this._links;
     }
 
+    set links(links: Link[]) {
+        this._links = links;
+    }
+
     set value(value: string) {
         this._value = value;
     }
@@ -327,12 +331,12 @@ export default class Station {
         if(prevTerminal) {
             const terminalIndex = this.findTerminalIndex(prevTerminal);
             const terminal = new Terminal(this);
-            this.nextTerminals.splice(terminalIndex, 0, terminal);
+            this.terminals.splice(terminalIndex, 0, terminal);
             animateHighlight(terminal.html);
         }
         else {
             const terminal = new Terminal(this);
-            this.nextTerminals.push(terminal);
+            this.terminals.push(terminal);
             animateHighlight(terminal.html);
         }
 
@@ -340,28 +344,28 @@ export default class Station {
     }
 
     appendExistingTerminal(terminal: Terminal) {
-        terminal.prevStation = this;
-        this._nextTerminals.push(terminal);
+        terminal.parent = this;
+        this._terminals.push(terminal);
         animateHighlight(terminal.html);
         this.rerender();
     }
 
     addTerminalAfterReference(refTerminal: Terminal, newTerminal: Terminal) {
-        newTerminal.prevStation = this;
+        newTerminal.parent = this;
         const prevTerminalIndex = this.findTerminalIndex(refTerminal);
-        this._nextTerminals.splice(prevTerminalIndex, 0, newTerminal);
+        this._terminals.splice(prevTerminalIndex, 0, newTerminal);
         animateHighlight(newTerminal.html);
         this.rerender();
     }
 
     deleteTerminal(terminal: Terminal) {
         const terminalIndex = this.findTerminalIndex(terminal)-1;
-        this._nextTerminals.splice(terminalIndex, 1);
+        this._terminals.splice(terminalIndex, 1);
         this.rerender();
     }
 
     findTerminalIndex(terminal: Terminal): number {
-        const terminalIndex = this._nextTerminals.findIndex(t => t.id === terminal.id);
+        const terminalIndex = this._terminals.findIndex(t => t.id === terminal.id);
         if (terminalIndex === -1) return 1;
         return (terminalIndex + 1);
     }
@@ -415,17 +419,23 @@ export default class Station {
         this._parent = parent;
     }
 
-    toJSON(): any {
+
+    toObj() {
+        const {id, value, label, terminals, links} = this;
         return {
-            id: this._id,
-            parent: this._parent.toJSON(),
-            root: this._root.toJSON(),
-            label: this._label,
-            value: this._value,
-            nextTerminals: this._nextTerminals.map(terminal => terminal.toJSON()),
-            links: this._links.map(link => link.toJSON()),
-            editable: this._editable
-        };
+            id,
+            value,
+            label,
+            terminals: terminals.map(terminal => terminal.toObj()),
+            links: links.map(link => link.toObj())
+        }
     }
 
+    static from(obj: any, parent: Group|Station|Terminal): Station {
+        const {id, value, label, terminals, links} = obj;
+        const station = new Station(parent, undefined, value, label, [], [], undefined, true, id);
+        station.terminals =  terminals.map((terminal: any) => Terminal.from(terminal, station));
+        links.forEach((link: any) => Link.from(link, station));
+        return station;
+    }
 }

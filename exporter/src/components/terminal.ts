@@ -156,8 +156,8 @@ function createPlusIcon(): HTMLImageElement {
 
 export default class Terminal {
     constructor(
-        private _prevStation: Station,
-        private _label: string = `Option ${_prevStation.label}-1`,
+        private _parent: Station,
+        private _label: string = `Option ${_parent.label}-1`,
         private _root: Terminal = this,
         private _value: string = "",
         private _links: Link[] = [],
@@ -195,9 +195,9 @@ export default class Terminal {
         const buttons = document.createElement("div");
         buttons.classList.add("buttons");
         if (this._editable) {
-            const deleteButton = new TerminalButtonDelete(this._prevStation, this).button;
+            const deleteButton = new TerminalButtonDelete(this. _parent, this).button;
             const collapseButton = new TerminalButtonCollapse(this).button;
-            const addButton = new TerminalButtonAdd(this._prevStation, this).button;
+            const addButton = new TerminalButtonAdd(this. _parent, this).button;
             const copyButton = new TerminalButtonCopy(this).button;
             const pasteButton = new TerminalButtonPaste(this).button;
             buttons.appendChild(deleteButton);
@@ -217,9 +217,9 @@ export default class Terminal {
     private createLabelElement(): HTMLInputElement {
         const labelElement = document.createElement("input");
         labelElement.disabled = true;
-        const stationLabelSplit = this._prevStation.label.split(" ");
+        const stationLabelSplit = this. _parent.label.split(" ");
         const stationIndex = stationLabelSplit[stationLabelSplit.length-1];
-        labelElement.value = `Option ${stationIndex}-${this.prevStation.findTerminalIndex(this).toString()}`;
+        labelElement.value = `Option ${stationIndex}-${this.parent.findTerminalIndex(this).toString()}`;
         labelElement.classList.add("terminal_label");
         return labelElement;
     }
@@ -253,8 +253,8 @@ export default class Terminal {
             return;
         }
         if(copiedObject instanceof Terminal) {
-            const newTerminal = copiedObject.clone(true, this._prevStation);
-            this._prevStation.addTerminalAfterReference(this, newTerminal);
+            const newTerminal = copiedObject.clone(true, this. _parent);
+            this. _parent.addTerminalAfterReference(this, newTerminal);
         }
         else if(copiedObject instanceof Group) {
             copiedObject.parent = this;
@@ -279,12 +279,12 @@ export default class Terminal {
         return this._root;
     }
 
-    get prevStation(): Station {
-        return this._prevStation;
+    get parent(): Station {
+        return this. _parent;
     }
 
-    set prevStation(station: Station) {
-        this._prevStation = station;
+    set parent(station: Station) {
+        this. _parent = station;
     }
 
     get id(): string {
@@ -328,21 +328,26 @@ export default class Terminal {
     }
 
     public addLink(link: Link) {
-        link.left = this;
+        link.parent = this;
         this._links.push(link);
         this.rerender();
-        this.prevStation.parent.rerender();
+        this.parent.parent.rerender();
     }
 
-    toJSON(): any {
+    toObj () {
+        const {id, label, value, links} = this;
         return {
-            id: this._id,
-            prevStation: this._prevStation.toJSON(),
-            root: this._root.toJSON(),
-            editable: this._editable,
-            label: this._label,
-            value: this._value,
-            links: this._links.map(link => link.toJSON())
+            id,
+            label,
+            value,
+            links: links.map(link => link.toObj())
         }
+    }
+
+    static from(obj: any, parent: Station): Terminal {
+        const {label, value, links, id} = obj;
+        const terminal = new Terminal(parent, label, undefined, value, [], undefined, id);
+        links.forEach((link: any) => Link.from(link, terminal));
+        return terminal;
     }
 }

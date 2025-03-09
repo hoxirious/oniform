@@ -130,7 +130,7 @@ export default class Group {
     constructor(
         private _parent: Oniform|Station|Terminal,
         private _label: string = "Group 1",
-        private readonly _stations: Station[] = [],
+        private _stations: Station[] = [],
         private readonly _scoreExpression: string = "",
         private _score: number = 0,
         private readonly _editable: boolean = true,
@@ -183,7 +183,7 @@ export default class Group {
                 parentSignature = "-Q";
             }
             else if(this._parent instanceof Terminal) {
-                parentLabel = this._parent.prevStation.parent.label;
+                parentLabel = this._parent.parent.parent.label;
                 parentSignature = "-O";
             }
             const parentLabelSplit = parentLabel.split(" ");
@@ -306,6 +306,10 @@ export default class Group {
         return this._stations;
     }
 
+    set stations(stations: Station[]) {
+        this._stations = stations;
+    }
+
     get scoreExpression(): string {
         return this._scoreExpression;
     }
@@ -326,12 +330,21 @@ export default class Group {
         this._parent = parent;
     }
 
-    toJSON(): any {
+    toObj () {
+        const {label, stations, scoreExpression, score, id} = this;
         return {
-            id: this._id,
-            parent: this._parent.toJSON(),
-            label: this._label,
-            stations: this._stations.map(station => station.toJSON()),
+            id,
+            label,
+            score,
+            scoreExpression,
+            stations: stations.map(station => station.toObj()),
         }
+    }
+
+    static from (obj: any, parent: Oniform|Station|Terminal): Group {
+        const {label, stations, scoreExpression, score, id} = obj;
+        const group = new Group(parent, label, [], scoreExpression, score, true, id);
+        group.stations = stations.map((station: any) => Station.from(station, group))
+        return group;
     }
 }

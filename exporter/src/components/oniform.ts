@@ -15,6 +15,10 @@ export default class Oniform {
         return this._groups;
     }
 
+    set groups(groups: Group[]) {
+        this._groups = groups;
+    }
+
     get label(): string {
         return this._label;
     }
@@ -28,7 +32,7 @@ export default class Oniform {
         form.classList.add("oniform");
 
         const exportButton = new ActionButton("Export", "export", ["button"], () => {
-            console.log(this.toJSON());
+            console.log(this.deserialize(this.serialize()));
         });
 
         form.appendChild(exportButton.button);
@@ -89,13 +93,26 @@ export default class Oniform {
         return (this._groups.findIndex(g => g.id === group.id) + 1);
     }
 
-    static fromJSON(json: any): Oniform {
-        return new Oniform(json._groups, json._label);
+    toObj() {
+        const {groups, label} = this;
+        return {
+            label,
+            groups: groups.map(group => group.toObj())
+        };
     }
 
-    toJSON(): any {
-        return this._groups.map(group => group.toJSON());
+    static from(obj: any): Oniform {
+        const {groups, label} = obj;
+        const form = new Oniform([], label);
+        form.groups = groups.map((group: any) => Group.from(group, form));
+        return form;
     }
 
+    serialize() {
+        return JSON.stringify(this.toObj());
+    }
 
+    deserialize(json: string) {
+        return Oniform.from(JSON.parse(json));
+    }
 }
