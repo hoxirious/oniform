@@ -73,7 +73,6 @@ const initForm = () => {
     else
         oniformElement.appendChild(form.html);
 
-
     const clipboardElement = document.getElementById("clipboard");
     if (!clipboardElement) {
         console.error("Clipboard element not found");

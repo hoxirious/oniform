@@ -133,7 +133,6 @@ export default class Group {
         private readonly _stations: Station[] = [],
         private readonly _scoreExpression: string = "",
         private _score: number = 0,
-        // private readonly _links: Link[] = [],
         private readonly _editable: boolean = true,
         private readonly _id: string = `group-${generateGUID()}`
     ) {
@@ -330,9 +329,9 @@ export default class Group {
     toJSON(): any {
         return {
             id: this._id,
+            parent: this._parent.toJSON(),
             label: this._label,
             stations: this._stations.map(station => station.toJSON()),
-            // links: this._links.map(link => link.toJSON())
         }
     }
 }

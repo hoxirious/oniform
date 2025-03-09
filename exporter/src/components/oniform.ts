@@ -1,6 +1,7 @@
 import Group, {GroupButtonAdd} from "./group.ts";
 import "../styles/oniform.css";
 import {animateHighlight} from "../common/utility.ts";
+import ActionButton from "./actionButton.ts";
 
 export default class Oniform {
     static instance = new Oniform([]);
@@ -25,6 +26,12 @@ export default class Oniform {
     render() {
         const form = document.createElement("form");
         form.classList.add("oniform");
+
+        const exportButton = new ActionButton("Export", "export", ["button"], () => {
+            console.log(this.toJSON());
+        });
+
+        form.appendChild(exportButton.button);
         this._groups.forEach(group => {
             group.rerender();
             const groupDiv = group.html;
@@ -89,4 +96,6 @@ export default class Oniform {
     toJSON(): any {
         return this._groups.map(group => group.toJSON());
     }
+
+
 }

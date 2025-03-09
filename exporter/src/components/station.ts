@@ -48,8 +48,8 @@ export class StationButtonAdd extends ActionButton {
 
             actionItems.appendChild(createListItem(terminalButton));
             actionItems.appendChild(createListItem(siblingButton));
-            actionItems.appendChild(createListItem(dependantGroup));
             actionItems.appendChild(createListItem(dependantStation));
+            actionItems.appendChild(createListItem(dependantGroup));
 
 
             super(plus, "new-station", ["icon"], () => {
@@ -418,10 +418,13 @@ export default class Station {
     toJSON(): any {
         return {
             id: this._id,
+            parent: this._parent.toJSON(),
+            root: this._root.toJSON(),
             label: this._label,
             value: this._value,
-            terminals: this._nextTerminals.map(terminal => terminal.toJSON()),
-            links: this._links.map(link => link.toJSON())
+            nextTerminals: this._nextTerminals.map(terminal => terminal.toJSON()),
+            links: this._links.map(link => link.toJSON()),
+            editable: this._editable
         };
     }
 

@@ -67,8 +67,9 @@ export default class Link {
     toJSON(): any {
         return {
             id: this._id,
-            left_id: this._left.id,
+            left: this._left.toJSON(),
             right: this._right.toJSON(),
+            editable: this._editable,
             relationship: this._relationship
         }
     }

@@ -135,8 +135,8 @@ function createActionItems(parent: Station, self: Terminal): HTMLUListElement {
     }).button;
 
     actionItems.appendChild(createListItem(siblingButton));
-    actionItems.appendChild(createListItem(groupDependantButton));
     actionItems.appendChild(createListItem(stationDependantButton));
+    actionItems.appendChild(createListItem(groupDependantButton));
 
     return actionItems;
 }
@@ -337,6 +337,9 @@ export default class Terminal {
     toJSON(): any {
         return {
             id: this._id,
+            prevStation: this._prevStation.toJSON(),
+            root: this._root.toJSON(),
+            editable: this._editable,
             label: this._label,
             value: this._value,
             links: this._links.map(link => link.toJSON())
