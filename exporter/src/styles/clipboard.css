@@ -1,7 +1,6 @@
 #clipboard {
     display: none;
     position: fixed;
-    top: 0;
     right: 2.5rem;
     width: 40%;
     height: 90%;

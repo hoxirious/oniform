@@ -45,19 +45,28 @@ export class TerminalButtonCollapse extends ActionButton {
         chevronRight.src = chevronRightUrl as string;
         chevronRight.alt = "Expand All";
 
-        super(chevronDown, "collapse-stations", ["icon"], () => {
+        const collapseCallback = () => {
             const expandedlinks = self.html.getElementsByClassName(`link ${Relationship.DEPENDANT}`);
-            for (let i = 0; i < expandedlinks.length; i++) {
-                expandedlinks[i].classList.toggle("collapse");
+            if (expandedlinks.length > 0) {
+                for (let i = 0; i < expandedlinks.length; i++) {
+                    expandedlinks[i].classList.toggle("collapse");
+                }
+                self.html.getElementsByClassName("terminal_input")[0].classList.toggle("folded");
+                if (expandedlinks[0].classList.contains("collapse")) {
+                    this.button.replaceChild(chevronRight, this.button.firstChild!);
+                }
+                else {
+                    this.button.replaceChild(chevronDown, this.button.firstChild!);
+                }
+                self.isCollapsed = !self.isCollapsed;
             }
-            self.html.getElementsByClassName("terminal_input")[0].classList.toggle("folded");
-            if (expandedlinks.length > 0 && expandedlinks[0].classList.contains("collapse")) {
-                this.button.replaceChild(chevronRight, this.button.firstChild!);
-            }
-            else {
-                this.button.replaceChild(chevronDown, this.button.firstChild!);
-            }
-        }, true, undefined, "Collapse Dependants");
+        }
+        if(self.isCollapsed) {
+            super(chevronRight, "collapse-stations", ["icon"], collapseCallback, true, undefined, "Collapse Dependants");
+        }
+        else {
+            super(chevronDown, "collapse-stations", ["icon"], collapseCallback, true, undefined, "Collapse Dependants");
+        }
     }
 }
 
@@ -155,6 +164,7 @@ function createPlusIcon(): HTMLImageElement {
 }
 
 export default class Terminal {
+    isCollapsed: boolean = false;
     constructor(
         private _parent: Station,
         private _label: string = `Option ${_parent.label}-1`,

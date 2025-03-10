@@ -70,18 +70,29 @@ export class GroupButtonCollapse extends ActionButton {
         chevronRight.src = chevronRightUrl as string;
         chevronRight.alt = "Expand All";
 
-        super(chevronDown, "collapse-stations", ["icon"], () => {
-            const stations = self.html.getElementsByClassName(`stations`);
-            stations[0].classList.toggle("collapse");
-            self.html.getElementsByClassName(`group`)[0].classList.toggle("folded");
+        const collapseCallback = () => {
+            const stationContainer = self.html.getElementsByClassName("station_container");
 
-            if ((stations.length > 0 && stations[0].classList.contains("collapse"))) {
-                this.button.replaceChild(chevronRight, this.button.firstChild!);
+            if (stationContainer.length > 0) {
+                const stations = self.html.getElementsByClassName("stations")
+                stations[0].classList.toggle("collapse");
+                self.html.getElementsByClassName(`group`)[0].classList.toggle("folded");
+
+                if (stations[0].classList.contains("collapse")) {
+                    this.button.replaceChild(chevronRight, this.button.firstChild!);
+                } else {
+                    this.button.replaceChild(chevronDown, this.button.firstChild!);
+                }
+                self.isCollapsed = !self.isCollapsed;
             }
-            else {
-                this.button.replaceChild(chevronDown, this.button.firstChild!);
-            }
-        }, true, undefined, "Collapse Dependants");
+        }
+
+        if(self.isCollapsed) {
+            super(chevronRight, "collapse-stations", ["icon"], collapseCallback, true, undefined, "Collapse Dependants");
+        }
+        else {
+            super(chevronDown, "collapse-stations", ["icon"], collapseCallback, true, undefined, "Collapse Dependants");
+        }
     }
 }
 
@@ -126,6 +137,7 @@ export class GroupButtonPaste extends ActionButton {
 
 export default class Group {
     private readonly _html: HTMLDivElement = document.createElement("div");
+    isCollapsed: boolean = false;
 
     constructor(
         private _parent: Oniform|Station|Terminal,
