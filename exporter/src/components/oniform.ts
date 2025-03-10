@@ -1,6 +1,7 @@
 import Group, {GroupButtonAdd} from "./group.ts";
 import "../styles/oniform.css";
-import {animateHighlight} from "../common/utility.ts";
+import {animateHighlight, showSuccessPopup} from "../common/utility.ts";
+import ActionButton from "./actionButton.ts";
 
 export default class Oniform {
     static instance = new Oniform([]);
@@ -14,6 +15,10 @@ export default class Oniform {
         return this._groups;
     }
 
+    set groups(groups: Group[]) {
+        this._groups = groups;
+    }
+
     get label(): string {
         return this._label;
     }
@@ -25,6 +30,23 @@ export default class Oniform {
     render() {
         const form = document.createElement("form");
         form.classList.add("oniform");
+
+        const buttons = document.createElement("div");
+        buttons.classList.add("buttons");
+        const saveButton = new ActionButton("Save", "save", ["button"], () => {
+            const serializedForm = this.serialize();
+            localStorage.setItem("oniformInstance", serializedForm);
+            showSuccessPopup("Form saved");
+        });
+
+        buttons.appendChild(saveButton.button);
+        const resetButton = new ActionButton("Reset", "reset", ["button"], () => {
+            this.clear();
+            localStorage.removeItem("oniformInstance");
+            showSuccessPopup("Form cleared");
+        });
+        buttons.appendChild(resetButton.button);
+        form.appendChild(buttons);
         this._groups.forEach(group => {
             group.rerender();
             const groupDiv = group.html;
@@ -47,6 +69,11 @@ export default class Oniform {
             if (oniform.firstChild)
                 oniform!.replaceChild(this.html, oniform.firstChild);
         }
+    }
+
+    clear() {
+        this._groups = [];
+        this.rerender();
     }
 
     addGroup(prevGroup?: Group) {
@@ -82,11 +109,26 @@ export default class Oniform {
         return (this._groups.findIndex(g => g.id === group.id) + 1);
     }
 
-    static fromJSON(json: any): Oniform {
-        return new Oniform(json._groups, json._label);
+    toObj() {
+        const {groups, label} = this;
+        return {
+            label,
+            groups: groups.map(group => group.toObj())
+        };
     }
 
-    toJSON(): any {
-        return this._groups.map(group => group.toJSON());
+    static from(obj: any): Oniform {
+        const {groups, label} = obj;
+        const form = new Oniform([], label);
+        form.groups = groups.map((group: any) => Group.from(group, form));
+        return form;
+    }
+
+    serialize() {
+        return JSON.stringify(this.toObj());
+    }
+
+    static deserialize(json: string) {
+        this.instance = Oniform.from(JSON.parse(json));
     }
 }

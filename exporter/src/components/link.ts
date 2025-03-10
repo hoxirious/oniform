@@ -13,10 +13,11 @@ export default class Link {
     private readonly _html: HTMLDivElement = document.createElement("div");
 
     constructor(
-        private _left: Station | Terminal,
+        private _parent: Station | Terminal,
         private readonly _right: Group | Station,
         private readonly _relationship: Relationship,
         private readonly _editable: boolean = true,
+        private readonly _rightType: string = _right.constructor.name,
         private readonly _id: string = `link-${generateGUID()}`
     ) {
         this.render();
@@ -28,7 +29,7 @@ export default class Link {
 
         this._html.appendChild(this._right.html);
         if (this._relationship === Relationship.DEPENDANT) {
-            this._left.addLink(this);
+            this._parent.addLink(this);
             this._right.rerender();
         }
         this._html.scrollIntoView({behavior: "smooth", block: "center"});
@@ -40,16 +41,20 @@ export default class Link {
     }
 
 
-    get left(): Station | Terminal {
-        return this._left;
+    get parent(): Station | Terminal {
+        return this._parent;
     }
 
-    set left(left: Station | Terminal) {
-        this._left = left;
+    set parent(parent: Station | Terminal) {
+        this._parent = parent;
     }
 
     get right(): Station | Group {
         return this._right;
+    }
+
+    get rightType(): string {
+        return this._rightType;
     }
 
     get relationship(): Relationship {
@@ -64,12 +69,23 @@ export default class Link {
         return this._id;
     }
 
-    toJSON(): any {
+    toObj() {
+        const {right, relationship, rightType, id} = this;
         return {
-            id: this._id,
-            left_id: this._left.id,
-            right: this._right.toJSON(),
-            relationship: this._relationship
+            id,
+            relationship,
+            rightType,
+            right: right.toObj()
+        }
+    }
+
+    static from (obj: any, parent: Station | Terminal): Link {
+        const {right, relationship, rightType, id} = obj;
+        if(rightType === "Group") {
+            return new Link(parent, Group.from(right, parent), relationship, true, "Group", id);
+        }
+        else {
+            return new Link(parent, Station.from(right, parent), relationship, true, "Station", id);
         }
     }
 }
