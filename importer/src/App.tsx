@@ -11,7 +11,7 @@ function App() {
   useEffect(() => {
     try {
       // @ts-ignore
-        const parsedData: Group[] = sampleData;
+        const parsedData: Group[] = sampleData.groups;
       setGroups(parsedData);
     } catch (err) {
       setError('Failed to load group data');

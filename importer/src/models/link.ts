@@ -1,4 +1,5 @@
 import {Group} from "./group.ts";
+import {Station} from "./station.ts";
 
 export enum Relationship {
     SIBLING = "sibling",
@@ -7,7 +8,8 @@ export enum Relationship {
 
 export interface Link {
     id: string;
-    left_id: string;
-    right: Group;
+    value: string;
+    rightType: "Group" | "Station";
+    right: Group|Station;
     relationship: Relationship;
 }
