@@ -3,3 +3,9 @@
     flex-direction: column;
     margin: 2rem;
 }
+
+.oniform > .buttons {
+    display: flex;
+    margin: 1rem;
+    gap: 0.5rem;
+}

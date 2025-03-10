@@ -1,6 +1,6 @@
 import Group, {GroupButtonAdd} from "./group.ts";
 import "../styles/oniform.css";
-import {animateHighlight} from "../common/utility.ts";
+import {animateHighlight, showSuccessPopup} from "../common/utility.ts";
 import ActionButton from "./actionButton.ts";
 
 export default class Oniform {
@@ -31,17 +31,22 @@ export default class Oniform {
         const form = document.createElement("form");
         form.classList.add("oniform");
 
-        const exportButton = new ActionButton("Export", "export", ["button"], () => {
+        const buttons = document.createElement("div");
+        buttons.classList.add("buttons");
+        const saveButton = new ActionButton("Save", "save", ["button"], () => {
             const serializedForm = this.serialize();
             localStorage.setItem("oniformInstance", serializedForm);
+            showSuccessPopup("Form saved");
         });
 
-        form.appendChild(exportButton.button);
+        buttons.appendChild(saveButton.button);
         const resetButton = new ActionButton("Reset", "reset", ["button"], () => {
             this.clear();
             localStorage.removeItem("oniformInstance");
+            showSuccessPopup("Form cleared");
         });
-        form.appendChild(resetButton.button);
+        buttons.appendChild(resetButton.button);
+        form.appendChild(buttons);
         this._groups.forEach(group => {
             group.rerender();
             const groupDiv = group.html;
