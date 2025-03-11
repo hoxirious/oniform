@@ -1,14 +1,16 @@
+import { h } from "snabbdom";
+import { patch } from "../common/snabbdom.setup.ts";
 import Group, {GroupButtonAdd} from "./group.ts";
 import "../styles/oniform.css";
-import {animateHighlight, showSuccessPopup} from "../common/utility.ts";
+import {animateHighlight, generateGUID, showSuccessPopup} from "../common/utility.ts";
 import ActionButton from "./actionButton.ts";
 
 export default class Oniform {
     static instance = new Oniform([]);
+    private readonly _id = `oniform-${generateGUID()}`;
     private constructor(
-        private _groups: Group[],
+        private _groups: Group[] = [],
         private _label: string = "",
-        private _html: HTMLFormElement = document.createElement("form")
     ) {}
 
     get groups(): Group[] {
@@ -23,44 +25,39 @@ export default class Oniform {
         return this._label;
     }
 
-    get html(): HTMLFormElement {
-        return this._html;
-    }
-
     render() {
-        const form = document.createElement("form");
-        form.classList.add("oniform");
-
-        const buttons = document.createElement("div");
-        buttons.classList.add("buttons");
-        const saveButton = new ActionButton("Save", "save", ["button"], () => {
-            const serializedForm = this.serialize();
-            localStorage.setItem("oniformInstance", serializedForm);
-            showSuccessPopup("Form saved");
-        });
-
-        buttons.appendChild(saveButton.button);
-        const resetButton = new ActionButton("Reset", "reset", ["button"], () => {
-            this.clear();
-            localStorage.removeItem("oniformInstance");
-            showSuccessPopup("Form cleared");
-        });
-        buttons.appendChild(resetButton.button);
-        form.appendChild(buttons);
-        this._groups.forEach(group => {
-            group.rerender();
-            const groupDiv = group.html;
-            form.appendChild(groupDiv);
-        });
-
-        if(this._groups.length === 0) {
-            const newGroupButton = new GroupButtonAdd();
-            form.appendChild(newGroupButton.button);
-        }
-
-        this._html = form;
-        this._html.scrollIntoView({behavior: "smooth", block: "center"});
+        const groups = this.groups.length > 0 ? this.groups.map(group => group.render()) : new GroupButtonAdd().render();
+        return h(`form.oniform${this._id}`, [groups]);
     }
+
+    // private initComponent() {
+    //     const buttons = document.createElement("div");
+    //     buttons.classList.add("buttons");
+    //     const saveButton = new ActionButton("Save", "save", ["button"], () => {
+    //         const serializedForm = this.serialize();
+    //         localStorage.setItem("oniformInstance", serializedForm);
+    //         showSuccessPopup("Form saved");
+    //     });
+    //
+    //     buttons.appendChild(saveButton.button);
+    //     const resetButton = new ActionButton("Reset", "reset", ["button"], () => {
+    //         this.clear();
+    //         localStorage.removeItem("oniformInstance");
+    //         showSuccessPopup("Form cleared");
+    //     });
+    //     buttons.appendChild(resetButton.button);
+    //     form.appendChild(buttons);
+    //     this._groups.forEach(group => {
+    //         group.rerender();
+    //         const groupDiv = group.html;
+    //         form.appendChild(groupDiv);
+    //     });
+    //
+    //     if(this._groups.length === 0) {
+    //         const newGroupButton = new GroupButtonAdd();
+    //         form.appendChild(newGroupButton.button);
+    //     }
+    // }
 
     rerender() {
         const oniform = document.getElementById("oniform");

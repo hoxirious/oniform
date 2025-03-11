@@ -1,3 +1,5 @@
+import { h } from "snabbdom";
+import { patch } from "./common/snabbdom.setup.ts";
 import Oniform from "./components/oniform.ts";
 import Clipboard from "./components/clipboard.ts";
 import clipboard from "./static/clipboard.svg";
@@ -56,20 +58,18 @@ const initPage = () => {
 const initForm = () => {
     let form: Oniform;
 
-    const serializedForm = localStorage.getItem("oniformInstance");
-    if (serializedForm) {
-        Oniform.deserialize(serializedForm);
-        form = Oniform.instance;
-        form.render();
-    } else {
-        form = Oniform.instance;
-        form.render();
-
-        // default form
-        form.addGroup();
-        form.groups[0].addEmptyStation();
-        form.groups[0].stations[0].addEmptyTerminal();
-    }
+    // const serializedForm = localStorage.getItem("oniformInstance");
+    // if (serializedForm) {
+    //     Oniform.deserialize(serializedForm);
+    //     form = Oniform.instance;
+    // } else {
+    //     form = Oniform.instance;
+    //
+    //     // default form
+    //     form.addGroup();
+    //     form.groups[0].addEmptyStation();
+    //     form.groups[0].stations[0].addEmptyTerminal();
+    // }
 
     const oniformElement = document.getElementById("oniform");
     if (!oniformElement) {
@@ -77,10 +77,8 @@ const initForm = () => {
         return;
     }
 
-    if (oniformElement.firstChild)
-        oniformElement.replaceChild(form.html, oniformElement.firstChild);
-    else
-        oniformElement.appendChild(form.html);
+    const newVnode = h('div#oniform', [Oniform.instance.render()]);
+    patch(oniformElement, newVnode);
 
     const clipboardElement = document.getElementById("clipboard");
     if (!clipboardElement) {
@@ -91,11 +89,10 @@ const initForm = () => {
     const clipboard = Clipboard.instance;
     clipboard.render();
 
-    if (clipboardElement.firstChild)
-        clipboardElement.replaceChild(clipboard.html, clipboardElement.firstChild);
-    else
-        clipboardElement.appendChild(clipboard.html);
+    const clipboardVnode = h('div#clipboard', [clipboard.html]);
+    patch(clipboardElement, clipboardVnode);
 
     window.oniformInstance = form; // Attach the instance to the window object
 }
+
 document.addEventListener("DOMContentLoaded", initPage);

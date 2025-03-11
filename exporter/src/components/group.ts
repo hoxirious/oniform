@@ -13,6 +13,10 @@ import Terminal from "./terminal.ts";
 import Link, {Relationship} from "./link.ts";
 import chevronDownUrl from "../static/chevron-down.svg";
 import chevronRightUrl from "../static/chevron-right.svg";
+import { init } from "snabbdom";
+import { h } from "snabbdom/build/h";
+import {eventListenersModule} from "snabbdom/build/modules/eventlisteners";
+import {styleModule} from "snabbdom/build/modules/style";
 
 export class GroupButtonAdd extends ActionButton {
     constructor(self?: Group) {
@@ -138,6 +142,8 @@ export class GroupButtonPaste extends ActionButton {
 export default class Group {
     private readonly _html: HTMLDivElement = document.createElement("div");
     isCollapsed: boolean = false;
+    private vnode: any; // Store virtual DOM node
+    private static patch = init([eventListenersModule, styleModule]);
 
     constructor(
         private _parent: Oniform|Station|Terminal,
@@ -152,7 +158,7 @@ export default class Group {
     }
 
     render() {
-        this._html.innerHTML = "";
+
         this._html.classList.add("group_container");
         this._html.id = this._id;
 

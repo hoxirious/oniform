@@ -1,4 +1,6 @@
 import "../styles/action-button.css";
+import {h} from "snabbdom";
+import {patch} from "../common/snabbdom.setup";
 
 export default class ActionButton {
     private _button: HTMLButtonElement = document.createElement("button");
@@ -17,35 +19,39 @@ export default class ActionButton {
         this.render();
     }
 
-    render(): void {
-        this._button.type = "button";
-        this._button.classList.add("action-button", ...this._class);
-        this._button.id = this._id;
-        if(this._tooltip)
-            this._button.title = this._tooltip;
-        this._button.appendChild(typeof this._label === "string" ? document.createTextNode(this._label) : this._label);
-        if(this._actionItems) {
-            this._actionItems.classList.add("action_items");
-            this._button.appendChild(this._actionItems);
-        }
-        this.addEventListeners();
-    }
+     render() {
+         const labelVNode = typeof this._label === "string" ? this._label : this._label.outerHTML;
+         const actionItemsVNode = this._actionItems ? h('div', { props: { innerHTML: this._actionItems.outerHTML } }) : undefined;
 
-    private addEventListeners(): void {
+         return h("button", {
+             props: {
+                 id: this._id,
+                 title: this._tooltip,
+                 type: "button",
+                 value: labelVNode
+             },
+             class: { "action-button": true, ...this._class.reduce((acc, cls) => ({ ...acc, [cls]: true }), {}) },
+             on: this._getEventListeners(),
+         }, [labelVNode, actionItemsVNode]);
+     }
+
+    private _getEventListeners() {
+        const listeners: Record<string, EventListener> = {};
+
         if (this._isClicked) {
-            this._button.addEventListener("click", this._callback);
+            listeners.click = this._callback;
         } else {
-            this._button.addEventListener("mouseover", this._callback);
-            this._button.addEventListener("mouseout", () => {
-                this._actionItems?.classList.remove("show");
-            });
+            listeners.mouseover = this._callback;
+            listeners.mouseout = () => this._actionItems?.classList.remove("show");
         }
 
         document.addEventListener("click", (event) => {
-            if (this._actionItems && !this._actionItems.contains(event.target as Node) && !this._button.contains(event.target as Node)) {
+            if (this._actionItems && !this._actionItems.contains(event.target as Node)) {
                 this._actionItems.classList.remove("show");
             }
         });
+
+        return listeners;
     }
 
     get button(): HTMLButtonElement {
