@@ -13,6 +13,8 @@ import Link, {Relationship} from "./link.ts";
 import chevronDownUrl from "../static/chevron-down.svg";
 import chevronRightUrl from "../static/chevron-right.svg";
 import { h } from "snabbdom/build/h";
+import {patch} from "../common/snabbdom.setup.ts";
+import {VNode} from "snabbdom";
 
 export class GroupButtonAdd extends ActionButton {
     constructor(self?: Group) {
@@ -115,6 +117,7 @@ export class GroupButtonPaste extends ActionButton {
 export default class Group {
     private readonly _html: HTMLDivElement = document.createElement("div");
     isCollapsed: boolean = false;
+    vnode?: VNode;
 
     constructor(
         private _parent: Oniform|Station|Terminal,
@@ -127,7 +130,7 @@ export default class Group {
     ) {}
 
     render() {
-        return h("div.group_container", {
+        this.vnode = h("div.group_container", {
                 id: this._id,
             }
             , [
@@ -153,6 +156,8 @@ export default class Group {
                 ])
             ]
         )
+
+        return this.vnode;
 
         // if (this._parent) {
         //     if(this._editable) {
@@ -211,8 +216,10 @@ export default class Group {
     }
 
     rerender() {
-        this._html.innerHTML = "";
-        this.render();
+        if(this.vnode)
+            return patch(this.vnode, this.render());
+        else
+            return this.render();
     }
 
     clone(editable: boolean = false, parentClone?: Station|Terminal): Group {

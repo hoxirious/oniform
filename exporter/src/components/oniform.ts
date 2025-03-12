@@ -7,7 +7,8 @@ import ActionButton from "./actionButton.ts";
 
 export default class Oniform {
     static instance = new Oniform([]);
-    private readonly _id = `oniform-${generateGUID()}`;
+    readonly _id = `oniform-${generateGUID()}`;
+    vnode?: VNode;
     private constructor(
         private _groups: Group[] = [],
         private _label: string = "",
@@ -26,44 +27,31 @@ export default class Oniform {
     }
 
     render():VNode {
-        const groups = this.groups.length > 0 ? this.groups.map(group => group.render()) : new GroupButtonAdd().render();
-        return h(`form.oniform${this._id}`, [groups]);
+        const groups = this.groups.length > 0 ? this.groups.map(group => group.rerender()) : new GroupButtonAdd().render();
+        this.vnode = h(`form#${this._id}.oniform`, [this.createButtons(), groups]);
+        return this.vnode;
     }
 
-    // private initComponent() {
-    //     const buttons = document.createElement("div");
-    //     buttons.classList.add("buttons");
-    //     const saveButton = new ActionButton("Save", "save", ["button"], () => {
-    //         const serializedForm = this.serialize();
-    //         localStorage.setItem("oniformInstance", serializedForm);
-    //         showSuccessPopup("Form saved");
-    //     });
-    //
-    //     buttons.appendChild(saveButton.button);
-    //     const resetButton = new ActionButton("Reset", "reset", ["button"], () => {
-    //         this.clear();
-    //         localStorage.removeItem("oniformInstance");
-    //         showSuccessPopup("Form cleared");
-    //     });
-    //     buttons.appendChild(resetButton.button);
-    //     form.appendChild(buttons);
-    //     this._groups.forEach(group => {
-    //         group.rerender();
-    //         const groupDiv = group.html;
-    //         form.appendChild(groupDiv);
-    //     });
-    //
-    //     if(this._groups.length === 0) {
-    //         const newGroupButton = new GroupButtonAdd();
-    //         form.appendChild(newGroupButton.button);
-    //     }
-    // }
+    private createButtons(): VNode {
+        return h("div.buttons", [
+            new ActionButton("Save", () => {
+                const serializedForm = this.serialize();
+                localStorage.setItem("oniformInstance", serializedForm);
+                showSuccessPopup("Form saved");
+            }, undefined, ["text"], "Save form").render(),
+            new ActionButton("Reset",() => {
+                this.clear();
+                localStorage.removeItem("oniformInstance");
+                showSuccessPopup("Form cleared");
+            }, undefined, ["text"], "Reset form" ).render()
+        ])
+    }
 
     rerender() {
-        const oniformElement = document.getElementById("oniform");
-        if (oniformElement) {
-            patch(oniformElement, this.render());
-        }
+        if(this.vnode)
+            return patch(this.vnode, this.render());
+        else
+            return this.render();
     }
 
     clear() {

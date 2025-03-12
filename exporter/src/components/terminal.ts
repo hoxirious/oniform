@@ -13,6 +13,7 @@ import chevronRightUrl from "../static/chevron-right.svg";
 import {animateHighlight, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 import {h, VNode} from "snabbdom";
+import {patch} from "../common/snabbdom.setup.ts";
 
 export class TerminalButtonAdd extends ActionButton {
     constructor(parent: Station, self?: Terminal) {
@@ -126,6 +127,7 @@ export class TerminalButtonPaste extends ActionButton {
 
 export default class Terminal {
     isCollapsed: boolean = false;
+    vnode?: VNode;
     constructor(
         private _parent: Station,
         private _label: string = `Option ${_parent.label}-1`,
@@ -137,10 +139,14 @@ export default class Terminal {
         private _id: string = `terminal-${generateGUID()}`
     ) {}
 
-    public render() {
-        return h("div.terminal_container", { id: this._id }, [
+    public render():VNode {
+        const links = this.links.map(link => {
+            link.right.rerender();
+            return link.rerender();
+        });
+        this.vnode = h("div.terminal_container", { id: this._id }, [
             this.createTerminalElement(),
-            // ...this._links.map(link => link.html)
+            ...links
             ]);
         // this._html.innerHTML = "";
         // this._html.classList.add("terminal_container");
@@ -156,6 +162,7 @@ export default class Terminal {
         //     this._html.appendChild(link.html);
         // });
         // this._html.scrollIntoView({ behavior: "smooth" });
+        return this.vnode;
     }
 
     private createTerminalElement(): VNode {
@@ -191,30 +198,37 @@ export default class Terminal {
         // return terminalElement;
     }
 
-    private createLabelElement(): HTMLInputElement {
-        const labelElement = document.createElement("input");
-        labelElement.disabled = true;
-        const stationLabelSplit = this. _parent.label.split(" ");
-        const stationIndex = stationLabelSplit[stationLabelSplit.length-1];
-        labelElement.value = `Option ${stationIndex}-${this.parent.findTerminalIndex(this).toString()}`;
-        labelElement.classList.add("terminal_label");
-        return labelElement;
-    }
+    private createLabelElement(): VNode {
+        const stationLabelSplit = this._parent.label.split(" ");
+        const stationIndex = stationLabelSplit[stationLabelSplit.length - 1];
+        const labelValue = `Option ${stationIndex}-${this.parent.findTerminalIndex(this).toString()}`;
 
-    private createInputElement(): HTMLInputElement {
-        const inputElement = document.createElement("input");
-        inputElement.classList.add("terminal_input");
-        inputElement.value = this._value;
-        inputElement.placeholder = "Enter option here";
-        inputElement.addEventListener("input", (event) => {
-            this._value = (event.target as HTMLInputElement).value;
+        return h("input.terminal_label", {
+            props: {
+                disabled: true,
+                value: labelValue
+            }
         });
-        return inputElement;
     }
 
+    private createInputElement(): VNode {
+        return h("input.terminal_input", {
+            props: {
+                value: this._value,
+                placeholder: "Enter option here"
+            },
+            on: {
+                input: (event: Event) => {
+                    this._value = (event.target as HTMLInputElement).value;
+                }
+            }
+        });
+    }
     public rerender() {
-        this._html.innerHTML = "";
-        this.render();
+        if(this.vnode)
+            return patch(this.vnode, this.render());
+        else
+            return this.render();
     }
 
     public clone(editable: boolean = false, dumbStation?: Station): Terminal {

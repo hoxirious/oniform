@@ -3,7 +3,8 @@ import Terminal from "./terminal.ts";
 import Group from "./group.ts";
 import "../styles/link.css";
 import {generateGUID} from "../common/utility.ts";
-import {h} from "snabbdom";
+import {h, VNode} from "snabbdom";
+import {patch} from "../common/snabbdom.setup.ts";
 
 export enum Relationship {
     SIBLING = "sibling",
@@ -12,6 +13,7 @@ export enum Relationship {
 
 export default class Link {
     private readonly _html: HTMLDivElement = document.createElement("div");
+    vnode?: VNode;
 
     constructor(
         private _parent: Station | Terminal,
@@ -20,13 +22,12 @@ export default class Link {
         private readonly _editable: boolean = true,
         private readonly _rightType: string = _right.constructor.name,
         private readonly _id: string = `link-${generateGUID()}`
-    ) {
-        this.render();
-    }
+    ) {}
 
-    private render() {
+    private render():VNode {
         this.parent.addLink(this);
-        return h(`div.link.${this.relationship}`, { props: { id: this.id } }, [this.right.render()]);
+        this.vnode = h(`div.link.${this.relationship}`, { props: { id: this.id } }, [this.right.render()]);
+        return this.vnode;
         // this._html.classList.add("link", this._relationship)/*;
         // this._html.id = this._id;
         //
@@ -36,6 +37,13 @@ export default class Link {
         //     this._right.rerender();
         // }
         // this._html.scrollIntoView({behavior: "smooth", block: "center"});
+    }
+
+    rerender() {
+        if(this.vnode)
+            return patch(this.vnode, this.render());
+        else
+            return this.render();
     }
 
     clone(leftClone: Station|Terminal, editable: boolean = false): Link {

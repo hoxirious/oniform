@@ -12,7 +12,8 @@ import Clipboard from "./clipboard.ts";
 import Link, {Relationship} from "./link.ts";
 import {animateHighlight, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
-import {h} from "snabbdom";
+import {h, VNode} from "snabbdom";
+import {patch} from "../common/snabbdom.setup.ts";
 
 export class StationButtonAdd extends ActionButton {
     constructor(parent: Group | Station | Terminal, self?: Station) {
@@ -140,6 +141,7 @@ export class StationButtonPaste extends ActionButton {
 
 export default class Station {
     isCollapsed: boolean = false;
+    vnode?: VNode;
     constructor(
         private _parent: Group | Station | Terminal,
         private _root: Station = this,
@@ -152,8 +154,13 @@ export default class Station {
         private _id: string = `station-${generateGUID()}`
     ) {}
 
-    render() {
-        return h("div.station_container", { id: this._id }, [
+    render():VNode {
+        const terminals = this.terminals.length > 0 ? this.terminals.map(terminal => terminal.rerender()) : new TerminalButtonAdd(this).render();
+        const links = this.links.map(link => {
+            link.right.rerender();
+            return link.rerender();
+        });
+        this.vnode = h("div.station_container", { id: this._id }, [
             h("div.station", [
                 h("div.buttons", [
                     new StationButtonDelete(this).render(),
@@ -162,98 +169,100 @@ export default class Station {
                     new StationButtonCopy(this).render(),
                     new StationButtonPaste(this).render(),
                     h("input.station_label", { props: { disabled: true, value: this._label }, on: { input: (event: Event) => {
-                        this._label = (event.target as HTMLInputElement).value;
-                    }} }),
+                                this._label = (event.target as HTMLInputElement).value;
+                            }} }),
                 ]),
                 h("textarea.station_textarea", { props: { value: this._value, placeholder: "Enter question here" }, on: { input: (event: Event) => {
-                    this._value = (event.target as HTMLTextAreaElement).value;
-                }} }),
+                            this._value = (event.target as HTMLTextAreaElement).value;
+                        }}}),
+                terminals,
+                ...links,
             ]),
-            // this._terminals.length === 0 ? h("div.terminal", [new TerminalButtonAdd(this).render()]) : h("div.terminals", this._terminals.map(terminal => terminal.render())),
-            // this._links.map(link => {
-            //     link.html.classList.remove("collapse");
-            //     link.right.rerender();
-            //     return link.html;
-            // })
         ]);
-        this._html.innerHTML = "";
-        this._html.classList.add("station_container");
-        this._html.id = this._id;
 
-        const station = document.createElement("div");
-        station.classList.add("station");
-
-        const labelElement = document.createElement("input");
-        labelElement.disabled = true;
-        const stationIndex = this._parent.findStationIndex(this).toString();
-        if(!this._label || this._label != `Station ${stationIndex}`)
-            this._label = `Question ${stationIndex}`;
-        labelElement.value = this._label;
-        labelElement.classList.add("station_label");
-
-        labelElement.addEventListener("input", (event) => {
-            this._label = (event.target as HTMLInputElement).value;
-        });
+        return this.vnode;
+        // this._html.innerHTML = "";
+        // this._html.classList.add("station_container");
+        // this._html.id = this._id;
+        //
+        // const station = document.createElement("div");
+        // station.classList.add("station");
+        //
+        // const labelElement = document.createElement("input");
+        // labelElement.disabled = true;
+        // const stationIndex = this._parent.findStationIndex(this).toString();
+        // if(!this._label || this._label != `Station ${stationIndex}`)
+        //     this._label = `Question ${stationIndex}`;
+        // labelElement.value = this._label;
+        // labelElement.classList.add("station_label");
+        //
+        // labelElement.addEventListener("input", (event) => {
+        //     this._label = (event.target as HTMLInputElement).value;
+        // });
 
         // Buttons
-        const buttons = document.createElement("div");
-        buttons.classList.add("buttons");
-        const buttonCollapse = new StationButtonCollapse(this).button;
-        const buttonAdd = new StationButtonAdd(this._parent, this).button;
-        const buttonDelete = new StationButtonDelete(this).button;
-        const buttonCopy = new StationButtonCopy(this).button;
-        const buttonPaste = new StationButtonPaste(this).button;
-        if(this._editable) {
-            buttons.appendChild(buttonDelete);
-            buttons.appendChild(buttonAdd);
-            buttons.appendChild(buttonCollapse);
-            buttons.appendChild(buttonCopy);
-            buttons.appendChild(buttonPaste);
-        }
-            buttons.appendChild(labelElement);
-        station.appendChild(buttons);
+        // const buttons = document.createElement("div");
+        // buttons.classList.add("buttons");
+        // const buttonCollapse = new StationButtonCollapse(this).button;
+        // const buttonAdd = new StationButtonAdd(this._parent, this).button;
+        // const buttonDelete = new StationButtonDelete(this).button;
+        // const buttonCopy = new StationButtonCopy(this).button;
+        // const buttonPaste = new StationButtonPaste(this).button;
+        // if(this._editable) {
+        //     buttons.appendChild(buttonDelete);
+        //     buttons.appendChild(buttonAdd);
+        //     buttons.appendChild(buttonCollapse);
+        //     buttons.appendChild(buttonCopy);
+        //     buttons.appendChild(buttonPaste);
+        // }
+        //     buttons.appendChild(labelElement);
+        // station.appendChild(buttons);
 
-        const textareaElement = document.createElement("textarea");
-        textareaElement.classList.add("station_textarea");
-        textareaElement.value = this._value;
-        textareaElement.placeholder = "Enter question here";
-        textareaElement.addEventListener("input", (event) => {
-            this._value = (event.target as HTMLTextAreaElement).value;
-        });
+        // const textareaElement = document.createElement("textarea");
+        // textareaElement.classList.add("station_textarea");
+        // textareaElement.value = this._value;
+        // textareaElement.placeholder = "Enter question here";
+        // textareaElement.addEventListener("input", (event) => {
+        //     this._value = (event.target as HTMLTextAreaElement).value;
+        // });
 
-        station.appendChild(textareaElement);
+        // station.appendChild(textareaElement);
 
-        this._html.appendChild(station);
-        if(this._terminals.length == 0)
-        {
-            const terminalElement = document.createElement("div");
-            terminalElement.classList.add("terminal");
-            terminalElement.appendChild(new TerminalButtonAdd(this).button);
-            if(this._editable) {
-                this._html.appendChild(terminalElement);
-            }
-        }
-        else  {
-            const terminals = document.createElement("div");
-            terminals.classList.add("terminals");
-            this._terminals.forEach(terminal =>
-            {
-                terminal.rerender();
-                terminals.appendChild(terminal.html);
-            }
-            );
-            this._html.appendChild(terminals);
-        }
-        this._links.forEach(link => {
-            link.html.classList.remove("collapse");
-            link.right.rerender();
-            this._html.appendChild(link.html)
-        });
-        this._html.scrollIntoView({behavior: "smooth", block: "center"});
+        // this._html.appendChild(station);
+        // if(this._terminals.length == 0)
+        // {
+        //     const terminalElement = document.createElement("div");
+        //     terminalElement.classList.add("terminal");
+        //     terminalElement.appendChild(new TerminalButtonAdd(this).button);
+        //     if(this._editable) {
+        //         this._html.appendChild(terminalElement);
+        //     }
+        // }
+        // else  {
+        //     const terminals = document.createElement("div");
+        //     terminals.classList.add("terminals");
+        //     this._terminals.forEach(terminal =>
+        //     {
+        //         terminal.rerender();
+        //         terminals.appendChild(terminal.html);
+        //     }
+        //     );
+        //     this._html.appendChild(terminals);
+        // }
+        // this._links.forEach(link => {
+        //     link.html.classList.remove("collapse");
+        //     link.right.rerender();
+        //     this._html.appendChild(link.html)
+        // });
+        // this._html.scrollIntoView({behavior: "smooth", block: "center"});
+
     }
 
-    rerender() {
-        this.render();
+    rerender():VNode {
+        if(this.vnode)
+            return patch(this.vnode, this.render());
+        else
+            return this.render();
     }
 
     clone(editable: boolean = false, parentClone?: Group | Station | Terminal): Station {
