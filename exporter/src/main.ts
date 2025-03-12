@@ -21,9 +21,7 @@ const initPage = () => {
         return;
     }
 
-    const clipboardIcon = document.createElement("img");
-    clipboardIcon.src = clipboard as string;
-    clipboardIcon.alt = "Toggle Clipboard";
+    const clipboardIcon = h("img", { props: { src: clipboard, alt: "Toggle Clipboard" } });
     const clipboardElement = document.getElementById("clipboard");
     if (!clipboardElement) {
         console.error("Clipboard element not found");
@@ -37,7 +35,7 @@ const initPage = () => {
         clipboardElement.classList.add("show");
     }
 
-    const clipboardButton = new ActionButton(clipboardIcon, "toggle-clipboard", ["icon"], () => {
+    const clipboardButton = new ActionButton(clipboardIcon, () => {
         const clipboardElement = document.getElementById("clipboard");
         if (!clipboardElement) {
             console.error("Clipboard element not found");
@@ -51,8 +49,8 @@ const initPage = () => {
         } else {
             localStorage.setItem("clipboardStatus", "closed");
         }
-    }, true, undefined, "Toggle Clipboard");
-    toolbar.appendChild(clipboardButton.button);
+    }, undefined, ["icon"], "Toggle Clipboard");
+    toolbar.appendChild(clipboardButton.render().elm);
 }
 
 const initForm = () => {
