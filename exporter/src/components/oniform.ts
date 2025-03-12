@@ -1,4 +1,4 @@
-import { h } from "snabbdom";
+import {h, VNode} from "snabbdom";
 import { patch } from "../common/snabbdom.setup.ts";
 import Group, {GroupButtonAdd} from "./group.ts";
 import "../styles/oniform.css";
@@ -25,7 +25,7 @@ export default class Oniform {
         return this._label;
     }
 
-    render() {
+    render():VNode {
         const groups = this.groups.length > 0 ? this.groups.map(group => group.render()) : new GroupButtonAdd().render();
         return h(`form.oniform${this._id}`, [groups]);
     }
@@ -60,11 +60,9 @@ export default class Oniform {
     // }
 
     rerender() {
-        const oniform = document.getElementById("oniform");
-        if (oniform) {
-            this.render();
-            if (oniform.firstChild)
-                oniform!.replaceChild(this.html, oniform.firstChild);
+        const oniformElement = document.getElementById("oniform");
+        if (oniformElement) {
+            patch(oniformElement, this.render());
         }
     }
 
@@ -78,12 +76,12 @@ export default class Oniform {
             const prevGroupIndex = this.findGroupIndex(prevGroup);
             const group = new Group(this, `${prevGroupIndex + 1}`);
             this._groups.splice(prevGroupIndex, 0, group);
-            animateHighlight(group.html);
+            // animateHighlight(group.html);
         }
         else {
             const group = new Group(this);
             this._groups.push(group);
-            animateHighlight(group.html);
+            // animateHighlight(group.html);
         }
         this.rerender();
     }

@@ -3,6 +3,7 @@ import Terminal from "./terminal.ts";
 import Group from "./group.ts";
 import "../styles/link.css";
 import {generateGUID} from "../common/utility.ts";
+import {h} from "snabbdom";
 
 export enum Relationship {
     SIBLING = "sibling",
@@ -24,15 +25,17 @@ export default class Link {
     }
 
     private render() {
-        this._html.classList.add("link", this._relationship);
-        this._html.id = this._id;
-
-        this._html.appendChild(this._right.html);
-        if (this._relationship === Relationship.DEPENDANT) {
-            this._parent.addLink(this);
-            this._right.rerender();
-        }
-        this._html.scrollIntoView({behavior: "smooth", block: "center"});
+        this.parent.addLink(this);
+        return h(`div.link.${this.relationship}`, { props: { id: this.id } }, [this.right.render()]);
+        // this._html.classList.add("link", this._relationship)/*;
+        // this._html.id = this._id;
+        //
+        // this._html.appendChild(this._right.html);
+        // if (this._relationship === Relationship.DEPENDANT) {
+        //     this._parent.addLink(this);
+        //     this._right.rerender();
+        // }
+        // this._html.scrollIntoView({behavior: "smooth", block: "center"});
     }
 
     clone(leftClone: Station|Terminal, editable: boolean = false): Link {

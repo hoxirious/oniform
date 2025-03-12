@@ -3,7 +3,6 @@ import '../styles/group.css';
 import ActionButton from "./actionButton.ts";
 import Oniform from "./oniform.ts";
 import Clipboard from "./clipboard.ts";
-// import Link from "./link.ts";
 import {animateHighlight, createListItem, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import minusUrl from "../static/minus.svg";
 import plusUrl from "../static/plus.svg";
@@ -13,40 +12,28 @@ import Terminal from "./terminal.ts";
 import Link, {Relationship} from "./link.ts";
 import chevronDownUrl from "../static/chevron-down.svg";
 import chevronRightUrl from "../static/chevron-right.svg";
-import { init } from "snabbdom";
 import { h } from "snabbdom/build/h";
-import {eventListenersModule} from "snabbdom/build/modules/eventlisteners";
-import {styleModule} from "snabbdom/build/modules/style";
 
 export class GroupButtonAdd extends ActionButton {
     constructor(self?: Group) {
-        if(!self) {
-            super("New Group", "new-group", ["button"], () => {
+        if (!self) {
+            super("New Group", () => {
                 Oniform.instance.addGroup();
-            });
-        }
-        else {
-            const actionItems = document.createElement("ul");
-            actionItems.classList.add("action_items");
-
-            const groupButton = new ActionButton("New group", "new-group", ["add-group"], () => {
+            }, undefined, ["text"], "New Group");
+        } else {
+            const groupButton = new ActionButton("New group", () => {
                 Oniform.instance.addGroup(self);
-            }, true, undefined, "New Group").button;
-            const stationButton = new ActionButton("New question", "station-dependant", ["add_station_button"], () => {
+            }, undefined, ["text"], "New Group")
+            const stationButton = new ActionButton("New question", () => {
                 self.addEmptyStation();
                 self.stations[self.stations.length - 1].addEmptyTerminal();
-            }, true, undefined, "New Question").button;
+            }, undefined, ["text"], "New Question");
 
-            actionItems.appendChild(createListItem(stationButton));
-            actionItems.appendChild(createListItem(groupButton));
+            const actionItems = [groupButton, stationButton];
 
-            const plus = document.createElement("img");
-            plus.src = plusUrl as string;
-            plus.alt = "Plus";
+            const plusVNode = h("img", { props: { src: plusUrl, alt: "Plus" } });
 
-            super(plus, "new-group", ["icon"], () => {
-                actionItems.classList.toggle("show");
-            }, true, actionItems, "New Group");
+            super(plusVNode, () => {}, actionItems, ["icon"], "New Group");
         }
     }
 }
@@ -54,59 +41,48 @@ export class GroupButtonAdd extends ActionButton {
 export class GroupButtonDelete extends ActionButton {
     constructor(parent: Oniform|Station|Terminal, self: Group) {
 
-        const minus = document.createElement("img");
-        minus.src = minusUrl as string;
-        minus.alt = "Minus";
-
-        super(minus, "delete-group", ["icon"], () => {
+        super(h("img", {props: {src: minusUrl, alt: "Minus"}}), () => {
             parent.deleteGroup(self);
-        });
+        }, undefined, ["icon"], "Delete Group");
     }
 }
 
 export class GroupButtonCollapse extends ActionButton {
     constructor(self: Group) {
-        const chevronDown = document.createElement("img");
-        chevronDown.src = chevronDownUrl as string;
-        chevronDown.alt = "Collapse All";
-
-        const chevronRight = document.createElement("img");
-        chevronRight.src = chevronRightUrl as string;
-        chevronRight.alt = "Expand All";
+        const chevronDownVNode = h("img", { props: { src: chevronDownUrl, alt: "Collapse All" } });
+        const chevronRightVNode = h("img", { props: { src: chevronRightUrl, alt: "Expand All" } });
 
         const collapseCallback = () => {
-            const stationContainer = self.html.getElementsByClassName("station_container");
+            console.log("Collased")
+            // const stationContainer = self.html.getElementsByClassName("station_container");
+            //
+            // if (stationContainer.length > 0) {
+            //     const stations = self.html.getElementsByClassName("stations");
+            //     stations[0].classList.toggle("collapse");
+            //     self.html.getElementsByClassName(`group`)[0].classList.toggle("folded");
+            //
+            //     if (stations[0].classList.contains("collapse")) {
+            //         this.button.replaceChild(chevronRightVNode.elm!, this.button.firstChild!);
+            //     } else {
+            //         this.button.replaceChild(chevronDownVNode.elm!, this.button.firstChild!);
+            //     }
+            //     self.isCollapsed = !self.isCollapsed;
+            // }
+        };
 
-            if (stationContainer.length > 0) {
-                const stations = self.html.getElementsByClassName("stations")
-                stations[0].classList.toggle("collapse");
-                self.html.getElementsByClassName(`group`)[0].classList.toggle("folded");
-
-                if (stations[0].classList.contains("collapse")) {
-                    this.button.replaceChild(chevronRight, this.button.firstChild!);
-                } else {
-                    this.button.replaceChild(chevronDown, this.button.firstChild!);
-                }
-                self.isCollapsed = !self.isCollapsed;
-            }
-        }
-
-        if(self.isCollapsed) {
-            super(chevronRight, "collapse-stations", ["icon"], collapseCallback, true, undefined, "Collapse Dependants");
-        }
-        else {
-            super(chevronDown, "collapse-stations", ["icon"], collapseCallback, true, undefined, "Collapse Dependants");
+        if (self.isCollapsed) {
+            super(chevronRightVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
+        } else {
+            super(chevronDownVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
         }
     }
 }
 
 export class GroupButtonCopy extends ActionButton {
     constructor(self: Group) {
-        const copy = document.createElement("img");
-        copy.src = copyUrl as string;
-        copy.alt = "Copy";
+        const copyVNode = h("img", { props: { src: copyUrl, alt: "Copy" } });
 
-        super(copy, "copy-group", ["icon"], () => {
+        super(copyVNode, () => {
             const previouslySelected = document.querySelector(".selected");
             if (previouslySelected) {
                 previouslySelected.classList.remove("selected");
@@ -123,27 +99,22 @@ export class GroupButtonCopy extends ActionButton {
             };
 
             document.addEventListener("keydown", removeSelection);
-        }, true, undefined, "Copy Group");
+        }, undefined, ["icon"], "Copy Group");
     }
 }
 
 export class GroupButtonPaste extends ActionButton {
     constructor(self: Group) {
-        const paste = document.createElement("img");
-        paste.src = pasteUrl as string;
-        paste.alt = "Paste";
+        const pasteVNode = h("img", { props: { src: pasteUrl, alt: "Paste" } });
 
-        super(paste, "paste-group", ["icon"], () => {
+        super(pasteVNode, () => {
             self.paste();
-        }, true, undefined, "Paste");
+        }, undefined, ["icon"], "Paste");
     }
 }
-
 export default class Group {
     private readonly _html: HTMLDivElement = document.createElement("div");
     isCollapsed: boolean = false;
-    private vnode: any; // Store virtual DOM node
-    private static patch = init([eventListenersModule, styleModule]);
 
     constructor(
         private _parent: Oniform|Station|Terminal,
@@ -153,83 +124,90 @@ export default class Group {
         private _score: number = 0,
         private readonly _editable: boolean = true,
         private readonly _id: string = `group-${generateGUID()}`
-    ) {
-        this.render();
-    }
+    ) {}
 
     render() {
-
-        this._html.classList.add("group_container");
-        this._html.id = this._id;
-
-        const group = document.createElement("div");
-        group.classList.add("group");
-
-        const buttons = document.createElement("div");
-        buttons.classList.add("buttons");
-
-        const inputElement = document.createElement("input");
-        inputElement.value = this._label;
-        inputElement.classList.add("group_label");
-
-        inputElement.addEventListener("input", (event) => {
-            this._label = (event.target as HTMLInputElement).value;
-        });
-
-        if (this._parent) {
-            if(this._editable) {
-                const deleteButton = new GroupButtonDelete(this._parent, this);
-                buttons.appendChild(deleteButton.button);
-
-                if (this._parent instanceof Oniform) {
-                    const addButton = new GroupButtonAdd(this);
-                    buttons.appendChild(addButton.button);
-                }
-
-                const copyButton = new GroupButtonCopy(this);
-                const pasteButton = new GroupButtonPaste(this);
-                const collapseButton = new GroupButtonCollapse(this);
-                buttons.appendChild(collapseButton.button);
-                buttons.appendChild(copyButton.button);
-                buttons.appendChild(pasteButton.button);
+        return h("div.group_container", {
+                id: this._id,
             }
-            let parentLabel = this._parent.label;
-            let parentSignature = "";
+            , [
+                h("div.group", [
+                    h("div.buttons", [
+                        h("input.group_label", {
+                            props: {
+                                value: this._label,
+                            },
+                            on: {
+                                input: (event: Event) => {
+                                    this._label = (event.target as HTMLInputElement).value;
+                                }
+                            }
+                        }),
+                        this._parent && this._editable ? new GroupButtonDelete(this._parent, this).render() : undefined,
+                        this._parent instanceof Oniform ? new GroupButtonAdd(this).render() : undefined,
+                        new GroupButtonCopy(this).render(),
+                        new GroupButtonPaste(this).render(),
+                        new GroupButtonCollapse(this).render()
+                    ]),
+                    h("div.stations", this._stations.length === 0 && this._editable ? [new StationButtonAdd(this).render()] : this._stations.map(station => station.render()))
+                ])
+            ]
+        )
 
-            if(this._parent instanceof Station) {
-                parentLabel = this._parent.parent.label;
-                parentSignature = "-Q";
-            }
-            else if(this._parent instanceof Terminal) {
-                parentLabel = this._parent.parent.parent.label;
-                parentSignature = "-O";
-            }
-            const parentLabelSplit = parentLabel.split(" ");
-            let parentIndex = parentLabelSplit[parentLabelSplit.length - 1]
-            // Remove signature if applicable
-            parentIndex = parentIndex.slice(0, -parentSignature.length);
+        // if (this._parent) {
+        //     if(this._editable) {
+        //         const deleteButton = new GroupButtonDelete(this._parent, this);
+        //         buttons.appendChild(deleteButton.button);
+        //
+        //         if (this._parent instanceof Oniform) {
+        //             const addButton = new GroupButtonAdd(this);
+        //             buttons.appendChild(addButton.button);
+        //         }
+        //
+        //         const copyButton = new GroupButtonCopy(this);
+        //         const pasteButton = new GroupButtonPaste(this);
+        //         const collapseButton = new GroupButtonCollapse(this);
+        //         buttons.appendChild(collapseButton.button);
+        //         buttons.appendChild(copyButton.button);
+        //         buttons.appendChild(pasteButton.button);
+        //     }
+        //     let parentLabel = this._parent.label;
+        //     let parentSignature = "";
+        //
+        //     if(this._parent instanceof Station) {
+        //         parentLabel = this._parent.parent.label;
+        //         parentSignature = "-Q";
+        //     }
+        //     else if(this._parent instanceof Terminal) {
+        //         parentLabel = this._parent.parent.parent.label;
+        //         parentSignature = "-O";
+        //     }
+        //     const parentLabelSplit = parentLabel.split(" ");
+        //     let parentIndex = parentLabelSplit[parentLabelSplit.length - 1]
+        //     // Remove signature if applicable
+        //     parentIndex = parentIndex.slice(0, -parentSignature.length);
+        //
+        //     // Group parentIndex.groupIndex(S/T)
+        //     this._label = `Group ${parentIndex ? parentIndex + "." : ""}${this._parent.findGroupIndex(this).toString()}${parentSignature}`;
+        //     inputElement.value = this._label;
+        // }
 
-            // Group parentIndex.groupIndex(S/T)
-            this._label = `Group ${parentIndex ? parentIndex + "." : ""}${this._parent.findGroupIndex(this).toString()}${parentSignature}`;
-            inputElement.value = this._label;
-        }
-
-        buttons.appendChild(inputElement);
-        this.html.appendChild(buttons);
-
-        const stationDiv = document.createElement("div");
-        stationDiv.classList.add("stations");
-        if(this._stations.length == 0 && this._editable) {
-            group.appendChild(new StationButtonAdd(this).button);
-        }
-        this._stations.forEach(station => {
-            station.rerender();
-            stationDiv.appendChild(station.html)
-        });
-        group.appendChild(stationDiv);
-
-        this._html.appendChild(group);
-        this._html.scrollIntoView({behavior: "smooth", block: "center"});
+        // buttons.appendChild(inputElement);
+        // this.html.appendChild(buttons);
+        //
+        // const stationDiv = document.createElement("div");
+        // stationDiv.classList.add("stations");
+        // if(this._stations.length == 0 && this._editable) {
+        //     group.appendChild(new StationButtonAdd(this).button);
+        // }
+        // this._stations.forEach(station => {
+        //     station.rerender();
+        //     stationDiv.appendChild(station.html)
+        // });
+        // group.appendChild(stationDiv);
+        //
+        // this._html.appendChild(group);
+        // this._html.scrollIntoView({behavior: "smooth", block: "center"});
     }
 
     rerender() {

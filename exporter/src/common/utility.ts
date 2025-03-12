@@ -1,3 +1,5 @@
+import {h, VNode} from "snabbdom";
+
 export const generateGUID = (): string => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
         const r = Math.random() * 16 | 0;
@@ -75,12 +77,6 @@ export function showSuccessPopup(message: string, duration: number = 1000) {
             document.body.removeChild(successPopup);
         }, 500); // Ensure the transition completes before removal
     }, duration);
-}
-
-export function createListItem(button: HTMLButtonElement): HTMLLIElement {
-    const listItem = document.createElement("li");
-    listItem.appendChild(button);
-    return listItem;
 }
 
 export function animateHighlight(element: HTMLElement, duration: number = 500) {

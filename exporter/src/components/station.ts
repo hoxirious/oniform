@@ -10,115 +10,92 @@ import pasteUrl from "../static/paste.svg";
 import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import Link, {Relationship} from "./link.ts";
-import {animateHighlight, createListItem, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {animateHighlight, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
+import {h} from "snabbdom";
 
 export class StationButtonAdd extends ActionButton {
     constructor(parent: Group | Station | Terminal, self?: Station) {
-        const plus = document.createElement("img");
-        plus.src = plusUrl as string;
-        plus.alt = "Plus";
-
         if (!self) {
-            super("New Question", "new-station", ["button"], () => {
+            super("New Question", () => {
                 parent.addEmptyStation();
-            }, true, undefined, "New Question");
+            }, undefined, ["text"], "New Question");
         }
         else {
-            const actionItems = document.createElement("ul");
-            actionItems.classList.add("action_items");
-
-            const siblingButton = new ActionButton("New question", "station-sibling", ["add_station_button"], () => {
+            const siblingButton = new ActionButton("New question", () => {
                 parent.addEmptyStation(self);
-            }, true, undefined, "New Question").button;
-            const dependantGroup = new ActionButton("New sub-group", "group-dependant", ["add_station_button"], () => {
+            }, undefined, ["text"], "New Question");
+            const dependantGroup = new ActionButton("New sub-group", () => {
                 const newGroup = new Group(self);
                 newGroup.addEmptyStation();
                 newGroup.stations[0].addEmptyTerminal();
                 new Link(self, newGroup, Relationship.DEPENDANT);
-            }, true, undefined, "New Dependant Group").button;
-            const dependantStation = new ActionButton("New sub-question", "station-dependant", ["add_station_button"], () => {
+            }, undefined, ["text"], "New Dependant Group");
+            const dependantStation = new ActionButton("New sub-question", () => {
                 const newStation = new Station(self);
                 newStation.addEmptyTerminal();
                 new Link(self, newStation, Relationship.DEPENDANT);
-            }).button;
-            const terminalButton = new ActionButton("New option", "terminal-sibling", ["add_terminal_button"], () => {
+            }, undefined, ["text"], "New Dependant Station");
+            const terminalButton = new ActionButton("New option", () => {
                 self.addEmptyTerminal();
-            }, true, undefined, "New Option").button;
+            }, undefined, ["text"], "New Option");
 
-            actionItems.appendChild(createListItem(terminalButton));
-            actionItems.appendChild(createListItem(siblingButton));
-            actionItems.appendChild(createListItem(dependantStation));
-            actionItems.appendChild(createListItem(dependantGroup));
+            const actionItems = [siblingButton, dependantGroup, dependantStation, terminalButton];
 
-
-            super(plus, "new-station", ["icon"], () => {
-                actionItems.classList.toggle("show");
-            }, true, actionItems, "New Station");
+            super(h("img", { props: { src: plusUrl, alt: "Plus" } }), () => {}, actionItems, ["icon"], "New Station");
         }
     }
 }
 
 export class StationButtonCollapse extends ActionButton {
     constructor(self: Station) {
-        const chevronDown = document.createElement("img");
-        chevronDown.src = chevronDownUrl as string;
-        chevronDown.alt = "Collapse All";
-
-        const chevronRight = document.createElement("img");
-        chevronRight.src = chevronRightUrl as string;
-        chevronRight.alt = "Expand All";
+        const chevronDownVNode = h("img", { props: { src: chevronDownUrl, alt: "Collapse All" } });
+        const chevronRightVNode = h("img", { props: { src: chevronRightUrl, alt: "Expand All" } });
 
         const collapseCallback = () => {
-            const links = self.html.getElementsByClassName(`link ${Relationship.DEPENDANT}`);
-            const terminals = self.html.getElementsByClassName("terminals");
-            if(links.length != 0 || terminals.length != 0) {
-                for (let i = 0; i < links.length; i++) {
-                    links[i].classList.toggle("collapse");
-                }
-                terminals[0].classList.toggle("collapse");
-                self.html.getElementsByClassName("station_textarea")[0].classList.toggle("folded");
-            }
-
-            if ((terminals.length > 0 && terminals[0].classList.contains("collapse")) ||
-                (links.length > 0 && links[0].classList.contains("collapse"))) {
-                this.button.replaceChild(chevronRight, this.button.firstChild!);
-            }
-            else {
-                this.button.replaceChild(chevronDown, this.button.firstChild!);
-            }
-            self.isCollapsed = !self.isCollapsed;
-        }
+            console.log("Collapse");
+            // const links = self.html.getElementsByClassName(`link ${Relationship.DEPENDANT}`);
+            // const terminals = self.html.getElementsByClassName("terminals");
+            // if (links.length != 0 || terminals.length != 0) {
+            //     for (let i = 0; i < links.length; i++) {
+            //         links[i].classList.toggle("collapse");
+            //     }
+            //     terminals[0].classList.toggle("collapse");
+            //     self.html.getElementsByClassName("station_textarea")[0].classList.toggle("folded");
+            // }
+            //
+            // if ((terminals.length > 0 && terminals[0].classList.contains("collapse")) ||
+            //     (links.length > 0 && links[0].classList.contains("collapse"))) {
+            //     this.button.replaceChild(chevronRightVNode.elm!, this.button.firstChild!);
+            // } else {
+            //     this.button.replaceChild(chevronDownVNode.elm!, this.button.firstChild!);
+            // }
+            // self.isCollapsed = !self.isCollapsed;
+        };
 
         if (self.isCollapsed) {
-            super(chevronRight, "collapse-stations", ["icon"], collapseCallback, true, undefined, "Collapse Dependants");
-        }
-        else {
-            super(chevronDown, "collapse-stations", ["icon"], collapseCallback, true, undefined, "Collapse Dependants");
+            super(chevronRightVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
+        } else {
+            super(chevronDownVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
         }
     }
 }
-
 export class StationButtonDelete extends ActionButton {
     constructor(self: Station) {
-        const minus = document.createElement("img");
-        minus.src = minusUrl as string;
-        minus.alt = "Delete";
+        const minusVNode = h("img", { props: { src: minusUrl, alt: "Delete" } });
 
-        super(minus, "delete-station", ["icon"], () => {
+        super(minusVNode, () => {
             self.html.remove();
             self.parent.deleteStation(self);
-        }, true, undefined, "Delete Station");
+        }, undefined, ["icon"], "Delete Station");
     }
 }
 
 export class StationButtonCopy extends ActionButton {
     constructor(self: Station) {
-        const copy = document.createElement("img");
-        copy.src = copyUrl as string;
-        copy.alt = "Copy";
+        const copyVNode = h("img", { props: { src: copyUrl, alt: "Copy" } });
 
-        super(copy, "copy-station", ["icon"], () => {
+        super(copyVNode, () => {
             const previouslySelected = document.querySelector(".selected");
             if (previouslySelected) {
                 previouslySelected.classList.remove("selected");
@@ -135,35 +112,29 @@ export class StationButtonCopy extends ActionButton {
             };
 
             document.addEventListener("keydown", removeSelection);
-        }, true, undefined, "Copy Station");
+        }, undefined, ["icon"], "Copy Station");
     }
 }
 
 export class StationButtonPaste extends ActionButton {
     constructor(self: Station) {
-        const paste = document.createElement("img");
+        const pasteVNode = h("img", { props: { src: pasteUrl, alt: "Paste" } });
 
-        paste.src = pasteUrl as string;
-        paste.alt = "Paste";
+        const actionItems = [
+            new ActionButton("Paste as question", () => {
+                if (self.parent instanceof Group || self.parent instanceof Station)
+                    self.parent.addStationAfterReference(self, <Station>Clipboard.instance.cloneCopiedObject());
+            }, undefined, ["text"], "New Question"),
+            new ActionButton("Paste as sub-question", () => {
+                const cloneObject = <Station>Clipboard.instance.cloneCopiedObject();
+                cloneObject.parent = self;
+                new Link(self, cloneObject, Relationship.DEPENDANT);
+            }, undefined, ["text"], "New Dependant Station")
+        ];
 
-        const actionItems = document.createElement("ul");
-        actionItems.classList.add("action_items");
-
-        const siblingButton = new ActionButton("Paste as question", "station-sibling", ["add_station_button"], () => {
-            if(self.parent instanceof Group || self.parent instanceof Station)
-                self.parent.addStationAfterReference(self, <Station>Clipboard.instance.cloneCopiedObject());
-        }, true, undefined, "New Question").button;
-        const dependantStation = new ActionButton("Paste as sub-question", "station-dependant", ["add_station_button"], () => {
-            const cloneObject = <Station>Clipboard.instance.cloneCopiedObject();
-            cloneObject.parent = self;
-            new Link(self, cloneObject, Relationship.DEPENDANT);
-        }).button;
-        actionItems.appendChild(createListItem(siblingButton));
-        actionItems.appendChild(createListItem(dependantStation));
-
-        super(paste, "paste-station", ["icon"], () => {
+        super(pasteVNode, () => {
             self.paste(this);
-        }, true, actionItems, "Paste");
+        }, actionItems, ["icon"], "Paste");
     }
 }
 
@@ -179,11 +150,32 @@ export default class Station {
         private _html: HTMLDivElement = document.createElement("div"),
         private _editable: boolean = true,
         private _id: string = `station-${generateGUID()}`
-    ) {
-        this.render();
-    }
+    ) {}
 
     render() {
+        return h("div.station_container", { id: this._id }, [
+            h("div.station", [
+                h("div.buttons", [
+                    new StationButtonDelete(this).render(),
+                    new StationButtonAdd(this._parent, this).render(),
+                    new StationButtonCollapse(this).render(),
+                    new StationButtonCopy(this).render(),
+                    new StationButtonPaste(this).render(),
+                    h("input.station_label", { props: { disabled: true, value: this._label }, on: { input: (event: Event) => {
+                        this._label = (event.target as HTMLInputElement).value;
+                    }} }),
+                ]),
+                h("textarea.station_textarea", { props: { value: this._value, placeholder: "Enter question here" }, on: { input: (event: Event) => {
+                    this._value = (event.target as HTMLTextAreaElement).value;
+                }} }),
+            ]),
+            // this._terminals.length === 0 ? h("div.terminal", [new TerminalButtonAdd(this).render()]) : h("div.terminals", this._terminals.map(terminal => terminal.render())),
+            // this._links.map(link => {
+            //     link.html.classList.remove("collapse");
+            //     link.right.rerender();
+            //     return link.html;
+            // })
+        ]);
         this._html.innerHTML = "";
         this._html.classList.add("station_container");
         this._html.id = this._id;
