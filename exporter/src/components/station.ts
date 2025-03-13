@@ -155,7 +155,8 @@ export default class Station {
     ) {}
 
     render():VNode {
-        const terminals = this.terminals.length > 0 ? this.terminals.map(terminal => terminal.rerender()) : new TerminalButtonAdd(this).render();
+        const newTerminalButton = this.terminals.length === 0 ? new TerminalButtonAdd(this).render() : undefined;
+        const terminals = this.terminals.length > 0 ? this.terminals.map(terminal => terminal.rerender()) : undefined;
         const links = this.links.map(link => {
             link.right.rerender();
             return link.rerender();
@@ -175,7 +176,8 @@ export default class Station {
                 h("textarea.station_textarea", { props: { value: this._value, placeholder: "Enter question here" }, on: { input: (event: Event) => {
                             this._value = (event.target as HTMLTextAreaElement).value;
                         }}}),
-                terminals,
+                newTerminalButton,
+                h("div.terminals", terminals),
                 ...links,
             ]),
         ]);

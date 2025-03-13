@@ -132,8 +132,7 @@ export default class Group {
     render() {
         this.vnode = h("div.group_container", {
                 id: this._id,
-            }
-            , [
+            }, [
                 h("div.group", [
                     h("div.buttons", [
                         h("input.group_label", {

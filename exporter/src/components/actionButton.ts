@@ -28,7 +28,8 @@ export default class ActionButton {
          this._vnode = h("button",{
              props: {
                  id: this._id,
-                 title: this._tooltip
+                 title: this._tooltip,
+                 type: "button"
              },
              on: { click: this._callback },
              class: { dropdown: true, "action-button": true, [this._class]: true }

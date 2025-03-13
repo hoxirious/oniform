@@ -27,8 +27,12 @@ export default class Oniform {
     }
 
     render():VNode {
-        const groups = this.groups.length > 0 ? this.groups.map(group => group.rerender()) : new GroupButtonAdd().render();
-        this.vnode = h(`form#${this._id}.oniform`, [this.createButtons(), groups]);
+        const groups = this.groups.length > 0 ? this.groups.map(g => g.rerender()) : undefined;
+
+        this.vnode = h(`form#${this._id}.oniform`, [this.createButtons(),
+            this.groups.length == 0 ? new GroupButtonAdd().render() : undefined,
+            h("div.groups", groups),
+        ]);
         return this.vnode;
     }
 
@@ -48,8 +52,10 @@ export default class Oniform {
     }
 
     rerender() {
-        if(this.vnode)
+        console.log(this.groups);
+        if(this.vnode){
             return patch(this.vnode, this.render());
+        }
         else
             return this.render();
     }

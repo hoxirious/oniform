@@ -75,7 +75,7 @@ const initForm = () => {
         return;
     }
 
-    const newVnode = h('div#oniform', [Oniform.instance.render()]);
+    const newVnode = h('div#oniform', [Oniform.instance.rerender()]);
     patch(oniformElement, newVnode);
 
     const clipboardElement = document.getElementById("clipboard");
