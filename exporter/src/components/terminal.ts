@@ -14,6 +14,7 @@ import {animateHighlight, generateGUID, showErrorPopup, showSuccessPopup} from "
 import Oniform from "./oniform.ts";
 import {h, VNode} from "snabbdom";
 import {patch} from "../common/snabbdom.setup.ts";
+import {renderView} from "../main.ts";
 
 export class TerminalButtonAdd extends ActionButton {
     constructor(parent: Station, self?: Terminal) {
@@ -127,42 +128,25 @@ export class TerminalButtonPaste extends ActionButton {
 
 export default class Terminal {
     isCollapsed: boolean = false;
-    vnode?: VNode;
     constructor(
         private _parent: Station,
         private _label: string = `Option ${_parent.label}-1`,
         private _root: Terminal = this,
         private _value: string = "",
         private _links: Link[] = [],
-        private _html: HTMLDivElement = document.createElement("div"),
         private _editable: boolean = true,
         private _id: string = `terminal-${generateGUID()}`
     ) {}
 
     public render():VNode {
         const links = this.links.map(link => {
-            link.right.rerender();
             return link.rerender();
         });
-        this.vnode = h("div.terminal_container", { id: this._id }, [
+        return h("div.terminal_container", {props: { id: this._id }, key: this._id}, [
             this.createTerminalElement(),
             ...links
             ]);
-        // this._html.innerHTML = "";
-        // this._html.classList.add("terminal_container");
-        // this._html.id = this._id;
-
-        // const terminalElement = this.createTerminalElement();
-        // this._html.appendChild(terminalElement);
-        //
-        // this._links.forEach(link =>
-        // {
-        //     link.html.classList.remove("collapse");
-        //     link.right.rerender();
-        //     this._html.appendChild(link.html);
-        // });
         // this._html.scrollIntoView({ behavior: "smooth" });
-        return this.vnode;
     }
 
     private createTerminalElement(): VNode {
@@ -225,10 +209,7 @@ export default class Terminal {
         });
     }
     public rerender() {
-        if(this.vnode)
-            return patch(this.vnode, this.render());
-        else
-            return this.render();
+        return this.render();
     }
 
     public clone(editable: boolean = false, dumbStation?: Station): Terminal {
@@ -266,10 +247,6 @@ export default class Terminal {
         return this._value;
     }
 
-    get html(): HTMLDivElement {
-        return this._html;
-    }
-
     get root(): Terminal {
         return this._root;
     }
@@ -294,14 +271,14 @@ export default class Terminal {
         const linkIndex = this.links.findIndex(g => g.right.id === group.id);
         this.links[linkIndex].html.remove();
         this.links.splice(linkIndex, 1);
-        this.rerender();
+        renderView();
     }
 
     deleteStation(station: Station) {
         const linkIndex = this.links.findIndex(g => g.right.id === station.id);
         this.links[linkIndex].html.remove();
         this.links.splice(linkIndex, 1);
-        this.rerender();
+        renderView();
     }
 
     findGroupIndex(group: Group): number {
@@ -325,8 +302,8 @@ export default class Terminal {
     public addLink(link: Link) {
         link.parent = this;
         this._links.push(link);
-        this.rerender();
-        this.parent.parent.rerender();
+        renderView();
+        // this.parent.parent.rerender();
     }
 
     toObj () {

@@ -14,6 +14,7 @@ import {animateHighlight, generateGUID, showErrorPopup, showSuccessPopup} from "
 import Oniform from "./oniform.ts";
 import {h, VNode} from "snabbdom";
 import {patch} from "../common/snabbdom.setup.ts";
+import {renderView} from "../main.ts";
 
 export class StationButtonAdd extends ActionButton {
     constructor(parent: Group | Station | Terminal, self?: Station) {
@@ -141,7 +142,6 @@ export class StationButtonPaste extends ActionButton {
 
 export default class Station {
     isCollapsed: boolean = false;
-    vnode?: VNode;
     constructor(
         private _parent: Group | Station | Terminal,
         private _root: Station = this,
@@ -154,14 +154,12 @@ export default class Station {
         private _id: string = `station-${generateGUID()}`
     ) {}
 
-    render():VNode {
-        const newTerminalButton = this.terminals.length === 0 ? new TerminalButtonAdd(this).render() : undefined;
-        const terminals = this.terminals.length > 0 ? this.terminals.map(terminal => terminal.rerender()) : undefined;
+    render(): VNode {
+        // const terminals = this.terminals.length > 0 ? this.terminals.map(terminal => terminal.rerender()) : undefined;
         const links = this.links.map(link => {
-            link.right.rerender();
             return link.rerender();
         });
-        this.vnode = h("div.station_container", { id: this._id }, [
+        const newNode = h("div.station_container", {props: { id: this._id }, key: this._id}, [
             h("div.station", [
                 h("div.buttons", [
                     new StationButtonDelete(this).render(),
@@ -176,13 +174,13 @@ export default class Station {
                 h("textarea.station_textarea", { props: { value: this._value, placeholder: "Enter question here" }, on: { input: (event: Event) => {
                             this._value = (event.target as HTMLTextAreaElement).value;
                         }}}),
-                newTerminalButton,
-                h("div.terminals", terminals),
+                this.terminals.length === 0 ? new TerminalButtonAdd(this).render() : null,
+                this.terminals.length > 0 ? h("div.terminals", this.terminals.map(terminal => terminal.render())) : null,
                 ...links,
             ]),
         ]);
 
-        return this.vnode;
+        return newNode;
         // this._html.innerHTML = "";
         // this._html.classList.add("station_container");
         // this._html.id = this._id;
@@ -261,10 +259,7 @@ export default class Station {
     }
 
     rerender():VNode {
-        if(this.vnode)
-            return patch(this.vnode, this.render());
-        else
-            return this.render();
+        return this.render();
     }
 
     clone(editable: boolean = false, parentClone?: Group | Station | Terminal): Station {
@@ -296,7 +291,7 @@ export default class Station {
         else {
             this.appendExistingTerminal(copiedObject);
         }
-        this.rerender();
+        renderView();
     }
 
     get root(): Station {
@@ -346,37 +341,40 @@ export default class Station {
         if(prevTerminal) {
             const terminalIndex = this.findTerminalIndex(prevTerminal);
             const terminal = new Terminal(this);
-            this.terminals.splice(terminalIndex, 0, terminal);
-            animateHighlight(terminal.html);
+            this._terminals.splice(terminalIndex, 0, terminal);
+            // animateHighlight(terminal.html);
         }
         else {
+            console.log(this);
             const terminal = new Terminal(this);
-            this.terminals.push(terminal);
-            animateHighlight(terminal.html);
+            this._terminals.push(terminal);
+            // animateHighlight(terminal.html);
         }
 
-        this.rerender();
+        console.log("Add empty terminal")
+
+        renderView();
     }
 
     appendExistingTerminal(terminal: Terminal) {
         terminal.parent = this;
         this._terminals.push(terminal);
-        animateHighlight(terminal.html);
-        this.rerender();
+        // animateHighlight(terminal.html);
+        renderView();
     }
 
     addTerminalAfterReference(refTerminal: Terminal, newTerminal: Terminal) {
         newTerminal.parent = this;
         const prevTerminalIndex = this.findTerminalIndex(refTerminal);
         this._terminals.splice(prevTerminalIndex, 0, newTerminal);
-        animateHighlight(newTerminal.html);
-        this.rerender();
+        // animateHighlight(newTerminal.html);
+        renderView();
     }
 
     deleteTerminal(terminal: Terminal) {
         const terminalIndex = this.findTerminalIndex(terminal)-1;
         this._terminals.splice(terminalIndex, 1);
-        this.rerender();
+        renderView();
     }
 
     findTerminalIndex(terminal: Terminal): number {
@@ -387,12 +385,12 @@ export default class Station {
 
     addEmptyStation() {
         const newStation = new Station(this);
-        animateHighlight(newStation.html);
+        // animateHighlight(newStation.html);
         new Link(this, newStation, Relationship.DEPENDANT);
     }
 
     addStationAfterReference(refStation: Station, newStation: Station) {
-        animateHighlight(newStation.html);
+        // animateHighlight(newStation.html);
         new Link(this, newStation, Relationship.DEPENDANT);
     }
 
@@ -400,7 +398,7 @@ export default class Station {
         const linkIndex = this.links.findIndex(g => g.right.id === station.id);
         this.links[linkIndex].html.remove();
         this.links.splice(linkIndex, 1);
-        this.rerender();
+        renderView();
     }
 
     deleteGroup(group: Group) {
@@ -409,7 +407,7 @@ export default class Station {
         const linkIndex = this.links.findIndex(g => g.right.id === group.id);
         this.links[linkIndex].html.remove();
         this.links.splice(linkIndex, 1);
-        this.rerender();
+        renderView();
     }
 
     findGroupIndex(group: Group): number {
@@ -426,7 +424,7 @@ export default class Station {
 
     addLink(link: Link) {
         this.links.push(link);
-        this.rerender();
+        renderView();
     }
 
 

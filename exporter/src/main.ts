@@ -13,6 +13,7 @@ declare global {
     }
 }
 
+let vnode = null;
 const initPage = () => {
     initForm();
     const toolbar = document.getElementById("toolbar");
@@ -55,42 +56,21 @@ const initPage = () => {
 
 const initForm = () => {
     let form: Oniform;
-
-    // const serializedForm = localStorage.getItem("oniformInstance");
-    // if (serializedForm) {
-    //     Oniform.deserialize(serializedForm);
-    //     form = Oniform.instance;
-    // } else {
-    //     form = Oniform.instance;
-    //
-    //     // default form
-    //     form.addGroup();
-    //     form.groups[0].addEmptyStation();
-    //     form.groups[0].stations[0].addEmptyTerminal();
-    // }
+    form = Oniform.instance;
 
     const oniformElement = document.getElementById("oniform");
     if (!oniformElement) {
         console.error("Oniform element not found");
         return;
     }
-
-    const newVnode = h('div#oniform', [Oniform.instance.rerender()]);
-    patch(oniformElement, newVnode);
-
-    const clipboardElement = document.getElementById("clipboard");
-    if (!clipboardElement) {
-        console.error("Clipboard element not found");
-        return;
-    }
-
-    const clipboard = Clipboard.instance;
-    clipboard.render();
-
-    const clipboardVnode = h('div#clipboard', [clipboard.html]);
-    patch(clipboardElement, clipboardVnode);
-
+    vnode = patch(oniformElement, form.render());
+    renderView();
     window.oniformInstance = form; // Attach the instance to the window object
+}
+
+export const renderView = () => {
+    const newNode = Oniform.instance.render();
+    vnode = patch(vnode, newNode);
 }
 
 document.addEventListener("DOMContentLoaded", initPage);

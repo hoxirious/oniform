@@ -13,7 +13,6 @@ export enum Relationship {
 
 export default class Link {
     private readonly _html: HTMLDivElement = document.createElement("div");
-    vnode?: VNode;
 
     constructor(
         private _parent: Station | Terminal,
@@ -22,28 +21,18 @@ export default class Link {
         private readonly _editable: boolean = true,
         private readonly _rightType: string = _right.constructor.name,
         private readonly _id: string = `link-${generateGUID()}`
-    ) {}
+    ) {
+        this.render();
+    }
 
     private render():VNode {
         this.parent.addLink(this);
-        this.vnode = h(`div.link.${this.relationship}`, { props: { id: this.id } }, [this.right.render()]);
-        return this.vnode;
-        // this._html.classList.add("link", this._relationship)/*;
-        // this._html.id = this._id;
-        //
-        // this._html.appendChild(this._right.html);
-        // if (this._relationship === Relationship.DEPENDANT) {
-        //     this._parent.addLink(this);
-        //     this._right.rerender();
-        // }
+        return h(`div.link.${this.relationship}`, { props: { id: this.id }, key: this._id }, [this.right.render()]);
         // this._html.scrollIntoView({behavior: "smooth", block: "center"});
     }
 
     rerender() {
-        if(this.vnode)
-            return patch(this.vnode, this.render());
-        else
-            return this.render();
+        return h(`div.link.${this.relationship}`, { props: { id: this.id }, key: this._id }, [this.right.render()]);
     }
 
     clone(leftClone: Station|Terminal, editable: boolean = false): Link {

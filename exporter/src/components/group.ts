@@ -3,7 +3,7 @@ import '../styles/group.css';
 import ActionButton from "./actionButton.ts";
 import Oniform from "./oniform.ts";
 import Clipboard from "./clipboard.ts";
-import {animateHighlight, createListItem, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {animateHighlight, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import minusUrl from "../static/minus.svg";
 import plusUrl from "../static/plus.svg";
 import copyUrl from "../static/copy.svg";
@@ -15,16 +15,17 @@ import chevronRightUrl from "../static/chevron-right.svg";
 import { h } from "snabbdom/build/h";
 import {patch} from "../common/snabbdom.setup.ts";
 import {VNode} from "snabbdom";
+import {renderView} from "../main.ts";
 
 export class GroupButtonAdd extends ActionButton {
-    constructor(self?: Group) {
+    constructor(parent: Oniform|Station|Terminal, self?: Group) {
         if (!self) {
             super("New Group", () => {
-                Oniform.instance.addGroup();
+                (parent as Oniform).addGroup();
             }, undefined, ["text"], "New Group");
         } else {
             const groupButton = new ActionButton("New group", () => {
-                Oniform.instance.addGroup(self);
+                (parent as Oniform).addGroup(self);
             }, undefined, ["text"], "New Group")
             const stationButton = new ActionButton("New question", () => {
                 self.addEmptyStation();
@@ -117,7 +118,6 @@ export class GroupButtonPaste extends ActionButton {
 export default class Group {
     private readonly _html: HTMLDivElement = document.createElement("div");
     isCollapsed: boolean = false;
-    vnode?: VNode;
 
     constructor(
         private _parent: Oniform|Station|Terminal,
@@ -130,34 +130,34 @@ export default class Group {
     ) {}
 
     render() {
-        this.vnode = h("div.group_container", {
-                id: this._id,
-            }, [
-                h("div.group", [
-                    h("div.buttons", [
-                        h("input.group_label", {
-                            props: {
-                                value: this._label,
-                            },
-                            on: {
-                                input: (event: Event) => {
-                                    this._label = (event.target as HTMLInputElement).value;
-                                }
+        const newNode = h("div.group_container", {props: {id: this._id}, key: this._id},
+            [h("div.buttons", [
+                    this._parent && this._editable ? new GroupButtonDelete(this._parent, this).render() : undefined,
+                    this._parent instanceof Oniform ? new GroupButtonAdd(this._parent,this).render() : undefined,
+                    new GroupButtonCopy(this).render(),
+                    new GroupButtonPaste(this).render(),
+                    new GroupButtonCollapse(this).render(),
+                    h("input.group_label", {
+                        props: {
+                            value: this._label,
+                        },
+                        on: {
+                            input: (event: Event) => {
+                                this._label = (event.target as HTMLInputElement).value;
                             }
-                        }),
-                        this._parent && this._editable ? new GroupButtonDelete(this._parent, this).render() : undefined,
-                        this._parent instanceof Oniform ? new GroupButtonAdd(this).render() : undefined,
-                        new GroupButtonCopy(this).render(),
-                        new GroupButtonPaste(this).render(),
-                        new GroupButtonCollapse(this).render()
-                    ]),
-                    h("div.stations", this._stations.length === 0 && this._editable ? [new StationButtonAdd(this).render()] : this._stations.map(station => station.render()))
+                        }
+                    })
+                ]),
+                h("div.group", [
+                    h("div.stations", [
+                        this.stations.length === 0 ? new StationButtonAdd(this).render() : null,
+                        ...this.stations.map(station => station.render())
+                    ])
                 ])
             ]
         )
 
-        return this.vnode;
-
+        return newNode;
         // if (this._parent) {
         //     if(this._editable) {
         //         const deleteButton = new GroupButtonDelete(this._parent, this);
@@ -214,11 +214,8 @@ export default class Group {
         // this._html.scrollIntoView({behavior: "smooth", block: "center"});
     }
 
-    rerender() {
-        if(this.vnode)
-            return patch(this.vnode, this.render());
-        else
-            return this.render();
+    rerender():VNode {
+        return this.render();
     }
 
     clone(editable: boolean = false, parentClone?: Station|Terminal): Group {
@@ -249,7 +246,7 @@ export default class Group {
             showErrorPopup("Cannot copy Option in Group.", 2000);
             return;
         }
-        this.rerender();
+        renderView();
     }
 
     addEmptyStation(prevStation?: Station) {
@@ -264,14 +261,14 @@ export default class Group {
             this._stations.push(station);
             animateHighlight(station.html);
         }
-        this.rerender();
+        renderView();
     }
 
     appendExistingStation(station: Station) {
         station.parent = this;
         this._stations.push(station);
         animateHighlight(station.html);
-        this.rerender();
+        renderView();
     }
 
     addStationAfterReference(refStation: Station, newStation: Station) {
@@ -279,13 +276,13 @@ export default class Group {
         const prevStationIndex = this.findStationIndex(refStation);
         this._stations.splice(prevStationIndex, 0, newStation);
         animateHighlight(newStation.html);
-        this.rerender();
+        renderView();
     }
 
     deleteStation(station: Station) {
         const stationIndex = this.findStationIndex(station) - 1;
         this._stations.splice(stationIndex, 1);
-        this.rerender();
+        renderView();
     }
 
     findStationIndex(station: Station): number {

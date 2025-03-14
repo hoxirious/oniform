@@ -1,39 +1,31 @@
 import {h, VNode} from "snabbdom";
-import { patch } from "../common/snabbdom.setup.ts";
 import Group, {GroupButtonAdd} from "./group.ts";
 import "../styles/oniform.css";
 import {animateHighlight, generateGUID, showSuccessPopup} from "../common/utility.ts";
 import ActionButton from "./actionButton.ts";
+import {renderView} from "../main.ts";
 
 export default class Oniform {
-    static instance = new Oniform([]);
+    static instance: Oniform = new Oniform();
     readonly _id = `oniform-${generateGUID()}`;
-    vnode?: VNode;
     private constructor(
         private _groups: Group[] = [],
         private _label: string = "",
     ) {}
 
-    get groups(): Group[] {
-        return this._groups;
-    }
 
-    set groups(groups: Group[]) {
-        this._groups = groups;
-    }
-
-    get label(): string {
-        return this._label;
-    }
-
-    render():VNode {
-        const groups = this.groups.length > 0 ? this.groups.map(g => g.rerender()) : undefined;
-
-        this.vnode = h(`form#${this._id}.oniform`, [this.createButtons(),
-            this.groups.length == 0 ? new GroupButtonAdd().render() : undefined,
-            h("div.groups", groups),
+    render(): VNode {
+        const newNode = h(`form#${this._id}.oniform`, {key: this._id}, [
+            this.createButtons(),
+            this._groups.length === 0 ? new GroupButtonAdd(this).render() : null,
+            ...this._groups.map(group => group.render())
         ]);
-        return this.vnode;
+
+        return newNode;
+    }
+
+    rerender():VNode {
+        return this.render();
     }
 
     private createButtons(): VNode {
@@ -45,30 +37,23 @@ export default class Oniform {
             }, undefined, ["text"], "Save form").render(),
             new ActionButton("Reset",() => {
                 this.clear();
+                this.rerender();
                 localStorage.removeItem("oniformInstance");
                 showSuccessPopup("Form cleared");
             }, undefined, ["text"], "Reset form" ).render()
         ])
     }
 
-    rerender() {
-        console.log(this.groups);
-        if(this.vnode){
-            return patch(this.vnode, this.render());
-        }
-        else
-            return this.render();
-    }
-
     clear() {
         this._groups = [];
-        this.rerender();
+        renderView();
     }
 
     addGroup(prevGroup?: Group) {
         if (prevGroup) {
             const prevGroupIndex = this.findGroupIndex(prevGroup);
             const group = new Group(this, `${prevGroupIndex + 1}`);
+
             this._groups.splice(prevGroupIndex, 0, group);
             // animateHighlight(group.html);
         }
@@ -77,21 +62,21 @@ export default class Oniform {
             this._groups.push(group);
             // animateHighlight(group.html);
         }
-        this.rerender();
+        renderView();
     }
 
     addGroupAfterReference(prevGroup: Group, newGroup: Group) {
         newGroup.parent = this;
         const prevGroupIndex = this.findGroupIndex(prevGroup);
         this._groups.splice(prevGroupIndex, 0, newGroup);
-        animateHighlight(newGroup.html);
-        this.rerender();
+        // animateHighlight(newGroup.html);
+        renderView();
     }
 
     deleteGroup(group: Group) {
         const groupIndex = this.findGroupIndex(group) - 1;
         this._groups.splice(groupIndex, 1);
-        this.rerender();
+        renderView();
     }
 
     findGroupIndex(group: Group): number {
@@ -119,5 +104,21 @@ export default class Oniform {
 
     static deserialize(json: string) {
         this.instance = Oniform.from(JSON.parse(json));
+    }
+
+    get groups(): Group[] {
+        return this._groups;
+    }
+
+    set groups(groups: Group[]) {
+        this._groups = groups;
+    }
+
+    get label(): string {
+        return this._label;
+    }
+
+    get id(): string {
+        return this._id;
     }
 }
