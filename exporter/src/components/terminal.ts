@@ -258,7 +258,6 @@ export default class Terminal {
 
     public addEmptyStation() {
         const newStation = new Station(this);
-        // animateHighlight(newStation.html);
         new Link(this, newStation, Relationship.DEPENDANT);
     }
 

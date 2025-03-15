@@ -60,7 +60,6 @@ export default class Oniform {
         newGroup.parent = this;
         const prevGroupIndex = this.findGroupIndex(prevGroup);
         this._groups.splice(prevGroupIndex, 0, newGroup);
-        // animateHighlight(newGroup.html);
         renderView();
     }
 

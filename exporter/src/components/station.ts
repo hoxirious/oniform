@@ -267,7 +267,6 @@ export default class Station {
     appendExistingTerminal(terminal: Terminal) {
         terminal.parent = this;
         this._terminals.push(terminal);
-        // animateHighlight(terminal.html);
         renderView();
     }
 
