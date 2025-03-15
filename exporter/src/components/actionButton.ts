@@ -4,10 +4,11 @@ import {patch} from "../common/snabbdom.setup";
 import {generateGUID} from "../common/utility.ts";
 
 import toHTML from "snabbdom-to-html";
+import {renderView} from "../main.ts";
 
 export default class ActionButton {
     private readonly _id = `button-${generateGUID()}`;
-    private showDropdown: boolean = false;
+    showDropdown: boolean = false;
     _vnode?: VNode;
 
     constructor(
@@ -22,6 +23,7 @@ export default class ActionButton {
             _callback();
             if (_subButtons && this._vnode) {
                 this.showDropdown = !this.showDropdown;
+                console.log("showDropdown", this.showDropdown);
                 patch(this._vnode, this.render());
                 if (this.showDropdown) {
                     document.addEventListener("click", this.handleOutsideClick);

@@ -12,8 +12,9 @@ import Clipboard from "./clipboard.ts";
 import Link, {Relationship} from "./link.ts";
 import {generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
-import {h, VNode} from "snabbdom";
+import {h, vnode, VNode} from "snabbdom";
 import {renderView} from "../main.ts";
+import {patch} from "../common/snabbdom.setup.ts";
 
 export class StationButtonAdd extends ActionButton {
     constructor(parent: Group | Station | Terminal, self?: Station) {
@@ -97,22 +98,22 @@ export class StationButtonCopy extends ActionButton {
         const copyVNode = h("img", {props: {src: copyUrl, alt: "Copy"}});
 
         super(copyVNode, () => {
-            const previouslySelected = document.querySelector(".selected");
-            if (previouslySelected) {
-                previouslySelected.classList.remove("selected");
-            }
+            // const previouslySelected = document.querySelector(".selected");
+            // if (previouslySelected) {
+            //     previouslySelected.classList.remove("selected");
+            // }
             Clipboard.instance.copiedObject = self.clone();
             showSuccessPopup("Question copied to clipboard", 1500);
             // self.html.classList.add("selected");
 
-            const removeSelection = (event: Event) => {
-                if (event instanceof KeyboardEvent && event.key === "Escape") {
-                    // self.html.classList.remove("selected");
-                    document.removeEventListener("keydown", removeSelection);
-                }
-            };
+            // const removeSelection = (event: Event) => {
+            //     if (event instanceof KeyboardEvent && event.key === "Escape") {
+            //         // self.html.classList.remove("selected");
+            //         document.removeEventListener("keydown", removeSelection);
+            //     }
+            // };
 
-            document.addEventListener("keydown", removeSelection);
+            // document.addEventListener("keydown", removeSelection);
         }, undefined, ["icon"], "Copy Station");
     }
 }
@@ -134,7 +135,7 @@ export class StationButtonPaste extends ActionButton {
         ];
 
         super(pasteVNode, () => {
-            self.paste(this);
+            self.paste();
         }, actionItems, ["icon"], "Paste");
     }
 }
@@ -174,7 +175,7 @@ export default class Station {
                     style: {
                         opacity: "0.8",
                         top: "-0.5rem",
-                        transition: "opacity 0.3s, top 0.3s",
+                        transition: "opacity 0.3s, top 0.3s ",
                         delayed: {opacity: "1", top: "0"},
                     }
                 }, [
@@ -274,23 +275,23 @@ export default class Station {
         return stationClone;
     }
 
-    paste(pasteButton: ActionButton): void {
-        const copiedObject = Clipboard.instance.cloneCopiedObject();
-        if (!copiedObject) {
+    paste(): void {
+        if (!Clipboard.instance.copiedObject) {
             showErrorPopup("Clipboard is empty");
+            console.log("Clipboard is empty");
+            return;
+        }
+        if(Clipboard.instance.copiedObject instanceof Station) {
             return;
         }
 
-        if (copiedObject instanceof Station) {
-            pasteButton.actionItems?.classList.toggle("show");
-            return;
-        } else if (copiedObject instanceof Group) {
+        const copiedObject = Clipboard.instance.cloneCopiedObject();
+        if (copiedObject instanceof Group) {
             copiedObject.parent = this;
             new Link(this, copiedObject, Relationship.DEPENDANT);
-        } else {
+        } else if (copiedObject instanceof Terminal) {
             this.appendExistingTerminal(copiedObject);
         }
-        renderView();
     }
 
     get label() {
