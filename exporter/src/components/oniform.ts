@@ -1,108 +1,72 @@
+import {h, VNode} from "snabbdom";
 import Group, {GroupButtonAdd} from "./group.ts";
 import "../styles/oniform.css";
-import {animateHighlight, showSuccessPopup} from "../common/utility.ts";
+import {generateGUID, showSuccessPopup} from "../common/utility.ts";
 import ActionButton from "./actionButton.ts";
+import {renderView} from "../main.ts";
 
 export default class Oniform {
-    static instance = new Oniform([]);
+    static instance: Oniform = new Oniform();
+    readonly _id = `oniform-${generateGUID()}`;
     private constructor(
-        private _groups: Group[],
+        private _groups: Group[] = [],
         private _label: string = "",
-        private _html: HTMLFormElement = document.createElement("form")
     ) {}
 
-    get groups(): Group[] {
-        return this._groups;
+
+    render(): VNode {
+        return h(`form#${this._id}.oniform`, {key: this._id}, [
+            this.createButtons(),
+            this._groups.length === 0 ? new GroupButtonAdd(this).render() : null,
+            ...this._groups.map(group => group.render())
+        ]);
     }
 
-    set groups(groups: Group[]) {
-        this._groups = groups;
-    }
-
-    get label(): string {
-        return this._label;
-    }
-
-    get html(): HTMLFormElement {
-        return this._html;
-    }
-
-    render() {
-        const form = document.createElement("form");
-        form.classList.add("oniform");
-
-        const buttons = document.createElement("div");
-        buttons.classList.add("buttons");
-        const saveButton = new ActionButton("Save", "save", ["button"], () => {
-            const serializedForm = this.serialize();
-            localStorage.setItem("oniformInstance", serializedForm);
-            showSuccessPopup("Form saved");
-        });
-
-        buttons.appendChild(saveButton.button);
-        const resetButton = new ActionButton("Reset", "reset", ["button"], () => {
-            this.clear();
-            localStorage.removeItem("oniformInstance");
-            showSuccessPopup("Form cleared");
-        });
-        buttons.appendChild(resetButton.button);
-        form.appendChild(buttons);
-        this._groups.forEach(group => {
-            group.rerender();
-            const groupDiv = group.html;
-            form.appendChild(groupDiv);
-        });
-
-        if(this._groups.length === 0) {
-            const newGroupButton = new GroupButtonAdd();
-            form.appendChild(newGroupButton.button);
-        }
-
-        this._html = form;
-        this._html.scrollIntoView({behavior: "smooth", block: "center"});
-    }
-
-    rerender() {
-        const oniform = document.getElementById("oniform");
-        if (oniform) {
-            this.render();
-            if (oniform.firstChild)
-                oniform!.replaceChild(this.html, oniform.firstChild);
-        }
+    private createButtons(): VNode {
+        return h("div.buttons", [
+            new ActionButton("Save", () => {
+                const serializedForm = this.serialize();
+                localStorage.setItem("oniformInstance", serializedForm);
+                showSuccessPopup("Form saved");
+            }, undefined, ["text"], "Save form").render(),
+            new ActionButton("Reset",() => {
+                this.clear();
+                this.render();
+                localStorage.removeItem("oniformInstance");
+                showSuccessPopup("Form cleared");
+            }, undefined, ["text"], "Reset form" ).render()
+        ])
     }
 
     clear() {
         this._groups = [];
-        this.rerender();
+        renderView();
     }
 
     addGroup(prevGroup?: Group) {
         if (prevGroup) {
             const prevGroupIndex = this.findGroupIndex(prevGroup);
-            const group = new Group(this, `${prevGroupIndex + 1}`);
+            const group = new Group(this, `Group ${prevGroupIndex + 1}`);
             this._groups.splice(prevGroupIndex, 0, group);
-            animateHighlight(group.html);
         }
         else {
             const group = new Group(this);
             this._groups.push(group);
-            animateHighlight(group.html);
         }
-        this.rerender();
+        renderView();
     }
 
     addGroupAfterReference(prevGroup: Group, newGroup: Group) {
         newGroup.parent = this;
         const prevGroupIndex = this.findGroupIndex(prevGroup);
         this._groups.splice(prevGroupIndex, 0, newGroup);
-        animateHighlight(newGroup.html);
-        this.rerender();
+        renderView();
     }
 
     deleteGroup(group: Group) {
         const groupIndex = this.findGroupIndex(group) - 1;
         this._groups.splice(groupIndex, 1);
-        this.rerender();
+        renderView();
     }
 
     findGroupIndex(group: Group): number {
@@ -130,5 +94,21 @@ export default class Oniform {
 
     static deserialize(json: string) {
         this.instance = Oniform.from(JSON.parse(json));
+    }
+
+    get groups(): Group[] {
+        return this._groups;
+    }
+
+    set groups(groups: Group[]) {
+        this._groups = groups;
+    }
+
+    get label(): string {
+        return this._label;
+    }
+
+    get id(): string {
+        return this._id;
     }
 }

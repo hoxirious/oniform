@@ -1,3 +1,5 @@
+import {h, VNode} from "snabbdom";
+import { patch } from "./common/snabbdom.setup.ts";
 import Oniform from "./components/oniform.ts";
 import Clipboard from "./components/clipboard.ts";
 import clipboard from "./static/clipboard.svg";
@@ -11,7 +13,12 @@ declare global {
     }
 }
 
+let isPageInitialized = false;
+let vnode: VNode = h("div#oniform");
+
 const initPage = () => {
+    if (isPageInitialized) return;
+    isPageInitialized = true;
     initForm();
     const toolbar = document.getElementById("toolbar");
     if (!toolbar) {
@@ -19,9 +26,7 @@ const initPage = () => {
         return;
     }
 
-    const clipboardIcon = document.createElement("img");
-    clipboardIcon.src = clipboard as string;
-    clipboardIcon.alt = "Toggle Clipboard";
+    const clipboardIcon = h("img", { props: { src: clipboard, alt: "Toggle Clipboard" } });
     const clipboardElement = document.getElementById("clipboard");
     if (!clipboardElement) {
         console.error("Clipboard element not found");
@@ -35,7 +40,7 @@ const initPage = () => {
         clipboardElement.classList.add("show");
     }
 
-    const clipboardButton = new ActionButton(clipboardIcon, "toggle-clipboard", ["icon"], () => {
+    const clipboardButton = new ActionButton(clipboardIcon, () => {
         const clipboardElement = document.getElementById("clipboard");
         if (!clipboardElement) {
             console.error("Clipboard element not found");
@@ -49,53 +54,42 @@ const initPage = () => {
         } else {
             localStorage.setItem("clipboardStatus", "closed");
         }
-    }, true, undefined, "Toggle Clipboard");
-    toolbar.appendChild(clipboardButton.button);
+    }, undefined, ["icon"], "Toggle Clipboard").render();
+
+    patch(toolbar, h("div#toolbar", clipboardButton));
 }
 
 const initForm = () => {
     let form: Oniform;
-
-    const serializedForm = localStorage.getItem("oniformInstance");
-    if (serializedForm) {
-        Oniform.deserialize(serializedForm);
-        form = Oniform.instance;
-        form.render();
-    } else {
-        form = Oniform.instance;
-        form.render();
-
-        // default form
-        form.addGroup();
-        form.groups[0].addEmptyStation();
-        form.groups[0].stations[0].addEmptyTerminal();
-    }
-
+    // initialize empty form
+    form = Oniform.instance;
     const oniformElement = document.getElementById("oniform");
     if (!oniformElement) {
         console.error("Oniform element not found");
         return;
     }
+    vnode = patch(oniformElement, form.render());
+    renderView();
 
-    if (oniformElement.firstChild)
-        oniformElement.replaceChild(form.html, oniformElement.firstChild);
-    else
-        oniformElement.appendChild(form.html);
-
+    // initialize cache if available
+    const serializedForm = localStorage.getItem("oniformInstance");
+    if (serializedForm) {
+        Oniform.deserialize(serializedForm);
+    }
+    renderView();
+    const clipboard = Clipboard.instance;
     const clipboardElement = document.getElementById("clipboard");
     if (!clipboardElement) {
         console.error("Clipboard element not found");
         return;
     }
-
-    const clipboard = Clipboard.instance;
-    clipboard.render();
-
-    if (clipboardElement.firstChild)
-        clipboardElement.replaceChild(clipboard.html, clipboardElement.firstChild);
-    else
-        clipboardElement.appendChild(clipboard.html);
-
+    patch(clipboardElement, h("div#clipboard", clipboard.vnode));
     window.oniformInstance = form; // Attach the instance to the window object
 }
+
+export const renderView = () => {
+    const newNode = Oniform.instance.render();
+    vnode = patch(vnode, newNode);
+}
+
 document.addEventListener("DOMContentLoaded", initPage);

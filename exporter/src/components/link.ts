@@ -3,13 +3,14 @@ import Terminal from "./terminal.ts";
 import Group from "./group.ts";
 import "../styles/link.css";
 import {generateGUID} from "../common/utility.ts";
+import {h, VNode} from "snabbdom";
 
 export enum Relationship {
-    SIBLING = "sibling",
     DEPENDANT = "dependant"
 }
 
 export default class Link {
+    isCollapsed: boolean = false;
     private readonly _html: HTMLDivElement = document.createElement("div");
 
     constructor(
@@ -23,16 +24,13 @@ export default class Link {
         this.render();
     }
 
-    private render() {
-        this._html.classList.add("link", this._relationship);
-        this._html.id = this._id;
+    private render():VNode {
+        this.parent.addLink(this);
+        return h(`div.link.${this.relationship}`, { props: { id: this.id }, key: this._id, class: {collapse: this.isCollapsed} }, [this.right.render()]);
+    }
 
-        this._html.appendChild(this._right.html);
-        if (this._relationship === Relationship.DEPENDANT) {
-            this._parent.addLink(this);
-            this._right.rerender();
-        }
-        this._html.scrollIntoView({behavior: "smooth", block: "center"});
+    rerender() {
+        return h(`div.link.${this.relationship}`, { props: { id: this.id }, key: this._id, class: {collapse: this.isCollapsed} }, [this.right.render()]);
     }
 
     clone(leftClone: Station|Terminal, editable: boolean = false): Link {

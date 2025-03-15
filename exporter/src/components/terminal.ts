@@ -10,85 +10,80 @@ import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import chevronDownUrl from "../static/chevron-down.svg";
 import chevronRightUrl from "../static/chevron-right.svg";
-import {animateHighlight, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
+import {h, VNode} from "snabbdom";
+import {renderView} from "../main.ts";
 
 export class TerminalButtonAdd extends ActionButton {
     constructor(parent: Station, self?: Terminal) {
-        const plus = createPlusIcon();
         if(!self) {
-            super("New Option", "new-terminal", ["button"], () => {
+            super("New option", () => {
                     parent.addEmptyTerminal();
                 },
-                true,
                 undefined,
-                "New Terminal"
+                ["text"]
             );
         }
         else
         {
-            const actionItems = createActionItems(parent, self);
-            super(plus, "new-terminal", ["icon"], () => {
-                actionItems.classList.toggle("show");
-            }, true, actionItems, "New Option");
+            const siblingButton = new ActionButton("New option", () => {
+                parent.addEmptyTerminal(self);
+                parent.render();
+            }, undefined, ["text"]);
+
+            const groupDependantButton = new ActionButton("New sub-group", () => {
+                const newGroup = new Group(self);
+                newGroup.addEmptyStation();
+                newGroup.stations[0].addEmptyTerminal();
+                new Link(self, newGroup, Relationship.DEPENDANT);
+            }, undefined, ["text"]);
+
+            const stationDependantButton = new ActionButton("New sub-question", () => {
+                new Link(self, new Station(self), Relationship.DEPENDANT);
+            }, undefined, ["text"]);
+
+            const actionItems = [siblingButton, groupDependantButton, stationDependantButton];
+
+            super(h("img", { props: { src: plusUrl, alt: "Plus" } }), () => {}, actionItems, ["icon"], "New Option");
         }
     }
 }
 
 export class TerminalButtonCollapse extends ActionButton {
     constructor(self: Terminal) {
-        const chevronDown = document.createElement("img");
-        chevronDown.src = chevronDownUrl as string;
-        chevronDown.alt = "Collapse All";
-
-        const chevronRight = document.createElement("img");
-        chevronRight.src = chevronRightUrl as string;
-        chevronRight.alt = "Expand All";
+        const chevronDownVNode = h("img", { props: { src: chevronDownUrl, alt: "Collapse All" } });
+        const chevronRightVNode = h("img", { props: { src: chevronRightUrl, alt: "Expand All" } });
 
         const collapseCallback = () => {
-            const expandedlinks = self.html.getElementsByClassName(`link ${Relationship.DEPENDANT}`);
-            if (expandedlinks.length > 0) {
-                for (let i = 0; i < expandedlinks.length; i++) {
-                    expandedlinks[i].classList.toggle("collapse");
-                }
-                self.html.getElementsByClassName("terminal_input")[0].classList.toggle("folded");
-                if (expandedlinks[0].classList.contains("collapse")) {
-                    this.button.replaceChild(chevronRight, this.button.firstChild!);
-                }
-                else {
-                    this.button.replaceChild(chevronDown, this.button.firstChild!);
-                }
-                self.isCollapsed = !self.isCollapsed;
-            }
-        }
-        if(self.isCollapsed) {
-            super(chevronRight, "collapse-stations", ["icon"], collapseCallback, true, undefined, "Collapse Dependants");
-        }
-        else {
-            super(chevronDown, "collapse-stations", ["icon"], collapseCallback, true, undefined, "Collapse Dependants");
+            self.isCollapsed = !self.isCollapsed;
+            self.links.forEach(link => link.isCollapsed = !link.isCollapsed);
+            renderView();
+        };
+
+        if (self.isCollapsed && self.links.length > 0) {
+            super(chevronRightVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
+        } else {
+            super(chevronDownVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
         }
     }
 }
 
 export class TerminalButtonDelete extends ActionButton {
     constructor(parent: Station, self: Terminal) {
-        const minus = document.createElement("img");
-        minus.src = minusUrl as string;
-        minus.alt = "Delete";
+        const minusVNode = h("img", { props: { src: minusUrl, alt: "Delete" } });
 
-        super(minus, "delete-terminal", ["icon"], () => {
+        super(minusVNode, () => {
             parent.deleteTerminal(self);
-        }, true, undefined, "Delete Terminal");
+        }, undefined, ["icon"], "Delete Terminal");
     }
 }
 
 export class TerminalButtonCopy extends ActionButton {
     constructor(self: Terminal) {
-        const copy = document.createElement("img");
-        copy.src = copyUrl as string;
-        copy.alt = "Copy";
+        const copyVNode = h("img", { props: { src: copyUrl, alt: "Copy" } });
 
-        super(copy, "copy-terminal", ["icon"], () => {
+        super(copyVNode, () => {
             const previouslySelected = document.querySelector(".selected");
             if (previouslySelected) {
                 previouslySelected.classList.remove("selected");
@@ -96,162 +91,94 @@ export class TerminalButtonCopy extends ActionButton {
 
             Clipboard.instance.copiedObject = self.clone();
             showSuccessPopup("Option copied to clipboard", 1500);
-            self.html.classList.add("selected");
+            // self.html.classList.add("selected");
 
             const removeSelection = (event: Event) => {
                 if (event instanceof KeyboardEvent && event.key === "Escape") {
-                    self.html.classList.remove("selected");
+                    // self.html.classList.remove("selected");
                     document.removeEventListener("keydown", removeSelection);
                 }
             };
 
             document.addEventListener("keydown", removeSelection);
-        }, true, undefined, "Copy Terminal");
+        }, undefined, ["icon"], "Copy Terminal");
     }
 }
 
 export class TerminalButtonPaste extends ActionButton {
     constructor(self: Terminal) {
-        const paste = document.createElement("img");
-        paste.src = pasteUrl as string;
-        paste.alt = "Paste";
+        const pasteVNode = h("img", { props: { src: pasteUrl, alt: "Paste" } });
 
-
-        super(paste, "paste-terminal", ["icon"], () => {
+        super(pasteVNode, () => {
             self.paste();
-        }, true, undefined, "Paste");
+        }, undefined, ["icon"], "Paste");
     }
-}
-
-function createActionItems(parent: Station, self: Terminal): HTMLUListElement {
-    const actionItems = document.createElement("ul");
-    actionItems.classList.add("action_items");
-
-    const siblingButton = new ActionButton("New option", "terminal-sibling", ["add_terminal_button"], () => {
-        parent.addEmptyTerminal(self);
-        parent.rerender();
-    }).button;
-
-    const groupDependantButton = new ActionButton("New sub-group", "terminal-group-dependant", ["add_terminal_button"], () => {
-        const newGroup = new Group(self);
-        newGroup.addEmptyStation();
-        newGroup.stations[0].addEmptyTerminal();
-        new Link(self, newGroup, Relationship.DEPENDANT);
-    }).button;
-
-    const stationDependantButton = new ActionButton("New sub-question", "terminal-dependant", ["add_terminal_button"], () => {
-        new Link(self, new Station(self), Relationship.DEPENDANT);
-    }).button;
-
-    actionItems.appendChild(createListItem(siblingButton));
-    actionItems.appendChild(createListItem(stationDependantButton));
-    actionItems.appendChild(createListItem(groupDependantButton));
-
-    return actionItems;
-}
-
-function createListItem(button: HTMLButtonElement): HTMLLIElement {
-    const listItem = document.createElement("li");
-    listItem.appendChild(button);
-    return listItem;
-}
-
-function createPlusIcon(): HTMLImageElement {
-    const plus = document.createElement("img");
-    plus.src = plusUrl as string;
-    plus.alt = "Plus";
-    return plus;
 }
 
 export default class Terminal {
     isCollapsed: boolean = false;
     constructor(
         private _parent: Station,
-        private _label: string = `Option ${_parent.label}-1`,
+        private _label: string = `Option ${_parent.label.split(" ").pop()}-${_parent.findTerminalIndex(this).toString()}`,
         private _root: Terminal = this,
         private _value: string = "",
         private _links: Link[] = [],
-        private _html: HTMLDivElement = document.createElement("div"),
         private _editable: boolean = true,
         private _id: string = `terminal-${generateGUID()}`
-    ) {
-        this.render();
-    }
+    ) {}
 
-    public render() {
-        this._html.innerHTML = "";
-        this._html.classList.add("terminal_container");
-        this._html.id = this._id;
-
-        const terminalElement = this.createTerminalElement();
-        this._html.appendChild(terminalElement);
-
-        this._links.forEach(link =>
-        {
-            link.html.classList.remove("collapse");
-            link.right.rerender();
-            this._html.appendChild(link.html);
+    public render():VNode {
+       this._label =  `Option ${this._parent.label.split(" ").pop()}-${this._parent.findTerminalIndex(this).toString()}`;
+        const links = this.links.map(link => {
+            return link.rerender();
         });
-        this._html.scrollIntoView({ behavior: "smooth" });
+        return h("div.terminal_container", {props: { id: this._id }, key: this._id}, [
+            this.createTerminalElement(),
+            ...links
+            ]);
     }
 
-    private createTerminalElement(): HTMLDivElement {
-        const terminalElement = document.createElement("div");
-        terminalElement.classList.add("terminal");
-
-        const labelElement = this.createLabelElement();
-        const inputElement = this.createInputElement();
-
-        const buttons = document.createElement("div");
-        buttons.classList.add("buttons");
-        if (this._editable) {
-            const deleteButton = new TerminalButtonDelete(this. _parent, this).button;
-            const collapseButton = new TerminalButtonCollapse(this).button;
-            const addButton = new TerminalButtonAdd(this. _parent, this).button;
-            const copyButton = new TerminalButtonCopy(this).button;
-            const pasteButton = new TerminalButtonPaste(this).button;
-            buttons.appendChild(deleteButton);
-            buttons.appendChild(addButton);
-            buttons.appendChild(collapseButton);
-            buttons.appendChild(copyButton);
-            buttons.appendChild(pasteButton);
-        }
-        buttons.appendChild(labelElement);
-
-        terminalElement.appendChild(buttons);
-        terminalElement.appendChild(inputElement);
-
-        return terminalElement;
+    private createTerminalElement(): VNode {
+        return h("div.terminal",
+                {
+                    style: {
+                        opacity: "0.8",
+                        top: "-0.5rem",
+                        transition: "opacity 0.3s, top 0.3s",
+                        delayed: {opacity: "1", top: "0"},
+                    }
+                },[
+            this.createButtons(),
+            this.createInputElement()
+           ]);
     }
 
-    private createLabelElement(): HTMLInputElement {
-        const labelElement = document.createElement("input");
-        labelElement.disabled = true;
-        const stationLabelSplit = this. _parent.label.split(" ");
-        const stationIndex = stationLabelSplit[stationLabelSplit.length-1];
-        labelElement.value = `Option ${stationIndex}-${this.parent.findTerminalIndex(this).toString()}`;
-        labelElement.classList.add("terminal_label");
-        return labelElement;
-    }
-
-    private createInputElement(): HTMLInputElement {
-        const inputElement = document.createElement("input");
-        inputElement.classList.add("terminal_input");
-        inputElement.value = this._value;
-        inputElement.placeholder = "Enter option here";
-        inputElement.addEventListener("input", (event) => {
-            this._value = (event.target as HTMLInputElement).value;
+    private createLabelElement(): VNode {
+        return h("input.terminal_label", {
+            props: {
+                disabled: true,
+                value: this._label
+            }
         });
-        return inputElement;
     }
 
-    public rerender() {
-        this._html.innerHTML = "";
-        this.render();
+    private createInputElement(): VNode {
+        return h("input.terminal_input", {
+            props: {
+                value: this._value,
+                placeholder: "Enter option here"
+            },
+            on: {
+                input: (event: Event) => {
+                    this._value = (event.target as HTMLInputElement).value;
+                }
+            },
+            class: {folded: this.isCollapsed && this.links.length > 0}
+        });
     }
 
     public clone(editable: boolean = false, dumbStation?: Station): Terminal {
-        const terminalClone = new Terminal(dumbStation ?? new Station(new Group(Oniform.instance)), this._label, this._root, this._value, [], undefined, editable);
+        const terminalClone = new Terminal(dumbStation ?? new Station(new Group(Oniform.instance)), this._label, this._root, this._value, [], editable);
         this._links.forEach(link => link.clone(terminalClone, editable));
         return terminalClone;
     }
@@ -274,7 +201,7 @@ export default class Terminal {
             new Link(this, copiedObject, Relationship.DEPENDANT);
         }
 
-        this.rerender();
+        this.render();
     }
 
     get label(): string {
@@ -283,10 +210,6 @@ export default class Terminal {
 
     get value(): string {
         return this._value;
-    }
-
-    get html(): HTMLDivElement {
-        return this._html;
     }
 
     get root(): Terminal {
@@ -311,16 +234,14 @@ export default class Terminal {
 
     deleteGroup(group: Group) {
         const linkIndex = this.links.findIndex(g => g.right.id === group.id);
-        this.links[linkIndex].html.remove();
         this.links.splice(linkIndex, 1);
-        this.rerender();
+        renderView();
     }
 
     deleteStation(station: Station) {
         const linkIndex = this.links.findIndex(g => g.right.id === station.id);
-        this.links[linkIndex].html.remove();
         this.links.splice(linkIndex, 1);
-        this.rerender();
+        renderView();
     }
 
     findGroupIndex(group: Group): number {
@@ -337,15 +258,13 @@ export default class Terminal {
 
     public addEmptyStation() {
         const newStation = new Station(this);
-        animateHighlight(newStation.html);
         new Link(this, newStation, Relationship.DEPENDANT);
     }
 
     public addLink(link: Link) {
         link.parent = this;
         this._links.push(link);
-        this.rerender();
-        this.parent.parent.rerender();
+        renderView();
     }
 
     toObj () {
@@ -363,5 +282,16 @@ export default class Terminal {
         const terminal = new Terminal(parent, label, undefined, value, [], undefined, id);
         links.forEach((link: any) => Link.from(link, terminal));
         return terminal;
+    }
+
+    private createButtons():VNode {
+        return h("div.buttons", [
+            this._editable ? new TerminalButtonDelete(this. _parent, this).render() : undefined,
+            this._editable ? new TerminalButtonAdd(this. _parent, this).render() : undefined,
+            this._editable ? new TerminalButtonCollapse(this).render() : undefined,
+            this._editable ? new TerminalButtonCopy(this).render() : undefined,
+            this._editable ? new TerminalButtonPaste(this).render() : undefined,
+            this.createLabelElement()
+        ]);
     }
 }

@@ -1,70 +1,57 @@
 import "../styles/action-button.css";
+import {h, VNode} from "snabbdom";
+import {patch} from "../common/snabbdom.setup";
+import {generateGUID} from "../common/utility.ts";
 
 export default class ActionButton {
-    private _button: HTMLButtonElement = document.createElement("button");
+    private readonly _id = `button-${generateGUID()}`;
+    showDropdown: boolean = false;
+    _vnode?: VNode;
 
     constructor(
-        private readonly _label: string | HTMLElement,
-        private readonly _id: string,
-        private readonly _class: string[],
-        private readonly _callback: () => void = () => {
-            this._actionItems?.classList.add("show");
-        },
-        private readonly _isClicked: boolean = true,
-        private _actionItems?: HTMLUListElement,
-        private _tooltip?: string
+        readonly _label: string | VNode,
+        readonly _callback: () => void,
+        readonly _subButtons?: ActionButton[],
+        readonly _class?: string[],
+        readonly _tooltip?: string,
     ) {
-        this.render();
-    }
 
-    render(): void {
-        this._button.type = "button";
-        this._button.classList.add("action-button", ...this._class);
-        this._button.id = this._id;
-        if(this._tooltip)
-            this._button.title = this._tooltip;
-        this._button.appendChild(typeof this._label === "string" ? document.createTextNode(this._label) : this._label);
-        if(this._actionItems) {
-            this._actionItems.classList.add("action_items");
-            this._button.appendChild(this._actionItems);
-        }
-        this.addEventListeners();
-    }
-
-    private addEventListeners(): void {
-        if (this._isClicked) {
-            this._button.addEventListener("click", this._callback);
-        } else {
-            this._button.addEventListener("mouseover", this._callback);
-            this._button.addEventListener("mouseout", () => {
-                this._actionItems?.classList.remove("show");
-            });
-        }
-
-        document.addEventListener("click", (event) => {
-            if (this._actionItems && !this._actionItems.contains(event.target as Node) && !this._button.contains(event.target as Node)) {
-                this._actionItems.classList.remove("show");
+        this._callback = () => {
+            _callback();
+            if (_subButtons && this._vnode) {
+                this.showDropdown = !this.showDropdown;
+                patch(this._vnode, this.render());
+                if (this.showDropdown) {
+                    document.addEventListener("click", this.handleOutsideClick);
+                }
             }
-        });
+        }
     }
 
-    get button(): HTMLButtonElement {
-        return this._button;
+    render(): VNode {
+        this._vnode = h("button", {
+            props: {
+                id: this._id,
+                title: this._tooltip,
+                type: "button"
+            },
+            key: this._id,
+            on: {click: this._callback},
+            class: {dropdown: true, "action-button": true, [this._class]: true}
+        }, [
+            this._label,
+            this.showDropdown && this._subButtons
+                ? h("ul.action_items", this._subButtons.map(btn => h("li", btn.render())))
+                : null,
+        ]);
+        return this._vnode;
     }
 
-    get actionItems(): HTMLUListElement {
-        return <HTMLUListElement>this._actionItems;
-    }
-    set actionItems(actionItems: HTMLUListElement) {
-        this._actionItems = actionItems;
+    private handleOutsideClick = (event: MouseEvent) => {
+        if (this._vnode && !this._vnode.elm!.contains(event.target as Node)) {
+            this.showDropdown = false;
+            patch(this._vnode, this.render());
+            document.removeEventListener("click", this.handleOutsideClick);
+        }
     }
 }
-
-export class SubActionButton extends ActionButton {
-    constructor(_label: string, _id: string, _classes: string[], subActionItems: HTMLUListElement) {
-        super(_label, _id, _classes, undefined, false);
-        subActionItems.classList.add("sub_action_items");
-        this.actionItems = subActionItems;
-    }
-}
-
