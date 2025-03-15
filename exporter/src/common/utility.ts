@@ -79,6 +79,7 @@ export function showSuccessPopup(message: string, duration: number = 1000) {
     }, duration);
 }
 
+/*
 export function animateHighlight(element: HTMLElement, duration: number = 500) {
     element.animate(
         [
@@ -87,4 +88,4 @@ export function animateHighlight(element: HTMLElement, duration: number = 500) {
         ],
         { duration: duration, iterations: 1}
     );
-}
+}*/

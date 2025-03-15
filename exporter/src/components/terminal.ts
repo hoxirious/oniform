@@ -10,7 +10,7 @@ import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import chevronDownUrl from "../static/chevron-down.svg";
 import chevronRightUrl from "../static/chevron-right.svg";
-import {animateHighlight, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 import {h, VNode} from "snabbdom";
 import {patch} from "../common/snabbdom.setup.ts";
@@ -130,7 +130,7 @@ export default class Terminal {
     isCollapsed: boolean = false;
     constructor(
         private _parent: Station,
-        private _label: string = `Option ${_parent.label}-1`,
+        private _label: string = `Option ${_parent.label.split(" ").pop()}-${_parent.findTerminalIndex(this).toString()}`,
         private _root: Terminal = this,
         private _value: string = "",
         private _links: Link[] = [],
@@ -151,7 +151,7 @@ export default class Terminal {
 
     private createTerminalElement(): VNode {
         return h("div.terminal", [
-            this.createButtons(),
+            this._editable ? this.createButtons() : null,
             this.createInputElement()
            ]);
         // const terminalElement = document.createElement("div");
@@ -183,14 +183,10 @@ export default class Terminal {
     }
 
     private createLabelElement(): VNode {
-        const stationLabelSplit = this._parent.label.split(" ");
-        const stationIndex = stationLabelSplit[stationLabelSplit.length - 1];
-        const labelValue = `Option ${stationIndex}-${this.parent.findTerminalIndex(this).toString()}`;
-
         return h("input.terminal_label", {
             props: {
                 disabled: true,
-                value: labelValue
+                value: this._label
             }
         });
     }
@@ -213,7 +209,7 @@ export default class Terminal {
     }
 
     public clone(editable: boolean = false, dumbStation?: Station): Terminal {
-        const terminalClone = new Terminal(dumbStation ?? new Station(new Group(Oniform.instance)), this._label, this._root, this._value, [], undefined, editable);
+        const terminalClone = new Terminal(dumbStation ?? new Station(new Group(Oniform.instance)), this._label, this._root, this._value, [], editable);
         this._links.forEach(link => link.clone(terminalClone, editable));
         return terminalClone;
     }
@@ -269,14 +265,12 @@ export default class Terminal {
 
     deleteGroup(group: Group) {
         const linkIndex = this.links.findIndex(g => g.right.id === group.id);
-        this.links[linkIndex].html.remove();
         this.links.splice(linkIndex, 1);
         renderView();
     }
 
     deleteStation(station: Station) {
         const linkIndex = this.links.findIndex(g => g.right.id === station.id);
-        this.links[linkIndex].html.remove();
         this.links.splice(linkIndex, 1);
         renderView();
     }
@@ -295,7 +289,7 @@ export default class Terminal {
 
     public addEmptyStation() {
         const newStation = new Station(this);
-        animateHighlight(newStation.html);
+        // animateHighlight(newStation.html);
         new Link(this, newStation, Relationship.DEPENDANT);
     }
 

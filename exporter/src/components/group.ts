@@ -134,9 +134,9 @@ export default class Group {
             [h("div.buttons", [
                     this._parent && this._editable ? new GroupButtonDelete(this._parent, this).render() : undefined,
                     this._parent instanceof Oniform ? new GroupButtonAdd(this._parent,this).render() : undefined,
-                    new GroupButtonCopy(this).render(),
-                    new GroupButtonPaste(this).render(),
-                    new GroupButtonCollapse(this).render(),
+                    this._editable ? new GroupButtonCopy(this).render() : null,
+                    this._editable ? new GroupButtonPaste(this).render() : null,
+                    this._editable ? new GroupButtonCollapse(this).render() : null,
                     h("input.group_label", {
                         props: {
                             value: this._label,
@@ -196,14 +196,12 @@ export default class Group {
     addEmptyStation(prevStation?: Station) {
         if(prevStation) {
             const stationIndex = this.findStationIndex(prevStation);
-            const station = new Station(this, prevStation, "",`Station ${stationIndex + 1}`);
+            const station = new Station(this, prevStation, "",`Question ${stationIndex + 1}`);
             this._stations.splice(stationIndex, 0, station);
-            animateHighlight(station.html);
         }
         else {
             const station = new Station(this);
             this._stations.push(station);
-            animateHighlight(station.html);
         }
         renderView();
     }
@@ -211,7 +209,6 @@ export default class Group {
     appendExistingStation(station: Station) {
         station.parent = this;
         this._stations.push(station);
-        animateHighlight(station.html);
         renderView();
     }
 
@@ -219,7 +216,6 @@ export default class Group {
         newStation.parent = this;
         const prevStationIndex = this.findStationIndex(refStation);
         this._stations.splice(prevStationIndex, 0, newStation);
-        animateHighlight(newStation.html);
         renderView();
     }
 
@@ -259,10 +255,6 @@ export default class Group {
 
     get score(): number {
         return this._score;
-    }
-
-    get html(): HTMLDivElement {
-        return this._html;
     }
 
     get parent(): Oniform|Station|Terminal|undefined {

@@ -62,7 +62,6 @@ const initPage = () => {
 const initForm = () => {
     let form: Oniform;
     form = Oniform.instance;
-    console.log(document.documentElement);
     const oniformElement = document.getElementById("oniform");
     if (!oniformElement) {
         console.error("Oniform element not found");

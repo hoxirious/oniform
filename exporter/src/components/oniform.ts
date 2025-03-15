@@ -52,7 +52,7 @@ export default class Oniform {
     addGroup(prevGroup?: Group) {
         if (prevGroup) {
             const prevGroupIndex = this.findGroupIndex(prevGroup);
-            const group = new Group(this, `${prevGroupIndex + 1}`);
+            const group = new Group(this, `Group ${prevGroupIndex + 1}`);
 
             this._groups.splice(prevGroupIndex, 0, group);
             // animateHighlight(group.html);

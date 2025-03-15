@@ -10,10 +10,9 @@ import pasteUrl from "../static/paste.svg";
 import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import Link, {Relationship} from "./link.ts";
-import {animateHighlight, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 import {h, VNode} from "snabbdom";
-import {patch} from "../common/snabbdom.setup.ts";
 import {renderView} from "../main.ts";
 
 export class StationButtonAdd extends ActionButton {
@@ -146,7 +145,7 @@ export default class Station {
         private _parent: Group | Station | Terminal,
         private _root: Station = this,
         private _value: string = "",
-        private _label: string = "",
+        private _label: string = `Question ${_parent.findStationIndex(this)}`,
         private _terminals: Terminal[] = [],
         private _links: Link[] = [],
         private _html: HTMLDivElement = document.createElement("div"),
@@ -155,50 +154,40 @@ export default class Station {
     ) {}
 
     render(): VNode {
-        // const terminals = this.terminals.length > 0 ? this.terminals.map(terminal => terminal.rerender()) : undefined;
+        const labelElement = h("input.station_label", {
+            props: {disabled: true, value: this._label}, on: {
+                input: (event: Event) => {
+                    this._label = (event.target as HTMLInputElement).value;
+                }
+            }
+        });
+
         const links = this.links.map(link => {
             return link.rerender();
         });
-        const newNode = h("div.station_container", {props: { id: this._id }, key: this._id}, [
+        return h("div.station_container", {props: {id: this._id}, key: this._id}, [
             h("div.station", [
                 h("div.buttons", [
-                    new StationButtonDelete(this).render(),
-                    new StationButtonAdd(this._parent, this).render(),
-                    new StationButtonCollapse(this).render(),
-                    new StationButtonCopy(this).render(),
-                    new StationButtonPaste(this).render(),
-                    h("input.station_label", { props: { disabled: true, value: this._label }, on: { input: (event: Event) => {
-                                this._label = (event.target as HTMLInputElement).value;
-                            }} }),
+                    this._editable ? new StationButtonDelete(this).render() : null,
+                    this._editable ? new StationButtonAdd(this._parent, this).render() : null,
+                    this._editable ? new StationButtonCollapse(this).render() : null,
+                    this._editable ? new StationButtonCopy(this).render() : null,
+                    this._editable ? new StationButtonPaste(this).render() : null,
+                    labelElement,
                 ]),
-                h("textarea.station_textarea", { props: { value: this._value, placeholder: "Enter question here" }, on: { input: (event: Event) => {
+                h("textarea.station_textarea", {
+                    props: {value: this._value, placeholder: "Enter question here"}, on: {
+                        input: (event: Event) => {
                             this._value = (event.target as HTMLTextAreaElement).value;
-                        }}}),
+                        }
+                    }
+                }),
                 this.terminals.length === 0 ? new TerminalButtonAdd(this).render() : null,
                 this.terminals.length > 0 ? h("div.terminals", this.terminals.map(terminal => terminal.render())) : null,
                 ...links,
             ]),
         ]);
-
-        return newNode;
-        // this._html.innerHTML = "";
-        // this._html.classList.add("station_container");
-        // this._html.id = this._id;
-        //
-        // const station = document.createElement("div");
-        // station.classList.add("station");
-        //
-        // const labelElement = document.createElement("input");
-        // labelElement.disabled = true;
-        // const stationIndex = this._parent.findStationIndex(this).toString();
-        // if(!this._label || this._label != `Station ${stationIndex}`)
-        //     this._label = `Question ${stationIndex}`;
-        // labelElement.value = this._label;
-        // labelElement.classList.add("station_label");
-        //
-        // labelElement.addEventListener("input", (event) => {
-        //     this._label = (event.target as HTMLInputElement).value;
-        // });
+        // this._html.innerHTM
 
         // Buttons
         // const buttons = document.createElement("div");
@@ -268,8 +257,7 @@ export default class Station {
             this._root, this._value, this._label,
             [], [], undefined, editable);
 
-        this._terminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal));
-        this._links.forEach(link => link.clone(stationClone, editable))
+        this._terminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal));this._links.forEach(link => link.clone(stationClone, editable))
         return stationClone;
     }
 
@@ -294,16 +282,8 @@ export default class Station {
         renderView();
     }
 
-    get root(): Station {
-        return this._root;
-    }
-
     get label() {
         return this._label;
-    }
-
-    get html(): HTMLDivElement {
-        return this._html;
     }
 
     get id(): string {
@@ -345,13 +325,10 @@ export default class Station {
             // animateHighlight(terminal.html);
         }
         else {
-            console.log(this);
             const terminal = new Terminal(this);
             this._terminals.push(terminal);
             // animateHighlight(terminal.html);
         }
-
-        console.log("Add empty terminal")
 
         renderView();
     }
@@ -405,7 +382,6 @@ export default class Station {
         this.links.forEach(link => console.log(link.right.id));
         console.log(group.id);
         const linkIndex = this.links.findIndex(g => g.right.id === group.id);
-        this.links[linkIndex].html.remove();
         this.links.splice(linkIndex, 1);
         renderView();
     }
