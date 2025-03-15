@@ -55,26 +55,16 @@ export class TerminalButtonCollapse extends ActionButton {
         const chevronDownVNode = h("img", { props: { src: chevronDownUrl, alt: "Collapse All" } });
         const chevronRightVNode = h("img", { props: { src: chevronRightUrl, alt: "Expand All" } });
 
-        // const collapseCallback = () => {
-        //     const expandedlinks = self.html.getElementsByClassName(`link ${Relationship.DEPENDANT}`);
-        //     if (expandedlinks.length > 0) {
-        //         for (let i = 0; i < expandedlinks.length; i++) {
-        //             expandedlinks[i].classList.toggle("collapse");
-        //         }
-        //         self.html.getElementsByClassName("terminal_input")[0].classList.toggle("folded");
-        //         if (expandedlinks[0].classList.contains("collapse")) {
-        //             this.button.replaceChild(chevronRightVNode.elm!, this.button.firstChild!);
-        //         } else {
-        //             this.button.replaceChild(chevronDownVNode.elm!, this.button.firstChild!);
-        //         }
-        //         self.isCollapsed = !self.isCollapsed;
-        //     }
-        // };
+        const collapseCallback = () => {
+            self.isCollapsed = !self.isCollapsed;
+            self.links.forEach(link => link.isCollapsed = !link.isCollapsed);
+            renderView();
+        };
 
-        if (self.isCollapsed) {
-            super(chevronRightVNode, () => {}, undefined, ["icon"], "Collapse Dependants");
+        if (self.isCollapsed && self.links.length > 0) {
+            super(chevronRightVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
         } else {
-            super(chevronDownVNode, () => {}, undefined, ["icon"], "Collapse Dependants");
+            super(chevronDownVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
         }
     }
 }
@@ -182,7 +172,8 @@ export default class Terminal {
                 input: (event: Event) => {
                     this._value = (event.target as HTMLInputElement).value;
                 }
-            }
+            },
+            class: {folded: this.isCollapsed && this.links.length > 0}
         });
     }
 

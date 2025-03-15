@@ -54,24 +54,11 @@ export class GroupButtonCollapse extends ActionButton {
         const chevronRightVNode = h("img", { props: { src: chevronRightUrl, alt: "Expand All" } });
 
         const collapseCallback = () => {
-            console.log("Collased")
-            // const stationContainer = self.html.getElementsByClassName("station_container");
-            //
-            // if (stationContainer.length > 0) {
-            //     const stations = self.html.getElementsByClassName("stations");
-            //     stations[0].classList.toggle("collapse");
-            //     self.html.getElementsByClassName(`group`)[0].classList.toggle("folded");
-            //
-            //     if (stations[0].classList.contains("collapse")) {
-            //         this.button.replaceChild(chevronRightVNode.elm!, this.button.firstChild!);
-            //     } else {
-            //         this.button.replaceChild(chevronDownVNode.elm!, this.button.firstChild!);
-            //     }
-            //     self.isCollapsed = !self.isCollapsed;
-            // }
+            self.isCollapsed = !self.isCollapsed
+            renderView();
         };
 
-        if (self.isCollapsed) {
+        if (self.isCollapsed && self.stations.length > 0) {
             super(chevronRightVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
         } else {
             super(chevronDownVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
@@ -153,10 +140,11 @@ export default class Group {
                             top: "-0.5rem",
                             transition: "opacity 0.3s, top 0.3s",
                             delayed: {opacity: "1", top: "0"},
-                        }
+                        },
+                        class: {folded: this.isCollapsed && this.stations.length > 0}
                     }, [
-                        h("div.stations", [
-                            this.stations.length === 0 ? new StationButtonAdd(this).render() : null,
+                        this.stations.length === 0 ? new StationButtonAdd(this).render() : null,
+                        h("div.stations", {class: {collapse: this.isCollapsed}}, [
                             ...this.stations.map(station => station.render())
                         ])
                     ])

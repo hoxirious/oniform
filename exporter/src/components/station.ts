@@ -54,27 +54,12 @@ export class StationButtonCollapse extends ActionButton {
         const chevronRightVNode = h("img", {props: {src: chevronRightUrl, alt: "Expand All"}});
 
         const collapseCallback = () => {
-            console.log("Collapse");
-            // const links = self.html.getElementsByClassName(`link ${Relationship.DEPENDANT}`);
-            // const terminals = self.html.getElementsByClassName("terminals");
-            // if (links.length != 0 || terminals.length != 0) {
-            //     for (let i = 0; i < links.length; i++) {
-            //         links[i].classList.toggle("collapse");
-            //     }
-            //     terminals[0].classList.toggle("collapse");
-            //     self.html.getElementsByClassName("station_textarea")[0].classList.toggle("folded");
-            // }
-            //
-            // if ((terminals.length > 0 && terminals[0].classList.contains("collapse")) ||
-            //     (links.length > 0 && links[0].classList.contains("collapse"))) {
-            //     this.button.replaceChild(chevronRightVNode.elm!, this.button.firstChild!);
-            // } else {
-            //     this.button.replaceChild(chevronDownVNode.elm!, this.button.firstChild!);
-            // }
-            // self.isCollapsed = !self.isCollapsed;
+            self.isCollapsed = !self.isCollapsed;
+            self.links.forEach(link => link.isCollapsed = !link.isCollapsed);
+            renderView();
         };
 
-        if (self.isCollapsed) {
+        if (self.isCollapsed && (self.links.length > 0 || self.terminals.length > 0)) {
             super(chevronRightVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
         } else {
             super(chevronDownVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
@@ -191,10 +176,10 @@ export default class Station {
                             input: (event: Event) => {
                                 this._value = (event.target as HTMLTextAreaElement).value;
                             }
-                        }
+                        }, class: {folded: this.isCollapsed && (this.terminals.length > 0 || this.links.length > 0)}
                     }),
                     this.terminals.length === 0 ? new TerminalButtonAdd(this).render() : null,
-                    this.terminals.length > 0 ? h("div.terminals", this.terminals.map(terminal => terminal.render())) : null,
+                    this.terminals.length > 0 ? h("div.terminals",{class: {collapse: this.isCollapsed}} ,this.terminals.map(terminal => terminal.render())) : null,
                     ...links,
                 ]),
         ]);

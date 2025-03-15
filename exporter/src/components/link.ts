@@ -10,6 +10,7 @@ export enum Relationship {
 }
 
 export default class Link {
+    isCollapsed: boolean = false;
     private readonly _html: HTMLDivElement = document.createElement("div");
 
     constructor(
@@ -25,11 +26,11 @@ export default class Link {
 
     private render():VNode {
         this.parent.addLink(this);
-        return h(`div.link.${this.relationship}`, { props: { id: this.id }, key: this._id }, [this.right.render()]);
+        return h(`div.link.${this.relationship}`, { props: { id: this.id }, key: this._id, class: {collapse: this.isCollapsed} }, [this.right.render()]);
     }
 
     rerender() {
-        return h(`div.link.${this.relationship}`, { props: { id: this.id }, key: this._id }, [this.right.render()]);
+        return h(`div.link.${this.relationship}`, { props: { id: this.id }, key: this._id, class: {collapse: this.isCollapsed} }, [this.right.render()]);
     }
 
     clone(leftClone: Station|Terminal, editable: boolean = false): Link {
