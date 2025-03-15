@@ -3,6 +3,8 @@ import {h, VNode} from "snabbdom";
 import {patch} from "../common/snabbdom.setup";
 import {generateGUID} from "../common/utility.ts";
 
+import toHTML from "snabbdom-to-html";
+
 export default class ActionButton {
     private readonly _id = `button-${generateGUID()}`;
     private showDropdown: boolean = false;
@@ -53,5 +55,12 @@ export default class ActionButton {
             patch(this._vnode, this.render());
             document.removeEventListener("click", this.handleOutsideClick);
         }
+    }
+
+    toHtmlElement(): Node{
+        const el = document.createElement("div");
+        const s = toHTML(this.render());
+        el.innerHTML = s;
+        return el.firstChild as Node;
     }
 }

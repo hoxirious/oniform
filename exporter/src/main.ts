@@ -1,4 +1,4 @@
-import { h } from "snabbdom";
+import {h, VNode} from "snabbdom";
 import { patch } from "./common/snabbdom.setup.ts";
 import Oniform from "./components/oniform.ts";
 import Clipboard from "./components/clipboard.ts";
@@ -13,8 +13,13 @@ declare global {
     }
 }
 
-let vnode = null;
+let isPageInitialized = false;
+let vnode: VNode = h("div#oniform");
+// let toolbar: VNode = h("div#toolbar");
+
 const initPage = () => {
+    if (isPageInitialized) return;
+    isPageInitialized = true;
     initForm();
     const toolbar = document.getElementById("toolbar");
     if (!toolbar) {
@@ -50,8 +55,9 @@ const initPage = () => {
         } else {
             localStorage.setItem("clipboardStatus", "closed");
         }
-    }, undefined, ["icon"], "Toggle Clipboard");
-    toolbar.appendChild(clipboardButton.render().elm);
+    }, undefined, ["icon"], "Toggle Clipboard").render();
+
+    patch(toolbar, h("div#toolbar", clipboardButton));
 }
 
 const initForm = () => {
@@ -73,4 +79,4 @@ export const renderView = () => {
     vnode = patch(vnode, newNode);
 }
 
-document.addEventListener("DOMContentLoaded", initPage);
+document.addEventListener("DOMContentLoaded", initPage, {once: true});

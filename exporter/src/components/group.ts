@@ -130,7 +130,7 @@ export default class Group {
     ) {}
 
     render() {
-        const newNode = h("div.group_container", {props: {id: this._id}, key: this._id},
+        return h("div.group_container", {props: {id: this._id}, key: this._id},
             [h("div.buttons", [
                     this._parent && this._editable ? new GroupButtonDelete(this._parent, this).render() : undefined,
                     this._parent instanceof Oniform ? new GroupButtonAdd(this._parent,this).render() : undefined,
@@ -156,62 +156,6 @@ export default class Group {
                 ])
             ]
         )
-
-        return newNode;
-        // if (this._parent) {
-        //     if(this._editable) {
-        //         const deleteButton = new GroupButtonDelete(this._parent, this);
-        //         buttons.appendChild(deleteButton.button);
-        //
-        //         if (this._parent instanceof Oniform) {
-        //             const addButton = new GroupButtonAdd(this);
-        //             buttons.appendChild(addButton.button);
-        //         }
-        //
-        //         const copyButton = new GroupButtonCopy(this);
-        //         const pasteButton = new GroupButtonPaste(this);
-        //         const collapseButton = new GroupButtonCollapse(this);
-        //         buttons.appendChild(collapseButton.button);
-        //         buttons.appendChild(copyButton.button);
-        //         buttons.appendChild(pasteButton.button);
-        //     }
-        //     let parentLabel = this._parent.label;
-        //     let parentSignature = "";
-        //
-        //     if(this._parent instanceof Station) {
-        //         parentLabel = this._parent.parent.label;
-        //         parentSignature = "-Q";
-        //     }
-        //     else if(this._parent instanceof Terminal) {
-        //         parentLabel = this._parent.parent.parent.label;
-        //         parentSignature = "-O";
-        //     }
-        //     const parentLabelSplit = parentLabel.split(" ");
-        //     let parentIndex = parentLabelSplit[parentLabelSplit.length - 1]
-        //     // Remove signature if applicable
-        //     parentIndex = parentIndex.slice(0, -parentSignature.length);
-        //
-        //     // Group parentIndex.groupIndex(S/T)
-        //     this._label = `Group ${parentIndex ? parentIndex + "." : ""}${this._parent.findGroupIndex(this).toString()}${parentSignature}`;
-        //     inputElement.value = this._label;
-        // }
-
-        // buttons.appendChild(inputElement);
-        // this.html.appendChild(buttons);
-        //
-        // const stationDiv = document.createElement("div");
-        // stationDiv.classList.add("stations");
-        // if(this._stations.length == 0 && this._editable) {
-        //     group.appendChild(new StationButtonAdd(this).button);
-        // }
-        // this._stations.forEach(station => {
-        //     station.rerender();
-        //     stationDiv.appendChild(station.html)
-        // });
-        // group.appendChild(stationDiv);
-        //
-        // this._html.appendChild(group);
-        // this._html.scrollIntoView({behavior: "smooth", block: "center"});
     }
 
     rerender():VNode {
