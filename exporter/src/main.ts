@@ -15,7 +15,6 @@ declare global {
 
 let isPageInitialized = false;
 let vnode: VNode = h("div#oniform");
-// let toolbar: VNode = h("div#toolbar");
 
 const initPage = () => {
     if (isPageInitialized) return;
@@ -63,7 +62,7 @@ const initPage = () => {
 const initForm = () => {
     let form: Oniform;
     form = Oniform.instance;
-
+    console.log(document.documentElement);
     const oniformElement = document.getElementById("oniform");
     if (!oniformElement) {
         console.error("Oniform element not found");
@@ -71,6 +70,13 @@ const initForm = () => {
     }
     vnode = patch(oniformElement, form.render());
     renderView();
+    const clipboard = Clipboard.instance;
+    const clipboardElement = document.getElementById("clipboard");
+    if (!clipboardElement) {
+        console.error("Clipboard element not found");
+        return;
+    }
+    patch(clipboardElement, h("div#clipboard", clipboard.vnode));
     window.oniformInstance = form; // Attach the instance to the window object
 }
 
@@ -79,4 +85,4 @@ export const renderView = () => {
     vnode = patch(vnode, newNode);
 }
 
-document.addEventListener("DOMContentLoaded", initPage, {once: true});
+document.addEventListener("DOMContentLoaded", initPage);
