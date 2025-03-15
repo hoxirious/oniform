@@ -13,7 +13,6 @@ import chevronRightUrl from "../static/chevron-right.svg";
 import {generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 import {h, VNode} from "snabbdom";
-import {patch} from "../common/snabbdom.setup.ts";
 import {renderView} from "../main.ts";
 
 export class TerminalButtonAdd extends ActionButton {
@@ -30,7 +29,7 @@ export class TerminalButtonAdd extends ActionButton {
         {
             const siblingButton = new ActionButton("New option", () => {
                 parent.addEmptyTerminal(self);
-                parent.rerender();
+                parent.render();
             }, undefined, ["text"]);
 
             const groupDependantButton = new ActionButton("New sub-group", () => {
@@ -147,7 +146,6 @@ export default class Terminal {
             this.createTerminalElement(),
             ...links
             ]);
-        // this._html.scrollIntoView({ behavior: "smooth" });
     }
 
     private createTerminalElement(): VNode {
@@ -163,32 +161,6 @@ export default class Terminal {
             this.createButtons(),
             this.createInputElement()
            ]);
-        // const terminalElement = document.createElement("div");
-        // terminalElement.classList.add("terminal");
-        //
-        // const labelElement = this.createLabelElement();
-        // const inputElement = this.createInputElement();
-        //
-        // const buttons = document.createElement("div");
-        // buttons.classList.add("buttons");
-        // if (this._editable) {
-        //     const deleteButton = new TerminalButtonDelete(this. _parent, this).button;
-        //     const collapseButton = new TerminalButtonCollapse(this).button;
-        //     const addButton = new TerminalButtonAdd(this. _parent, this).button;
-        //     const copyButton = new TerminalButtonCopy(this).button;
-        //     const pasteButton = new TerminalButtonPaste(this).button;
-        //     buttons.appendChild(deleteButton);
-        //     buttons.appendChild(addButton);
-        //     buttons.appendChild(collapseButton);
-        //     buttons.appendChild(copyButton);
-        //     buttons.appendChild(pasteButton);
-        // }
-        // buttons.appendChild(labelElement);
-        //
-        // terminalElement.appendChild(buttons);
-        // terminalElement.appendChild(inputElement);
-        //
-        // return terminalElement;
     }
 
     private createLabelElement(): VNode {
@@ -212,9 +184,6 @@ export default class Terminal {
                 }
             }
         });
-    }
-    public rerender() {
-        return this.render();
     }
 
     public clone(editable: boolean = false, dumbStation?: Station): Terminal {
@@ -241,7 +210,7 @@ export default class Terminal {
             new Link(this, copiedObject, Relationship.DEPENDANT);
         }
 
-        this.rerender();
+        this.render();
     }
 
     get label(): string {
@@ -306,7 +275,6 @@ export default class Terminal {
         link.parent = this;
         this._links.push(link);
         renderView();
-        // this.parent.parent.rerender();
     }
 
     toObj () {

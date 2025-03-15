@@ -22,10 +22,6 @@ export default class Oniform {
         ]);
     }
 
-    rerender():VNode {
-        return this.render();
-    }
-
     private createButtons(): VNode {
         return h("div.buttons", [
             new ActionButton("Save", () => {
@@ -35,7 +31,7 @@ export default class Oniform {
             }, undefined, ["text"], "Save form").render(),
             new ActionButton("Reset",() => {
                 this.clear();
-                this.rerender();
+                this.render();
                 localStorage.removeItem("oniformInstance");
                 showSuccessPopup("Form cleared");
             }, undefined, ["text"], "Reset form" ).render()

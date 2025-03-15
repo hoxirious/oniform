@@ -3,7 +3,7 @@ import '../styles/group.css';
 import ActionButton from "./actionButton.ts";
 import Oniform from "./oniform.ts";
 import Clipboard from "./clipboard.ts";
-import {animateHighlight, generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import minusUrl from "../static/minus.svg";
 import plusUrl from "../static/plus.svg";
 import copyUrl from "../static/copy.svg";
@@ -13,8 +13,6 @@ import Link, {Relationship} from "./link.ts";
 import chevronDownUrl from "../static/chevron-down.svg";
 import chevronRightUrl from "../static/chevron-right.svg";
 import { h } from "snabbdom/build/h";
-import {patch} from "../common/snabbdom.setup.ts";
-import {VNode} from "snabbdom";
 import {renderView} from "../main.ts";
 
 export class GroupButtonAdd extends ActionButton {
@@ -116,7 +114,6 @@ export class GroupButtonPaste extends ActionButton {
     }
 }
 export default class Group {
-    private readonly _html: HTMLDivElement = document.createElement("div");
     isCollapsed: boolean = false;
 
     constructor(
@@ -165,10 +162,6 @@ export default class Group {
                     ])
             ]
         )
-    }
-
-    rerender():VNode {
-        return this.render();
     }
 
     clone(editable: boolean = false, parentClone?: Station|Terminal): Group {

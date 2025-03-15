@@ -3,9 +3,6 @@ import {h, VNode} from "snabbdom";
 import {patch} from "../common/snabbdom.setup";
 import {generateGUID} from "../common/utility.ts";
 
-import toHTML from "snabbdom-to-html";
-import {renderView} from "../main.ts";
-
 export default class ActionButton {
     private readonly _id = `button-${generateGUID()}`;
     showDropdown: boolean = false;
@@ -23,7 +20,6 @@ export default class ActionButton {
             _callback();
             if (_subButtons && this._vnode) {
                 this.showDropdown = !this.showDropdown;
-                console.log("showDropdown", this.showDropdown);
                 patch(this._vnode, this.render());
                 if (this.showDropdown) {
                     document.addEventListener("click", this.handleOutsideClick);
@@ -57,12 +53,5 @@ export default class ActionButton {
             patch(this._vnode, this.render());
             document.removeEventListener("click", this.handleOutsideClick);
         }
-    }
-
-    toHtmlElement(): Node{
-        const el = document.createElement("div");
-        const s = toHTML(this.render());
-        el.innerHTML = s;
-        return el.firstChild as Node;
     }
 }

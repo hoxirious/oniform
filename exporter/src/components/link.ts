@@ -4,10 +4,8 @@ import Group from "./group.ts";
 import "../styles/link.css";
 import {generateGUID} from "../common/utility.ts";
 import {h, VNode} from "snabbdom";
-import {patch} from "../common/snabbdom.setup.ts";
 
 export enum Relationship {
-    SIBLING = "sibling",
     DEPENDANT = "dependant"
 }
 
@@ -28,7 +26,6 @@ export default class Link {
     private render():VNode {
         this.parent.addLink(this);
         return h(`div.link.${this.relationship}`, { props: { id: this.id }, key: this._id }, [this.right.render()]);
-        // this._html.scrollIntoView({behavior: "smooth", block: "center"});
     }
 
     rerender() {

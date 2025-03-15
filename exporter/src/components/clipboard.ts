@@ -25,24 +25,19 @@ export default class Clipboard {
         }
     }
 
-    public rerender() {
-        this.render();
-    }
-
     get copiedObject(): Group|Station|Terminal|undefined {
         return this._copiedObject;
     }
 
     set copiedObject(copiedObject: Group|Station|Terminal) {
         this._copiedObject = copiedObject;
-        this.rerender();
+        this.render();
     }
 
      cloneCopiedObject(): Group|Station|Terminal|undefined {
         if(this._copiedObject) {
             return this._copiedObject.clone(true);
         }
-
         return undefined;
      }
 }

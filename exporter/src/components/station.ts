@@ -12,9 +12,8 @@ import Clipboard from "./clipboard.ts";
 import Link, {Relationship} from "./link.ts";
 import {generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
-import {h, vnode, VNode} from "snabbdom";
+import {h, VNode} from "snabbdom";
 import {renderView} from "../main.ts";
-import {patch} from "../common/snabbdom.setup.ts";
 
 export class StationButtonAdd extends ActionButton {
     constructor(parent: Group | Station | Terminal, self?: Station) {
@@ -169,7 +168,7 @@ export default class Station {
         const links = this.links.map(link => {
             return link.rerender();
         });
-        const newVnode = h("div.station_container", {props: {id: this._id}, key: this._id}, [
+        return h("div.station_container", {props: {id: this._id}, key: this._id}, [
             h("div.station",
                 {
                     style: {
@@ -199,69 +198,6 @@ export default class Station {
                     ...links,
                 ]),
         ]);
-        newVnode.dd
-        return newVnode;
-
-        // Buttons
-        // const buttons = document.createElement("div");
-        // buttons.classList.add("buttons");
-        // const buttonCollapse = new StationButtonCollapse(this).button;
-        // const buttonAdd = new StationButtonAdd(this._parent, this).button;
-        // const buttonDelete = new StationButtonDelete(this).button;
-        // const buttonCopy = new StationButtonCopy(this).button;
-        // const buttonPaste = new StationButtonPaste(this).button;
-        // if(this._editable) {
-        //     buttons.appendChild(buttonDelete);
-        //     buttons.appendChild(buttonAdd);
-        //     buttons.appendChild(buttonCollapse);
-        //     buttons.appendChild(buttonCopy);
-        //     buttons.appendChild(buttonPaste);
-        // }
-        //     buttons.appendChild(labelElement);
-        // station.appendChild(buttons);
-
-        // const textareaElement = document.createElement("textarea");
-        // textareaElement.classList.add("station_textarea");
-        // textareaElement.value = this._value;
-        // textareaElement.placeholder = "Enter question here";
-        // textareaElement.addEventListener("input", (event) => {
-        //     this._value = (event.target as HTMLTextAreaElement).value;
-        // });
-
-        // station.appendChild(textareaElement);
-
-        // this._html.appendChild(station);
-        // if(this._terminals.length == 0)
-        // {
-        //     const terminalElement = document.createElement("div");
-        //     terminalElement.classList.add("terminal");
-        //     terminalElement.appendChild(new TerminalButtonAdd(this).button);
-        //     if(this._editable) {
-        //         this._html.appendChild(terminalElement);
-        //     }
-        // }
-        // else  {
-        //     const terminals = document.createElement("div");
-        //     terminals.classList.add("terminals");
-        //     this._terminals.forEach(terminal =>
-        //     {
-        //         terminal.rerender();
-        //         terminals.appendChild(terminal.html);
-        //     }
-        //     );
-        //     this._html.appendChild(terminals);
-        // }
-        // this._links.forEach(link => {
-        //     link.html.classList.remove("collapse");
-        //     link.right.rerender();
-        //     this._html.appendChild(link.html)
-        // });
-        // this._html.scrollIntoView({behavior: "smooth", block: "center"});
-
-    }
-
-    rerender(): VNode {
-        return this.render();
     }
 
     clone(editable: boolean = false, parentClone?: Group | Station | Terminal): Station {
