@@ -21,8 +21,7 @@ export class StationButtonAdd extends ActionButton {
             super("New Question", () => {
                 parent.addEmptyStation();
             }, undefined, ["text"], "New Question");
-        }
-        else {
+        } else {
             const siblingButton = new ActionButton("New question", () => {
                 parent.addEmptyStation(self);
             }, undefined, ["text"], "New Question");
@@ -43,15 +42,16 @@ export class StationButtonAdd extends ActionButton {
 
             const actionItems = [siblingButton, dependantGroup, dependantStation, terminalButton];
 
-            super(h("img", { props: { src: plusUrl, alt: "Plus" } }), () => {}, actionItems, ["icon"], "New Station");
+            super(h("img", {props: {src: plusUrl, alt: "Plus"}}), () => {
+            }, actionItems, ["icon"], "New Station");
         }
     }
 }
 
 export class StationButtonCollapse extends ActionButton {
     constructor(self: Station) {
-        const chevronDownVNode = h("img", { props: { src: chevronDownUrl, alt: "Collapse All" } });
-        const chevronRightVNode = h("img", { props: { src: chevronRightUrl, alt: "Expand All" } });
+        const chevronDownVNode = h("img", {props: {src: chevronDownUrl, alt: "Collapse All"}});
+        const chevronRightVNode = h("img", {props: {src: chevronRightUrl, alt: "Expand All"}});
 
         const collapseCallback = () => {
             console.log("Collapse");
@@ -81,12 +81,12 @@ export class StationButtonCollapse extends ActionButton {
         }
     }
 }
+
 export class StationButtonDelete extends ActionButton {
     constructor(self: Station) {
-        const minusVNode = h("img", { props: { src: minusUrl, alt: "Delete" } });
+        const minusVNode = h("img", {props: {src: minusUrl, alt: "Delete"}});
 
         super(minusVNode, () => {
-            self.html.remove();
             self.parent.deleteStation(self);
         }, undefined, ["icon"], "Delete Station");
     }
@@ -94,7 +94,7 @@ export class StationButtonDelete extends ActionButton {
 
 export class StationButtonCopy extends ActionButton {
     constructor(self: Station) {
-        const copyVNode = h("img", { props: { src: copyUrl, alt: "Copy" } });
+        const copyVNode = h("img", {props: {src: copyUrl, alt: "Copy"}});
 
         super(copyVNode, () => {
             const previouslySelected = document.querySelector(".selected");
@@ -103,11 +103,11 @@ export class StationButtonCopy extends ActionButton {
             }
             Clipboard.instance.copiedObject = self.clone();
             showSuccessPopup("Question copied to clipboard", 1500);
-            self.html.classList.add("selected");
+            // self.html.classList.add("selected");
 
             const removeSelection = (event: Event) => {
                 if (event instanceof KeyboardEvent && event.key === "Escape") {
-                    self.html.classList.remove("selected");
+                    // self.html.classList.remove("selected");
                     document.removeEventListener("keydown", removeSelection);
                 }
             };
@@ -119,7 +119,7 @@ export class StationButtonCopy extends ActionButton {
 
 export class StationButtonPaste extends ActionButton {
     constructor(self: Station) {
-        const pasteVNode = h("img", { props: { src: pasteUrl, alt: "Paste" } });
+        const pasteVNode = h("img", {props: {src: pasteUrl, alt: "Paste"}});
 
         const actionItems = [
             new ActionButton("Paste as question", () => {
@@ -141,6 +141,7 @@ export class StationButtonPaste extends ActionButton {
 
 export default class Station {
     isCollapsed: boolean = false;
+
     constructor(
         private _parent: Group | Station | Terminal,
         private _root: Station = this,
@@ -151,9 +152,11 @@ export default class Station {
         private _html: HTMLDivElement = document.createElement("div"),
         private _editable: boolean = true,
         private _id: string = `station-${generateGUID()}`
-    ) {}
+    ) {
+    }
 
     render(): VNode {
+        this._label = `Question ${this._parent.findStationIndex(this)}`;
         const labelElement = h("input.station_label", {
             props: {disabled: true, value: this._label}, on: {
                 input: (event: Event) => {
@@ -165,29 +168,38 @@ export default class Station {
         const links = this.links.map(link => {
             return link.rerender();
         });
-        return h("div.station_container", {props: {id: this._id}, key: this._id}, [
-            h("div.station", [
-                h("div.buttons", [
-                    this._editable ? new StationButtonDelete(this).render() : null,
-                    this._editable ? new StationButtonAdd(this._parent, this).render() : null,
-                    this._editable ? new StationButtonCollapse(this).render() : null,
-                    this._editable ? new StationButtonCopy(this).render() : null,
-                    this._editable ? new StationButtonPaste(this).render() : null,
-                    labelElement,
-                ]),
-                h("textarea.station_textarea", {
-                    props: {value: this._value, placeholder: "Enter question here"}, on: {
-                        input: (event: Event) => {
-                            this._value = (event.target as HTMLTextAreaElement).value;
-                        }
+        const newVnode = h("div.station_container", {props: {id: this._id}, key: this._id}, [
+            h("div.station",
+                {
+                    style: {
+                        opacity: "0.8",
+                        top: "-0.5rem",
+                        transition: "opacity 0.3s, top 0.3s",
+                        delayed: {opacity: "1", top: "0"},
                     }
-                }),
-                this.terminals.length === 0 ? new TerminalButtonAdd(this).render() : null,
-                this.terminals.length > 0 ? h("div.terminals", this.terminals.map(terminal => terminal.render())) : null,
-                ...links,
-            ]),
+                }, [
+                    h("div.buttons", [
+                        this._editable ? new StationButtonDelete(this).render() : null,
+                        this._editable ? new StationButtonAdd(this._parent, this).render() : null,
+                        this._editable ? new StationButtonCollapse(this).render() : null,
+                        this._editable ? new StationButtonCopy(this).render() : null,
+                        this._editable ? new StationButtonPaste(this).render() : null,
+                        labelElement,
+                    ]),
+                    h("textarea.station_textarea", {
+                        props: {value: this._value, placeholder: "Enter question here"}, on: {
+                            input: (event: Event) => {
+                                this._value = (event.target as HTMLTextAreaElement).value;
+                            }
+                        }
+                    }),
+                    this.terminals.length === 0 ? new TerminalButtonAdd(this).render() : null,
+                    this.terminals.length > 0 ? h("div.terminals", this.terminals.map(terminal => terminal.render())) : null,
+                    ...links,
+                ]),
         ]);
-        // this._html.innerHTM
+        newVnode.dd
+        return newVnode;
 
         // Buttons
         // const buttons = document.createElement("div");
@@ -247,7 +259,7 @@ export default class Station {
 
     }
 
-    rerender():VNode {
+    rerender(): VNode {
         return this.render();
     }
 
@@ -257,26 +269,25 @@ export default class Station {
             this._root, this._value, this._label,
             [], [], undefined, editable);
 
-        this._terminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal));this._links.forEach(link => link.clone(stationClone, editable))
+        this._terminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal));
+        this._links.forEach(link => link.clone(stationClone, editable))
         return stationClone;
     }
 
     paste(pasteButton: ActionButton): void {
         const copiedObject = Clipboard.instance.cloneCopiedObject();
-        if(!copiedObject) {
+        if (!copiedObject) {
             showErrorPopup("Clipboard is empty");
             return;
         }
 
-        if(copiedObject instanceof Station) {
+        if (copiedObject instanceof Station) {
             pasteButton.actionItems?.classList.toggle("show");
             return;
-        }
-        else if (copiedObject instanceof Group) {
+        } else if (copiedObject instanceof Group) {
             copiedObject.parent = this;
             new Link(this, copiedObject, Relationship.DEPENDANT);
-        }
-        else {
+        } else {
             this.appendExistingTerminal(copiedObject);
         }
         renderView();
@@ -313,21 +324,19 @@ export default class Station {
     get value(): string {
         return this._value;
     }
+
     set value(value: string) {
         this._value = value;
     }
 
     addEmptyTerminal(prevTerminal?: Terminal) {
-        if(prevTerminal) {
+        if (prevTerminal) {
             const terminalIndex = this.findTerminalIndex(prevTerminal);
             const terminal = new Terminal(this);
             this._terminals.splice(terminalIndex, 0, terminal);
-            // animateHighlight(terminal.html);
-        }
-        else {
+        } else {
             const terminal = new Terminal(this);
             this._terminals.push(terminal);
-            // animateHighlight(terminal.html);
         }
 
         renderView();
@@ -344,12 +353,11 @@ export default class Station {
         newTerminal.parent = this;
         const prevTerminalIndex = this.findTerminalIndex(refTerminal);
         this._terminals.splice(prevTerminalIndex, 0, newTerminal);
-        // animateHighlight(newTerminal.html);
         renderView();
     }
 
     deleteTerminal(terminal: Terminal) {
-        const terminalIndex = this.findTerminalIndex(terminal)-1;
+        const terminalIndex = this.findTerminalIndex(terminal) - 1;
         this._terminals.splice(terminalIndex, 1);
         renderView();
     }
@@ -362,12 +370,10 @@ export default class Station {
 
     addEmptyStation() {
         const newStation = new Station(this);
-        // animateHighlight(newStation.html);
         new Link(this, newStation, Relationship.DEPENDANT);
     }
 
     addStationAfterReference(refStation: Station, newStation: Station) {
-        // animateHighlight(newStation.html);
         new Link(this, newStation, Relationship.DEPENDANT);
     }
 
@@ -389,13 +395,13 @@ export default class Station {
     findGroupIndex(group: Group): number {
         const index = this.links.findIndex(g => g.right.id === group.id);
         if (index == -1) return 1;
-        return (index+1);
+        return (index + 1);
     }
 
     findStationIndex(station: Station): number {
         const index = this.links.findIndex(g => g.right.id === station.id);
         if (index == -1) return 1;
-        return (index+1);
+        return (index + 1);
     }
 
     addLink(link: Link) {
@@ -420,10 +426,10 @@ export default class Station {
         }
     }
 
-    static from(obj: any, parent: Group|Station|Terminal): Station {
+    static from(obj: any, parent: Group | Station | Terminal): Station {
         const {id, value, label, terminals, links} = obj;
         const station = new Station(parent, undefined, value, label, [], [], undefined, true, id);
-        station.terminals =  terminals.map((terminal: any) => Terminal.from(terminal, station));
+        station.terminals = terminals.map((terminal: any) => Terminal.from(terminal, station));
         links.forEach((link: any) => Link.from(link, station));
         return station;
     }

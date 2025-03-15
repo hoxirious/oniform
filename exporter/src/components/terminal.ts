@@ -139,6 +139,7 @@ export default class Terminal {
     ) {}
 
     public render():VNode {
+       this._label =  `Option ${this._parent.label.split(" ").pop()}-${this._parent.findTerminalIndex(this).toString()}`;
         const links = this.links.map(link => {
             return link.rerender();
         });
@@ -150,7 +151,15 @@ export default class Terminal {
     }
 
     private createTerminalElement(): VNode {
-        return h("div.terminal", [
+        return h("div.terminal",
+                {
+                    style: {
+                        opacity: "0.8",
+                        top: "-0.5rem",
+                        transition: "opacity 0.3s, top 0.3s",
+                        delayed: {opacity: "1", top: "0"},
+                    }
+                },[
             this.createButtons(),
             this.createInputElement()
            ]);

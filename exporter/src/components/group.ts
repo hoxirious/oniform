@@ -92,11 +92,11 @@ export class GroupButtonCopy extends ActionButton {
             }
             Clipboard.instance.copiedObject = self.clone();
             showSuccessPopup("Group copied to clipboard");
-            self.html.classList.add("selected");
+            // self.html.classList.add("selected");
 
             const removeSelection = (event: Event) => {
                 if (event instanceof KeyboardEvent && event.key === "Escape") {
-                    self.html.classList.remove("selected");
+                    // self.html.classList.remove("selected");
                     document.removeEventListener("keydown", removeSelection);
                 }
             };
@@ -121,7 +121,7 @@ export default class Group {
 
     constructor(
         private _parent: Oniform|Station|Terminal,
-        private _label: string = "Group 1",
+        private _label: string = `Group ${_parent.findGroupIndex(this)}`,
         private _stations: Station[] = [],
         private readonly _scoreExpression: string = "",
         private _score: number = 0,
@@ -130,30 +130,39 @@ export default class Group {
     ) {}
 
     render() {
+        this._label = `Group ${this._parent.findGroupIndex(this)}`
         return h("div.group_container", {props: {id: this._id}, key: this._id},
             [h("div.buttons", [
-                    this._parent && this._editable ? new GroupButtonDelete(this._parent, this).render() : undefined,
-                    this._parent instanceof Oniform && this._editable ? new GroupButtonAdd(this._parent,this).render() : undefined,
-                    this._editable ? new GroupButtonCopy(this).render() : null,
-                    this._editable ? new GroupButtonPaste(this).render() : null,
-                    this._editable ? new GroupButtonCollapse(this).render() : null,
-                    h("input.group_label", {
-                        props: {
-                            value: this._label,
-                        },
-                        on: {
-                            input: (event: Event) => {
-                                this._label = (event.target as HTMLInputElement).value;
-                            }
+                this._parent && this._editable ? new GroupButtonDelete(this._parent, this).render() : undefined,
+                this._parent instanceof Oniform && this._editable ? new GroupButtonAdd(this._parent, this).render() : undefined,
+                this._editable ? new GroupButtonCopy(this).render() : null,
+                this._editable ? new GroupButtonPaste(this).render() : null,
+                this._editable ? new GroupButtonCollapse(this).render() : null,
+                h("input.group_label", {
+                    props: {
+                        value: this._label,
+                    },
+                    on: {
+                        input: (event: Event) => {
+                            this._label = (event.target as HTMLInputElement).value;
                         }
-                    })
-                ]),
-                h("div.group", [
-                    h("div.stations", [
-                        this.stations.length === 0 ? new StationButtonAdd(this).render() : null,
-                        ...this.stations.map(station => station.render())
+                    }
+                })
+            ]),
+                h("div.group",
+                    {
+                        style: {
+                            opacity: "0.8",
+                            top: "-0.5rem",
+                            transition: "opacity 0.3s, top 0.3s",
+                            delayed: {opacity: "1", top: "0"},
+                        }
+                    }, [
+                        h("div.stations", [
+                            this.stations.length === 0 ? new StationButtonAdd(this).render() : null,
+                            ...this.stations.map(station => station.render())
+                        ])
                     ])
-                ])
             ]
         )
     }

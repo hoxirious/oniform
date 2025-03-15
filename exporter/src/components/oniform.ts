@@ -1,7 +1,7 @@
 import {h, VNode} from "snabbdom";
 import Group, {GroupButtonAdd} from "./group.ts";
 import "../styles/oniform.css";
-import {animateHighlight, generateGUID, showSuccessPopup} from "../common/utility.ts";
+import {generateGUID, showSuccessPopup} from "../common/utility.ts";
 import ActionButton from "./actionButton.ts";
 import {renderView} from "../main.ts";
 
@@ -15,13 +15,11 @@ export default class Oniform {
 
 
     render(): VNode {
-        const newNode = h(`form#${this._id}.oniform`, {key: this._id}, [
+        return h(`form#${this._id}.oniform`, {key: this._id}, [
             this.createButtons(),
             this._groups.length === 0 ? new GroupButtonAdd(this).render() : null,
             ...this._groups.map(group => group.render())
         ]);
-
-        return newNode;
     }
 
     rerender():VNode {
@@ -53,14 +51,11 @@ export default class Oniform {
         if (prevGroup) {
             const prevGroupIndex = this.findGroupIndex(prevGroup);
             const group = new Group(this, `Group ${prevGroupIndex + 1}`);
-
             this._groups.splice(prevGroupIndex, 0, group);
-            // animateHighlight(group.html);
         }
         else {
             const group = new Group(this);
             this._groups.push(group);
-            // animateHighlight(group.html);
         }
         renderView();
     }
