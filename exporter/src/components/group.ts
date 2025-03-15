@@ -269,6 +269,7 @@ export default class Group {
     static from (obj: any, parent: Oniform|Station|Terminal): Group {
         const {label, stations, scoreExpression, score, id} = obj;
         const group = new Group(parent, label, [], scoreExpression, score, true, id);
+        console.log(group);
         group.stations = stations.map((station: any) => Station.from(station, group))
         return group;
     }

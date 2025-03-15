@@ -61,6 +61,7 @@ const initPage = () => {
 
 const initForm = () => {
     let form: Oniform;
+    // initialize empty form
     form = Oniform.instance;
     const oniformElement = document.getElementById("oniform");
     if (!oniformElement) {
@@ -68,6 +69,13 @@ const initForm = () => {
         return;
     }
     vnode = patch(oniformElement, form.render());
+    renderView();
+
+    // initialize cache if available
+    const serializedForm = localStorage.getItem("oniformInstance");
+    if (serializedForm) {
+        Oniform.deserialize(serializedForm);
+    }
     renderView();
     const clipboard = Clipboard.instance;
     const clipboardElement = document.getElementById("clipboard");
