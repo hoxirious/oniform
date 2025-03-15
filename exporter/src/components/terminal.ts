@@ -102,11 +102,11 @@ export class TerminalButtonCopy extends ActionButton {
 
             Clipboard.instance.copiedObject = self.clone();
             showSuccessPopup("Option copied to clipboard", 1500);
-            self.html.classList.add("selected");
+            // self.html.classList.add("selected");
 
             const removeSelection = (event: Event) => {
                 if (event instanceof KeyboardEvent && event.key === "Escape") {
-                    self.html.classList.remove("selected");
+                    // self.html.classList.remove("selected");
                     document.removeEventListener("keydown", removeSelection);
                 }
             };
@@ -151,7 +151,7 @@ export default class Terminal {
 
     private createTerminalElement(): VNode {
         return h("div.terminal", [
-            this._editable ? this.createButtons() : null,
+            this.createButtons(),
             this.createInputElement()
            ]);
         // const terminalElement = document.createElement("div");
