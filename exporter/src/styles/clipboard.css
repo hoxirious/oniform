@@ -1,4 +1,4 @@
-#clipboard {
+#sidebar {
     display: none;
     position: fixed;
     right: 4rem;
@@ -17,11 +17,11 @@
     margin-top: 2rem;
 }
 
-#clipboard > * {
+#sidebar > * {
     direction: ltr;
 }
 
-#clipboard.show {
+#sidebar.show {
     display: flex;
 }
 

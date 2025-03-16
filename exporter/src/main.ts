@@ -14,6 +14,7 @@ declare global {
 
 let isPageInitialized = false;
 let vnode: VNode = h("div#oniform");
+let sidebarVnode: VNode = h("div#sidebar");
 
 const initPage = () => {
     if (isPageInitialized) return;
@@ -25,26 +26,24 @@ const initPage = () => {
         return;
     }
 
-    const clipboardElement = document.getElementById("clipboard");
-    if (!clipboardElement) {
-        console.error("Clipboard element not found");
-        return;
-    }
-    // Check cache for clipboard status
-    const clipboardStatus = localStorage.getItem("clipboardStatus");
-    if (clipboardStatus === "closed") {
-        clipboardElement.classList.remove("show");
-    } else {
-        clipboardElement.classList.add("show");
-    }
-
     const clipboardButton = new ActionButton("Clipboard", () => {
-        const clipboardElement = document.getElementById("clipboard");
+        const clipboardElement = document.getElementById("sidebar");
         if (!clipboardElement) {
             console.error("Clipboard element not found");
             return;
         }
-        clipboardElement.classList.toggle("show");
+        const newClipboardVnode = h("div#sidebar", {key: "clipboard"}, Clipboard.instance.vnode);
+        console.log(newClipboardVnode);
+        const tempSidebarVnode = patch(sidebarVnode, newClipboardVnode);
+        console.log(tempSidebarVnode);
+
+        if(tempSidebarVnode.key == newClipboardVnode.key) {
+            clipboardElement.classList.toggle("show");
+        }
+        else {
+            clipboardElement.classList.add("show");
+        }
+        sidebarVnode = tempSidebarVnode;
 
         // Save the status to cache
         if (clipboardElement.classList.contains("show")) {
@@ -55,7 +54,21 @@ const initPage = () => {
     }, undefined, ["button"], "Toggle Clipboard").render();
 
     const reviewButton = new ActionButton("Review", () => {
-        console.log("Playground button clicked");
+        const clipboardElement = document.getElementById("sidebar");
+        if (!clipboardElement) {
+            console.error("Clipboard element not found");
+            return;
+        }
+        const newReviewVnode = h("div#sidebar", {key: "review"}, [h("h2", "Review")]);
+        const tempSidebarVnode = patch(sidebarVnode, newReviewVnode);
+        if (tempSidebarVnode.key === newReviewVnode.key) {
+            clipboardElement.classList.toggle("show");
+        }
+        else {
+            clipboardElement.classList.add("show");
+        }
+        sidebarVnode = tempSidebarVnode;
+
     }, undefined, ["button"], "Toggle Review").render();
 
     const libraryButton = new ActionButton("Library", () => {
@@ -84,12 +97,12 @@ const initForm = () => {
     }
     renderView();
     const clipboard = Clipboard.instance;
-    const clipboardElement = document.getElementById("clipboard");
+    const clipboardElement = document.getElementById("sidebar");
     if (!clipboardElement) {
         console.error("Clipboard element not found");
         return;
     }
-    patch(clipboardElement, h("div#clipboard", clipboard.vnode));
+    sidebarVnode = patch(clipboardElement, h("div#sidebar", clipboard.vnode));
     window.oniformInstance = form; // Attach the instance to the window object
 }
 
