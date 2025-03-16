@@ -63,11 +63,11 @@ input:focus, textarea:focus {
   margin: auto 0 auto auto;
   width: 3rem;
   position: sticky;
-  top: 30%;
-  right: 0;
-  background-color: rgba(63, 67, 70, 0.5);
+  right: 0.5rem;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 0.5rem;
 }

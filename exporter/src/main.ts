@@ -2,7 +2,6 @@ import {h, VNode} from "snabbdom";
 import { patch } from "./common/snabbdom.setup.ts";
 import Oniform from "./components/oniform.ts";
 import Clipboard from "./components/clipboard.ts";
-import clipboard from "./static/clipboard.svg";
 import ActionButton from "./components/actionButton.ts";
 import "./styles/clipboard.css";
 
@@ -26,7 +25,6 @@ const initPage = () => {
         return;
     }
 
-    const clipboardIcon = h("img", { props: { src: clipboard, alt: "Toggle Clipboard" } });
     const clipboardElement = document.getElementById("clipboard");
     if (!clipboardElement) {
         console.error("Clipboard element not found");
@@ -40,7 +38,7 @@ const initPage = () => {
         clipboardElement.classList.add("show");
     }
 
-    const clipboardButton = new ActionButton(clipboardIcon, () => {
+    const clipboardButton = new ActionButton("Clipboard", () => {
         const clipboardElement = document.getElementById("clipboard");
         if (!clipboardElement) {
             console.error("Clipboard element not found");
@@ -54,9 +52,17 @@ const initPage = () => {
         } else {
             localStorage.setItem("clipboardStatus", "closed");
         }
-    }, undefined, ["icon"], "Toggle Clipboard").render();
+    }, undefined, ["button"], "Toggle Clipboard").render();
 
-    patch(toolbar, h("div#toolbar", clipboardButton));
+    const reviewButton = new ActionButton("Review", () => {
+        console.log("Playground button clicked");
+    }, undefined, ["button"], "Toggle Review").render();
+
+    const libraryButton = new ActionButton("Library", () => {
+        console.log("Library button clicked");
+    }, undefined, ["button"], "Toggle Library").render();
+
+    patch(toolbar, h("div#toolbar", [clipboardButton, reviewButton, libraryButton]));
 }
 
 const initForm = () => {
