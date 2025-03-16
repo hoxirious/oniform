@@ -70,4 +70,5 @@ input:focus, textarea:focus {
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+  top: 5rem;
 }

@@ -135,7 +135,7 @@ export default class Group {
             ]),
                 h("div.group",
                     {
-                        style: {
+                        styles: {
                             opacity: "0.8",
                             top: "-0.5rem",
                             transition: "opacity 0.3s, top 0.3s",
@@ -154,7 +154,7 @@ export default class Group {
 
     clone(editable: boolean = false, parentClone?: Station|Terminal): Group {
         const cloneGroup = new Group(parentClone ?? Oniform.instance, this._label, [], this._scoreExpression, this._score, editable);
-        this._stations.map(station => station.clone(editable, cloneGroup)).forEach(station => cloneGroup.appendExistingStation(station));
+        this._stations.map(station => station.clone(editable, cloneGroup)).forEach(station => cloneGroup.appendExistingStation(station, true));
         return cloneGroup;
     }
 
@@ -174,7 +174,7 @@ export default class Group {
             }
         }
         else if(copiedObject instanceof Station) {
-            this.appendExistingStation(copiedObject);
+            this.appendExistingStation(copiedObject, true);
         }
         else {
             showErrorPopup("Cannot copy Option in Group.", 2000);
@@ -196,10 +196,10 @@ export default class Group {
         renderView();
     }
 
-    appendExistingStation(station: Station) {
+    appendExistingStation(station: Station, noRender: boolean = false) {
         station.parent = this;
         this._stations.push(station);
-        renderView();
+        if(!noRender) renderView();
     }
 
     addStationAfterReference(refStation: Station, newStation: Station) {

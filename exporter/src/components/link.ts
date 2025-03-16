@@ -25,7 +25,7 @@ export default class Link {
     }
 
     private render():VNode {
-        this.parent.addLink(this);
+        this.parent.addLink(this, !this._editable);
         return h(`div.link.${this.relationship}`, { props: { id: this.id }, key: this._id, class: {collapse: this.isCollapsed} }, [this.right.render()]);
     }
 

@@ -141,7 +141,7 @@ export default class Terminal {
     private createTerminalElement(): VNode {
         return h("div.terminal",
                 {
-                    style: {
+                    styles: {
                         opacity: "0.8",
                         top: "-0.5rem",
                         transition: "opacity 0.3s, top 0.3s",
@@ -261,13 +261,13 @@ export default class Terminal {
         new Link(this, newStation, Relationship.DEPENDANT);
     }
 
-    public addLink(link: Link) {
+    public addLink(link: Link, noRender: boolean = false) {
         link.parent = this;
         this._links.push(link);
-        renderView();
+        if(!noRender) renderView();
     }
 
-    toObj () {
+    toObj(): any {
         const {id, label, value, links} = this;
         return {
             id,

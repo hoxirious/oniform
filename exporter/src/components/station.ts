@@ -156,7 +156,7 @@ export default class Station {
         return h("div.station_container", {props: {id: this._id}, key: this._id}, [
             h("div.station",
                 {
-                    style: {
+                    styles: {
                         opacity: "0.8",
                         top: "-0.5rem",
                         transition: "opacity 0.3s, top 0.3s ",
@@ -191,7 +191,7 @@ export default class Station {
             this._root, this._value, this._label,
             [], [], undefined, editable);
 
-        this._terminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal));
+        this._terminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal, true));
         this._links.forEach(link => link.clone(stationClone, editable))
         return stationClone;
     }
@@ -211,7 +211,7 @@ export default class Station {
             copiedObject.parent = this;
             new Link(this, copiedObject, Relationship.DEPENDANT);
         } else if (copiedObject instanceof Terminal) {
-            this.appendExistingTerminal(copiedObject);
+            this.appendExistingTerminal(copiedObject, true);
         }
     }
 
@@ -264,10 +264,10 @@ export default class Station {
         renderView();
     }
 
-    appendExistingTerminal(terminal: Terminal) {
+    appendExistingTerminal(terminal: Terminal, noRender: boolean = false) {
         terminal.parent = this;
         this._terminals.push(terminal);
-        renderView();
+        if (!noRender) renderView();
     }
 
     addTerminalAfterReference(refTerminal: Terminal, newTerminal: Terminal) {
@@ -300,14 +300,12 @@ export default class Station {
 
     deleteStation(station: Station) {
         const linkIndex = this.links.findIndex(g => g.right.id === station.id);
-        this.links[linkIndex].html.remove();
         this.links.splice(linkIndex, 1);
         renderView();
     }
 
     deleteGroup(group: Group) {
         this.links.forEach(link => console.log(link.right.id));
-        console.log(group.id);
         const linkIndex = this.links.findIndex(g => g.right.id === group.id);
         this.links.splice(linkIndex, 1);
         renderView();
@@ -325,9 +323,9 @@ export default class Station {
         return (index + 1);
     }
 
-    addLink(link: Link) {
+    addLink(link: Link, noRender: boolean = false) {
         this.links.push(link);
-        renderView();
+        if(!noRender) renderView();
     }
 
 
@@ -336,7 +334,7 @@ export default class Station {
     }
 
 
-    toObj() {
+    toObj(): any {
         const {id, value, label, terminals, links} = this;
         return {
             id,
