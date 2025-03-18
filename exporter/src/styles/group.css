@@ -15,6 +15,7 @@
     min-width: 35rem;
     width: fit-content;
     height: fit-content;
+    min-height: 4rem;
     padding: 1rem;
     position: relative;
     display: flex;
@@ -26,6 +27,10 @@
 .group.folded {
     border-right: 0.5rem solid #cade8d;
     width: 30rem;
+}
+
+.group > .stations.collapse {
+    height: 0;
 }
 
 .group_label {

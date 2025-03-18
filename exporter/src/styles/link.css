@@ -4,6 +4,9 @@
     border-left-style: groove;
 }
 
+.link.collapse {
+    height: 0;
+}
 .link.dependant {
     margin-left: 1rem;
 }

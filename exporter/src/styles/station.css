@@ -39,3 +39,7 @@
     border-right: 0.5rem solid #cade8d;
     width: 30rem;
 }
+
+.station > .terminals.collapse {
+    height: 0;
+}
