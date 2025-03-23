@@ -2,6 +2,7 @@ import {h} from "snabbdom";
 import {Question} from "./question.ts";
 import Group from "./group.ts";
 import {Review} from "./review.ts";
+import "../styles/collection.css";
 
 export class Collection {
     questions: Map<string, Question> = new Map();
