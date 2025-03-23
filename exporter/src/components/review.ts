@@ -1,5 +1,4 @@
 import {h} from "snabbdom";
-import Oniform from "./oniform.ts";
 import {Collection} from "./collection.ts";
 import Group from "./group.ts";
 
