@@ -1,0 +1,18 @@
+.question {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem 0;
+}
+
+.question select {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem 0;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.question select > option {
+    color: white;
+    background-color: #cccccc;
+}

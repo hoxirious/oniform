@@ -4,6 +4,7 @@ import {Option} from "./option.ts";
 import {Collection} from "./collection.ts";
 import {renderReview} from "../main.ts";
 import {Review} from "./review.ts";
+import "../styles/question.css";
 
 export class Question {
     parent: Collection;
@@ -11,6 +12,7 @@ export class Question {
     label: string = "";
     id: string = "";
     selectedOptionId: string = "nil";
+    subQuestions: Question[] = [];
 
     constructor(station: Station, parent: Collection) {
         this.parent = parent;
@@ -44,8 +46,7 @@ export class Question {
                     Review.instance.collections.set(dependency.id, dependency);
                     console.log("Collection added to review");
                 } else {
-                    this.parent.questions.set(dependency.id, dependency);
-                    console.log(dependency);
+                    this.subQuestions.push(dependency);
                 }
             });
         }
@@ -58,14 +59,23 @@ export class Question {
                 if (previousDependency instanceof Collection) {
                     Review.instance.collections.delete(previousDependency.id);
                 } else {
-                    this.parent.questions.delete(previousDependency.id);
+                    const stack: Question[] = [previousDependency];
+                    while (stack.length > 0) {
+                        const current = stack.pop();
+                        if (current) {
+                            stack.push(...current.subQuestions);
+                            current.subQuestions = [];
+                            current.selectedOptionId = "nil";
+                        }
+                    }
+                    this.subQuestions = [];
                 }
             });
         }
     }
 
     render() {
-        return h("div", [
+        return h("div.question", [
             h("label", {props: {for: this.id}}, this.label),
             h("select", {
                 props: {id: this.id},
@@ -73,7 +83,8 @@ export class Question {
             }, [
                 h("option", {props: {id: "nil"}}, ["Select an option"]),
                 ...Array.from(this.options.values()).map(option => option.render())
-            ])
+            ]),
+            ...this.subQuestions.map(subQuestion => subQuestion.render())
         ]);
     }
 }
