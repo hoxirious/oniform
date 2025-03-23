@@ -4,7 +4,7 @@ import Group from "./group.ts";
 import {Review} from "./review.ts";
 
 export class Collection {
-    questions: Question[] = [];
+    questions: Map<string, Question> = new Map();
     label: string = "";
     parent: Review;
     id: string = "";
@@ -15,16 +15,16 @@ export class Collection {
     ) {
         this.id = group.id;
         this.label = group.label;
-        this.questions = group.stations.map(
-            station => new Question(station, this)
-        );
+        group.stations.forEach(station => {
+            this.questions.set(station.id, new Question(station, this));
+        });
         this.parent = review;
     }
 
     render() {
         return h("div.set", [
             h("div", [this.label]),
-            ...this.questions.map(question => question.render())
+            ...Array.from(this.questions.values()).map(question => question.render())
         ])
     }
 }

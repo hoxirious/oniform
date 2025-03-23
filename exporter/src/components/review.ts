@@ -1,15 +1,18 @@
 import {h} from "snabbdom";
 import Oniform from "./oniform.ts";
 import {Collection} from "./collection.ts";
+import Group from "./group.ts";
 
 export class Review {
     static instance: Review = new Review();
     collections: Map<string, Collection> = new Map();
 
-    constructor() {
-        Oniform.instance.groups.forEach(group => {
-            this.collections.set(group.id, new Collection(group,this));
-        })
+    constructor(groups?: Group[]) {
+        if (groups) {
+            groups.forEach(group => {
+                this.collections.set(group.id, new Collection(group, this));
+            })
+        }
     }
 
     render() {

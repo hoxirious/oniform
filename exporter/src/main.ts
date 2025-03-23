@@ -58,7 +58,7 @@ const initPage = () => {
             console.error("Clipboard element not found");
             return;
         }
-        const newReviewVnode = new Review().render();
+        const newReviewVnode = Review.instance.render();
         const tempSidebarVnode = patch(sidebarVnode, newReviewVnode);
         if (tempSidebarVnode.key === newReviewVnode.key) {
             clipboardElement.classList.toggle("show");
@@ -108,7 +108,9 @@ const initForm = () => {
 export const renderView = () => {
     const newNode = Oniform.instance.render();
     vnode = patch(vnode, newNode);
-    renderReview();
+    Review.instance = new Review(Oniform.instance.groups);
+    const newReviewVnode = Review.instance.render();
+    sidebarVnode = patch(sidebarVnode, newReviewVnode);
 }
 
 export const renderReview = () => {
