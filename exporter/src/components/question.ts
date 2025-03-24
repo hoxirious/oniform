@@ -14,8 +14,7 @@ export class Question {
     selectedOptionId: string = "nil";
     optionSubQuestions: Question[] = [];
     subQuestions: Question[] = [];
-    isCompleted: boolean = this.options.size > 0 ?
-        Array.from(this.options.values()).every(option => option.isCompleted) : false;
+    isCompleted: boolean = this.calculateIsCompleted();
 
     constructor(station: Station, parent: Collection) {
         this.parent = parent;
@@ -29,22 +28,34 @@ export class Question {
         });
     }
 
+    calculateIsCompleted(): boolean {
+        if (this.selectedOptionId === "nil") {
+            this.isCompleted = false;
+            return this.isCompleted;
+        }
+
+        const selectedOption = this.options.get(this.selectedOptionId);
+        this.isCompleted = selectedOption ? selectedOption.calculateIsCompleted() : false;
+        return this.isCompleted;
+    }
+
     private handleChange(event: Event): void {
         const target = event.target as HTMLSelectElement;
-        const selectedOption = target.options[target.selectedIndex];
-        if (selectedOption.id !== this.selectedOptionId) {
-            if (selectedOption.id !== "nil") {
-                this.addDependencies(selectedOption.id);
-                if(this.optionSubQuestions.length === 0) {
-                    console.log("Question completed", selectedOption.label);
-                    this.isCompleted = true;
-                }
-            } else {
-                this.removeOutdatedDependencies();
+        const selectedOptionId = target.options[target.selectedIndex].id;
+
+        if (selectedOptionId === this.selectedOptionId) return;
+
+        if (selectedOptionId !== "nil") {
+            this.addDependencies(selectedOptionId);
+            if (this.optionSubQuestions.length === 0) {
+                this.calculateIsCompleted();
             }
-            this.selectedOptionId = selectedOption.id;
-            renderReview();
+        } else {
+            this.removeOutdatedDependencies();
         }
+
+        this.selectedOptionId = selectedOptionId;
+        renderReview();
     }
 
     private addDependencies(optionId: string): void {
@@ -85,7 +96,6 @@ export class Question {
     }
 
     render(): VNode {
-        this.isCompleted = this.options.size > 0 ? Array.from(this.options.values()).every(option => option.isCompleted) : this.isCompleted;
         return h("div.question", [
             h("label", {props: {for: this.id}}, this.label),
             h("select", {
@@ -96,9 +106,8 @@ export class Question {
                 ...Array.from(this.options.values()).map(option => option.render())
             ]),
             ...this.optionSubQuestions.map(subQuestion => subQuestion.render()),
-            ...(this.isCompleted ?
-                this.subQuestions.map(subQuestion => subQuestion.render()) : []),
-            h("div", [(this.isCompleted && this.subQuestions.length > 0).toString()])
+            ...(this.calculateIsCompleted() ?
+                this.subQuestions.map(subQuestion => subQuestion.render()) : [])
         ]);
     }
 }
