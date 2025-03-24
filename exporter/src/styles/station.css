@@ -10,7 +10,7 @@
     flex-direction: column;
     min-width: 30rem;
     width: fit-content;
-    padding: 0rem 1rem 0;
+    padding: 0 1rem 0;
     position: relative;
 }
 
@@ -37,7 +37,7 @@
 }
 
 .station_textarea.folded{
-    border-right: 0.5rem solid #cade8d;
+    border-right: 1rem solid #ffc107;
     width: 30rem;
 }
 

@@ -6,7 +6,7 @@
     justify-content: flex-end;
     align-items: flex-end;
     gap: 1rem;
-    border-left: 0.1rem solid #cade8d;
+    border-left: 0.1rem solid #d0d0d0;
     border-bottom-left-radius: 1rem;
 }
 
@@ -26,6 +26,17 @@
     position: relative;
 }
 
+.terminal::after {
+    content: '';
+    position: absolute;
+    bottom: -0.75rem;
+    left: -2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: url('../static/curve.svg') no-repeat;
+    background-size: cover;
+}
+
 .terminal_label {
     font-size: 1rem;
     padding-left: 1rem;
@@ -39,10 +50,11 @@
     border-radius: 4px;
     font-family: Arial, sans-serif;
     font-size: 14px;
-    bog-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
 }
 
 .terminal_input.folded {
-    border-right: 0.5rem solid #cade8d;
+    border-right: 1rem solid #ffc107;
     width: 30rem;
 }

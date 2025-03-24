@@ -1,5 +1,5 @@
 .group_container {
-    padding: 1rem 1rem 0rem 1rem;
+    padding: 1rem 1rem 0 1rem;
 }
 
 .group_container .buttons, .station_container .buttons, .terminal_container .buttons {
@@ -24,7 +24,7 @@
 }
 
 .group.folded {
-    border-right: 0.5rem solid #cade8d;
+    border-right: 1rem solid #ffc107;
     width: 30rem;
 }
 
