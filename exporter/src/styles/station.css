@@ -10,13 +10,12 @@
     flex-direction: column;
     min-width: 30rem;
     width: fit-content;
-    padding: 0 1rem 0;
+    padding: 1rem;
     position: relative;
 }
 
 .station {
     position: relative;
-    padding-top: 1rem;
 }
 
 .station_label {
