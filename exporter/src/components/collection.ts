@@ -22,7 +22,7 @@ export class Collection {
         this.parent = review;
     }
 
-    render() {
+    render(): VNode {
         return h("div.collection", [
             h("div", [this.label]),
             ...Array.from(this.questions.values()).map(question => question.render())

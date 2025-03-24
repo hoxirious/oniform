@@ -1,4 +1,4 @@
-import {h} from "snabbdom";
+import {h, VNode} from "snabbdom";
 import Station from "./station.ts";
 import {Option} from "./option.ts";
 import {Collection} from "./collection.ts";
@@ -12,7 +12,10 @@ export class Question {
     label: string = "";
     id: string = "";
     selectedOptionId: string = "nil";
+    optionSubQuestions: Question[] = [];
     subQuestions: Question[] = [];
+
+    isCompleted: boolean = false;
 
     constructor(station: Station, parent: Collection) {
         this.parent = parent;
@@ -20,6 +23,9 @@ export class Question {
         this.id = station.id;
         station.terminals.forEach(terminal => {
             this.options.set(terminal.id, new Option(terminal, parent));
+        });
+        this.subQuestions = station.links.map(link => {
+            return new Question(link.right as Station, parent);
         });
     }
 
@@ -29,6 +35,10 @@ export class Question {
         if (selectedOption.id !== this.selectedOptionId) {
             if (selectedOption.id !== "nil") {
                 this.addDependencies(selectedOption.id);
+                if(this.optionSubQuestions.length === 0) {
+                    console.log("Question completed", selectedOption.label);
+                    this.isCompleted = true;
+                }
             } else {
                 this.removeOutdatedDependencies();
             }
@@ -46,7 +56,7 @@ export class Question {
                     Review.instance.collections.set(dependency.id, dependency);
                     console.log("Collection added to review");
                 } else {
-                    this.subQuestions.push(dependency);
+                    this.optionSubQuestions.push(dependency);
                 }
             });
         }
@@ -63,18 +73,19 @@ export class Question {
                     while (stack.length > 0) {
                         const current = stack.pop();
                         if (current) {
-                            stack.push(...current.subQuestions);
-                            current.subQuestions = [];
+                            stack.push(...current.optionSubQuestions);
+                            current.optionSubQuestions = [];
                             current.selectedOptionId = "nil";
                         }
                     }
-                    this.subQuestions = [];
+                    this.optionSubQuestions = [];
                 }
             });
         }
     }
 
-    render() {
+    render(): VNode {
+        this.isCompleted = this.optionSubQuestions.length > 0 ? this.optionSubQuestions.every(subQuestion => subQuestion.isCompleted) : this.isCompleted;
         return h("div.question", [
             h("label", {props: {for: this.id}}, this.label),
             h("select", {
@@ -84,7 +95,10 @@ export class Question {
                 h("option", {props: {id: "nil"}}, ["Select an option"]),
                 ...Array.from(this.options.values()).map(option => option.render())
             ]),
-            ...this.subQuestions.map(subQuestion => subQuestion.render())
+            ...this.optionSubQuestions.map(subQuestion => subQuestion.render()),
+            ...(this.isCompleted ?
+                this.subQuestions.map(subQuestion => subQuestion.render()) : []),
+            h("div", [(this.isCompleted && this.subQuestions.length > 0).toString()])
         ]);
     }
 }

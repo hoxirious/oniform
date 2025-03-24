@@ -13,6 +13,7 @@ export class Option {
     id: string = "";
     isCompleted: boolean = false;
     nextDependencies: (Collection|Question)[] = [];
+
     constructor(terminal: Terminal, parentCollection: Collection) {
         this.value = terminal.value;
         this.id = terminal.id;
@@ -23,6 +24,7 @@ export class Option {
                 new Question(link.right as Station, parentCollection);
         })
     }
+
     render() {
         return h("option", {props: {id: this.id}}, [this.value]);
     }
