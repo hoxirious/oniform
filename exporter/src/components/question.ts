@@ -14,8 +14,8 @@ export class Question {
     selectedOptionId: string = "nil";
     optionSubQuestions: Question[] = [];
     subQuestions: Question[] = [];
-
-    isCompleted: boolean = false;
+    isCompleted: boolean = this.options.size > 0 ?
+        Array.from(this.options.values()).every(option => option.isCompleted) : false;
 
     constructor(station: Station, parent: Collection) {
         this.parent = parent;
@@ -85,7 +85,7 @@ export class Question {
     }
 
     render(): VNode {
-        this.isCompleted = this.optionSubQuestions.length > 0 ? this.optionSubQuestions.every(subQuestion => subQuestion.isCompleted) : this.isCompleted;
+        this.isCompleted = this.options.size > 0 ? Array.from(this.options.values()).every(option => option.isCompleted) : this.isCompleted;
         return h("div.question", [
             h("label", {props: {for: this.id}}, this.label),
             h("select", {

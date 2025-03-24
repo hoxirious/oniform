@@ -11,8 +11,14 @@ export class Option {
     parentCollection: Collection;
     value: string = "";
     id: string = "";
-    isCompleted: boolean = false;
     nextDependencies: (Collection|Question)[] = [];
+    isCompleted: boolean = this.nextDependencies.every(dependency => {
+        if (dependency instanceof Collection) {
+            return dependency.isCompleted;
+        } else {
+            return dependency.isCompleted;
+        }
+    });
 
     constructor(terminal: Terminal, parentCollection: Collection) {
         this.value = terminal.value;
@@ -26,6 +32,13 @@ export class Option {
     }
 
     render() {
+        this.isCompleted = this.nextDependencies.every(dependency => {
+            if (dependency instanceof Collection) {
+                return dependency.isCompleted;
+            } else {
+                return dependency.isCompleted;
+            }
+        });
         return h("option", {props: {id: this.id}}, [this.value]);
     }
 }

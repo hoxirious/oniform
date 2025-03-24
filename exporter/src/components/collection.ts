@@ -1,4 +1,4 @@
-import {h} from "snabbdom";
+import {h, VNode} from "snabbdom";
 import {Question} from "./question.ts";
 import Group from "./group.ts";
 import {Review} from "./review.ts";
@@ -9,6 +9,8 @@ export class Collection {
     label: string = "";
     parent: Review;
     id: string = "";
+    isCompleted: boolean = this.questions.size > 0 ?
+        Array.from(this.questions.values()).every(question => question.isCompleted) : false;
 
     constructor(
         group: Group,
@@ -23,6 +25,7 @@ export class Collection {
     }
 
     render(): VNode {
+        // this.isCompleted = this.questions.size > 0 ? Array.from(this.questions.values()).every(question => question.isCompleted) : this.isCompleted;
         return h("div.collection", [
             h("div", [this.label]),
             ...Array.from(this.questions.values()).map(question => question.render())
