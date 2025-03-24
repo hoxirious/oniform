@@ -40,7 +40,7 @@
     border-radius: 4px;
     font-family: Arial, sans-serif;
     font-size: 14px;
-    bog-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .terminal_input.folded {
