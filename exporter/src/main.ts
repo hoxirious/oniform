@@ -17,6 +17,46 @@ let isPageInitialized = false;
 let vnode: VNode = h("div#oniform");
 let sidebarVnode: VNode = h("div#sidebar");
 
+const clipboardButton = new ActionButton("Clipboard", () => {
+    const sidebarElement = document.getElementById("sidebar");
+    if (!sidebarElement) {
+        console.error("Clipboard element not found");
+        return;
+    }
+    const newClipboardVnode = h("div#sidebar", {key: "clipboard"}, Clipboard.instance.vnode);
+    const tempSidebarVnode = patch(sidebarVnode, newClipboardVnode);
+
+    if(tempSidebarVnode.key == newClipboardVnode.key) {
+        sidebarElement.classList.toggle("show");
+    }
+    else {
+        sidebarElement.classList.add("show");
+    }
+    sidebarVnode = tempSidebarVnode;
+
+}, undefined, ["button"], "Toggle Clipboard").render()
+
+const reviewButton = new ActionButton("Review", () => {
+    const sidebarElement = document.getElementById("sidebar");
+    if (!sidebarElement) {
+        console.error("Clipboard element not found");
+        return;
+    }
+    const newReviewVnode = Review.instance.render();
+    const tempSidebarVnode = patch(sidebarVnode, newReviewVnode);
+    if (tempSidebarVnode.key === newReviewVnode.key) {
+        sidebarElement.classList.toggle("show");
+    }
+    else {
+        sidebarElement.classList.add("show");
+    }
+    sidebarVnode = tempSidebarVnode;
+
+}, undefined, ["button"], "Toggle Review").render();
+
+const libraryButton = new ActionButton("Library", () => {
+    console.log("Library button clicked");
+}, undefined, ["button"], "Toggle Library").render();
 const initPage = () => {
     if (isPageInitialized) return;
     isPageInitialized = true;
@@ -26,65 +66,16 @@ const initPage = () => {
         console.error("Toolbar element not found");
         return;
     }
-
-    // const clipboardButton = new ActionButton("Clipboard", () => {
-    //     const clipboardElement = document.getElementById("sidebar");
-    //     if (!clipboardElement) {
-    //         console.error("Clipboard element not found");
-    //         return;
-    //     }
-    //     const newClipboardVnode = h("div#sidebar", {key: "clipboard"}, Clipboard.instance.vnode);
-    //     const tempSidebarVnode = patch(sidebarVnode, newClipboardVnode);
-    //
-    //     if(tempSidebarVnode.key == newClipboardVnode.key) {
-    //         clipboardElement.classList.toggle("show");
-    //     }
-    //     else {
-    //         clipboardElement.classList.add("show");
-    //     }
-    //     sidebarVnode = tempSidebarVnode;
-    //
-    //     // Save the status to cache
-    //     if (clipboardElement.classList.contains("show")) {
-    //         localStorage.setItem("clipboardStatus", "open");
-    //     } else {
-    //         localStorage.setItem("clipboardStatus", "closed");
-    //     }
-    // }, undefined, ["button"], "Toggle Clipboard").render();
-
-    const reviewButton = new ActionButton("Review", () => {
-        const clipboardElement = document.getElementById("sidebar");
-        if (!clipboardElement) {
-            console.error("Clipboard element not found");
-            return;
-        }
-        const newReviewVnode = Review.instance.render();
-        const tempSidebarVnode = patch(sidebarVnode, newReviewVnode);
-        if (tempSidebarVnode.key === newReviewVnode.key) {
-            clipboardElement.classList.toggle("show");
-        }
-        else {
-            clipboardElement.classList.add("show");
-        }
-        sidebarVnode = tempSidebarVnode;
-
-    }, undefined, ["button"], "Toggle Review").render();
-
-    const libraryButton = new ActionButton("Library", () => {
-        console.log("Library button clicked");
-    }, undefined, ["button"], "Toggle Library").render();
-
-    patch(toolbar, h("div#toolbar", [reviewButton, libraryButton]));
+    patch(toolbar, h("div#toolbar", [clipboardButton, reviewButton, libraryButton]));
 }
 
 const initForm = () => {
-    // const clipboard = Clipboard.instance;
-    const clipboardElement = document.getElementById("sidebar");
-    if (!clipboardElement) {
+    const sidebarElement = document.getElementById("sidebar");
+    if (!sidebarElement) {
         console.error("Clipboard element not found");
         return;
     }
-    sidebarVnode = patch(clipboardElement, h("div#sidebar", []));
+    sidebarVnode = patch(sidebarElement, h("div#sidebar", []));
     let form: Oniform;
     // initialize empty form
     form = Oniform.instance;
