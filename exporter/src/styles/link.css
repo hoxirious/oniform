@@ -1,5 +1,5 @@
 .link {
-    border-left: 0.1rem dotted rgba(208, 208, 208, 0.5);
+    border-left: 0.1rem dashed #646464;
     border-bottom-left-radius: 1rem;
 }
 

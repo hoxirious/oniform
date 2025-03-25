@@ -5,8 +5,8 @@
     width: fit-content;
     position: relative;
     background-color: rgb(63, 67, 70);
-    border: 0.1rem solid rgb(89, 98, 105);
-    color: white;
+    border: 1px solid #505050;
+    color: #8f8f8f;
     padding-inline: 0.625rem;
     white-space: nowrap;
     text-align: center;
@@ -58,7 +58,7 @@
 }
 
 .action-button:hover {
-    background-color: rgb(89, 98, 105);
+    background-color: #545454;
 }
 
 .action_items {

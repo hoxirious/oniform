@@ -6,7 +6,7 @@
     justify-content: flex-end;
     align-items: flex-end;
     gap: 1rem;
-    border-left: 0.1rem solid #d0d0d0;
+    border-left: 0.1rem solid #505050;
     border-bottom-left-radius: 1rem;
 }
 
@@ -46,7 +46,7 @@
     width: 30rem;
     height: 40px;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #505050;
     border-radius: 4px;
     font-family: Arial, sans-serif;
     font-size: 14px;

@@ -50,6 +50,8 @@ input:focus, textarea:focus {
 #app {
   width: 100vw;
   height: 100vh;
+  filter: contrast(200%) brightness(100%);
+  background: linear-gradient(180deg, rgb(77, 77, 77), rgb(47 47 47 / 86%)), url("../static/noisy-background.jpg");
 }
 
 #navbar {
@@ -75,7 +77,7 @@ input:focus, textarea:focus {
 }
 
 #navbar > nav > a:hover {
-    background-color: #2a2a2a;
+    background-color: #545454;
 }
 
 #navbar nav {
@@ -96,8 +98,6 @@ input:focus, textarea:focus {
   height: 100%;
   overflow: auto;
   position: relative;
-  filter: contrast(200%) brightness(100%);
-  background: linear-gradient(180deg, rgb(77, 77, 77), rgb(47 47 47 / 86%)), url("../static/noisy-background.jpg");
 }
 
 #toolbar {
