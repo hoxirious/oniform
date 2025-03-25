@@ -10,7 +10,7 @@
     flex-direction: column;
     min-width: 30rem;
     width: fit-content;
-    padding: 0 1rem 0;
+    padding-left: 1rem;
     position: relative;
 }
 
