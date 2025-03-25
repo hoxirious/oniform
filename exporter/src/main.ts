@@ -15,33 +15,40 @@ declare global {
 
 let isPageInitialized = false;
 let vnode: VNode = h("div#oniform");
-let sidebarVnode: VNode = h("div#sidebar");
+let reviewWindowVnode: VNode = h("div#review-window");
+let clipboardWindowVnode: VNode = h("div#clipboard-window");
 
 const clipboardButton = new ActionButton("Clipboard", () => {
-    const sidebarElement = document.getElementById("sidebar");
-    if (!sidebarElement) {
+    const reviewElement = document.getElementById("review-window");
+    const clipboardElement = document.getElementById("clipboard-window");
+    if (!clipboardElement || !reviewElement) {
         console.error("Clipboard element not found");
         return;
     }
     const newClipboardVnode= Clipboard.instance.render();
-    const tempSidebarVnode = patch(sidebarVnode, newClipboardVnode);
+    const tempVnode = patch(clipboardWindowVnode, newClipboardVnode);
+    clipboardElement.classList.toggle("show");
 
-    sidebarElement.classList.toggle("show");
-    sidebarVnode = tempSidebarVnode;
+    if(reviewElement.classList.contains("show"))
+        reviewElement.classList.remove("show");
+    clipboardWindowVnode = tempVnode;
 
 }, undefined, ["button"], "Toggle Clipboard").render();
 
 const reviewButton = new ActionButton("Review", () => {
-    const sidebarElement = document.getElementById("sidebar");
-    if (!sidebarElement) {
+    const reviewElement = document.getElementById("review-window");
+    const clipboardElement = document.getElementById("clipboard-window");
+    if (!reviewElement || !clipboardElement) {
         console.error("Clipboard element not found");
         return;
     }
     const newReviewVnode = Review.instance.render();
-    const tempSidebarVnode = patch(sidebarVnode, newReviewVnode);
+    const tempVnode = patch(reviewWindowVnode, newReviewVnode);
 
-    sidebarElement.classList.toggle("show");
-    sidebarVnode = tempSidebarVnode;
+    reviewElement.classList.toggle("show");
+    if(clipboardElement.classList.contains("show"))
+        clipboardElement.classList.remove("show");
+    reviewWindowVnode = tempVnode;
 
 }, undefined, ["button"], "Toggle Review").render();
 
@@ -61,12 +68,18 @@ const initPage = () => {
 }
 
 const initForm = () => {
-    const sidebarElement = document.getElementById("sidebar");
-    if (!sidebarElement) {
+    const clipboardElement = document.getElementById("clipboard-window");
+    if (!clipboardElement) {
         console.error("Clipboard element not found");
         return;
     }
-    sidebarVnode = patch(sidebarElement, h("div#sidebar", []));
+    clipboardWindowVnode = patch(clipboardElement, h("div#clipboard-window", []));
+    const reviewElement = document.getElementById("review-window");
+    if (!reviewElement) {
+        console.error("Review element not found");
+        return;
+    }
+    reviewWindowVnode = patch(reviewElement, h("div#review-window", []));
     let form: Oniform;
     // initialize empty form
     form = Oniform.instance;
@@ -90,14 +103,20 @@ const initForm = () => {
 export const renderView = () => {
     const newNode = Oniform.instance.render();
     vnode = patch(vnode, newNode);
+
     Review.instance = new Review(Oniform.instance.groups);
-    const newReviewVnode = Review.instance.render();
-    sidebarVnode = patch(sidebarVnode, newReviewVnode);
+    renderReview();
+    renderClipboard();
 }
 
 export const renderReview = () => {
     const newReviewVnode = Review.instance.render();
-    sidebarVnode = patch(sidebarVnode, newReviewVnode);
+    reviewWindowVnode = patch(reviewWindowVnode, newReviewVnode);
+}
+
+export const renderClipboard = () => {
+    const newClipboardVnode = Clipboard.instance.render();
+    clipboardWindowVnode = patch(clipboardWindowVnode, newClipboardVnode);
 }
 
 document.addEventListener("DOMContentLoaded", initPage);

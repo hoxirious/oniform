@@ -1,4 +1,4 @@
-#sidebar {
+#clipboard-window, #review-window {
     display: none;
     position: fixed;
     right: 4rem;
@@ -17,11 +17,11 @@
     margin-top: 2rem;
 }
 
-#sidebar > * {
+#clipboard-window > *, #review-window > * {
     direction: ltr;
 }
 
-#sidebar.show {
+#clipboard-window.show, #review-window.show {
     display: flex;
     flex-direction: column;
 }

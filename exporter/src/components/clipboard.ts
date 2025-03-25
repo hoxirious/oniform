@@ -3,6 +3,7 @@ import Station from "./station.ts";
 import Terminal from "./terminal.ts";
 import "../styles/clipboard.css";
 import {h} from "snabbdom";
+import {renderClipboard} from "../main.ts";
 
 export default class Clipboard {
     static instance = new Clipboard();
@@ -12,7 +13,7 @@ export default class Clipboard {
     {}
 
     render() {
-        return h("div#sidebar", {key: "clipboard"}, [
+        return h("div#clipboard-window", {key: "clipboard"}, [
             h("div.clipboard_container", [
                 h("h2", "Clipboard"),
                 this._copiedObject ? this._copiedObject.render() : null
@@ -26,7 +27,7 @@ export default class Clipboard {
 
     set copiedObject(copiedObject: Group|Station|Terminal) {
         this._copiedObject = copiedObject;
-        this.render();
+        renderClipboard();
     }
 
      cloneCopiedObject(): Group|Station|Terminal|undefined {
