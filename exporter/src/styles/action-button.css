@@ -76,7 +76,7 @@
 
 .action_items li {
     width: 100%;
-    border: 0.1rem solid rgb(89, 98, 105);
+    border: 1px solid #505050;
     border-bottom-color: transparent;
 }
 
@@ -101,7 +101,7 @@
 .action_items li:last-child {
     border-bottom-left-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
-    border-bottom-color: rgb(89, 98, 105);
+    border-bottom-color: #505050;
 }
 
 .action_items.show {
