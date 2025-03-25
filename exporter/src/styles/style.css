@@ -52,11 +52,52 @@ input:focus, textarea:focus {
   height: 100vh;
 }
 
+#navbar {
+  display: flex;
+  align-items: stretch;
+  padding-inline: 0.25rem;
+  border-bottom: 1px solid #505050;
+  background-color: #111111;
+}
+
+#navbar > * {
+  display: flex;
+  font-size: small;
+  padding-block: 0.25rem;
+}
+
+#navbar a {
+  display: flex;
+  padding: 0.5rem 1rem;
+  align-items: center;
+  justify-items: center;
+  border-right: 1px solid #505050;
+}
+
+#navbar > nav > a:hover {
+    background-color: #2a2a2a;
+}
+
+#navbar nav {
+  margin: 0;
+  padding: 0;
+}
+
+#navbar > a {
+  color: #e0e0e0;
+}
+
+#navbar > nav > a {
+  color: #8f8f8f;
+}
+
 #exporter {
   display: flex;
   height: 100%;
   overflow: auto;
   position: relative;
+  filter: contrast(200%) brightness(100%);
+  background: linear-gradient(180deg, rgb(77, 77, 77), rgb(47 47 47 / 86%)), url("../static/noisy-background.jpg");
 }
 
 #toolbar {
