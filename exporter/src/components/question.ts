@@ -39,7 +39,7 @@ export class Question {
     }
 
     private handleChange(event: Event): void {
-        const target = event.target as HTMLSelectElement;
+    const target = event.target as HTMLSelectElement;
         const selectedOptionId = target.options[target.selectedIndex].id;
 
         if (selectedOptionId === this.selectedOptionId) return;

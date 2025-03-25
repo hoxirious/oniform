@@ -23,14 +23,10 @@ const clipboardButton = new ActionButton("Clipboard", () => {
         console.error("Clipboard element not found");
         return;
     }
-    const newClipboardVnode = h("div#sidebar", {key: "clipboard"}, Clipboard.instance.vnode);
+    const newClipboardVnode= Clipboard.instance.render();
     const tempSidebarVnode = patch(sidebarVnode, newClipboardVnode);
 
-    if (tempSidebarVnode.key == newClipboardVnode.key) {
-        sidebarElement.classList.toggle("show");
-    } else {
-        sidebarElement.classList.add("show");
-    }
+    sidebarElement.classList.toggle("show");
     sidebarVnode = tempSidebarVnode;
 
 }, undefined, ["button"], "Toggle Clipboard").render();
@@ -43,12 +39,8 @@ const reviewButton = new ActionButton("Review", () => {
     }
     const newReviewVnode = Review.instance.render();
     const tempSidebarVnode = patch(sidebarVnode, newReviewVnode);
-    if (tempSidebarVnode.key === newReviewVnode.key) {
-        sidebarElement.classList.toggle("show");
-    }
-    else {
-        sidebarElement.classList.add("show");
-    }
+
+    sidebarElement.classList.toggle("show");
     sidebarVnode = tempSidebarVnode;
 
 }, undefined, ["button"], "Toggle Review").render();
