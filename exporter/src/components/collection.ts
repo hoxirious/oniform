@@ -9,8 +9,7 @@ export class Collection {
     label: string = "";
     parent: Review;
     id: string = "";
-    isCompleted: boolean = this.questions.size > 0 ?
-        Array.from(this.questions.values()).every(question => question.isCompleted) : false;
+    isCompleted: boolean = this.calculatedIsCompleted();
 
     constructor(
         group: Group,
@@ -24,8 +23,13 @@ export class Collection {
         this.parent = review;
     }
 
+    calculatedIsCompleted(): boolean {
+        this.isCompleted = this.questions.size > 0 ?
+            Array.from(this.questions.values()).every(question => question.isCompleted) : false;
+        return this.isCompleted;
+    }
+
     render(): VNode {
-        // this.isCompleted = this.questions.size > 0 ? Array.from(this.questions.values()).every(question => question.isCompleted) : this.isCompleted;
         return h("div.collection", [
             h("div", [this.label]),
             ...Array.from(this.questions.values()).map(question => question.render())

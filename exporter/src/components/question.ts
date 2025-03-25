@@ -3,7 +3,6 @@ import Station from "./station.ts";
 import {Option} from "./option.ts";
 import {Collection} from "./collection.ts";
 import {renderReview} from "../main.ts";
-import {Review} from "./review.ts";
 import "../styles/question.css";
 
 export class Question {
@@ -12,7 +11,7 @@ export class Question {
     label: string = "";
     id: string = "";
     selectedOptionId: string = "nil";
-    optionSubQuestions: Question[] = [];
+    optionSubQuestions: (Question|Collection)[] = [];
     subQuestions: Question[] = [];
     isCompleted: boolean = this.calculateIsCompleted();
 
@@ -63,12 +62,7 @@ export class Question {
         if (selectedOptionDependencies) {
             this.removeOutdatedDependencies();
             selectedOptionDependencies.forEach(dependency => {
-                if (dependency instanceof Collection) {
-                    Review.instance.collections.set(dependency.id, dependency);
-                    console.log("Collection added to review");
-                } else {
-                    this.optionSubQuestions.push(dependency);
-                }
+                this.optionSubQuestions.push(dependency);
             });
         }
     }
@@ -77,19 +71,22 @@ export class Question {
         if (this.selectedOptionId !== "nil") {
             const previousDependencies = this.options.get(this.selectedOptionId)?.nextDependencies;
             previousDependencies?.forEach(previousDependency => {
-                if (previousDependency instanceof Collection) {
-                    Review.instance.collections.delete(previousDependency.id);
-                } else {
-                    const stack: Question[] = [previousDependency];
-                    while (stack.length > 0) {
-                        const current = stack.pop();
-                        if (current) {
+                const stack: (Question|Collection)[] = [previousDependency];
+                while (stack.length > 0) {
+                    const current = stack.pop();
+                    if (current) {
+                        if (current instanceof Collection) {
+                            current.questions.forEach(question => {
+                                question.subQuestions = [];
+                                question.selectedOptionId = "nil";
+                            });
+                        } else {
                             stack.push(...current.optionSubQuestions);
                             current.optionSubQuestions = [];
                             current.selectedOptionId = "nil";
                         }
+                        this.optionSubQuestions = [];
                     }
-                    this.optionSubQuestions = [];
                 }
             });
         }

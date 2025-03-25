@@ -23,6 +23,7 @@
 
 #sidebar.show {
     display: flex;
+    flex-direction: column;
 }
 
 .clipboard_container {

@@ -28,7 +28,7 @@ export class Option {
     calculateIsCompleted(): boolean {
         this.isCompleted = this.nextDependencies.every(dependency => {
             if (dependency instanceof Collection) {
-                return dependency.isCompleted;
+                return dependency.calculatedIsCompleted();
             } else {
                 return dependency.calculateIsCompleted();
             }
