@@ -91,11 +91,17 @@ export class TerminalButtonCopy extends ActionButton {
 
             Clipboard.instance.copiedObject = self.clone();
             showSuccessPopup("Option copied to clipboard", 1500);
-            // self.html.classList.add("selected");
+            const terminalElement = document.getElementById(self.id);
+            if(!terminalElement) {
+                showErrorPopup("Terminal not found");
+                return;
+            }
+
+            terminalElement.classList.add("selected");
 
             const removeSelection = (event: Event) => {
                 if (event instanceof KeyboardEvent && event.key === "Escape") {
-                    // self.html.classList.remove("selected");
+                    terminalElement.classList.remove("selected");
                     document.removeEventListener("keydown", removeSelection);
                 }
             };

@@ -77,11 +77,16 @@ export class GroupButtonCopy extends ActionButton {
             }
             Clipboard.instance.copiedObject = self.clone();
             showSuccessPopup("Group copied to clipboard");
-            // self.html.classList.add("selected");
+            const groupElement = document.getElementById(self.id);
+            if(!groupElement) {
+                showErrorPopup("Group cannot found");
+                return;
+            }
+            groupElement.classList.add("selected");
 
             const removeSelection = (event: Event) => {
                 if (event instanceof KeyboardEvent && event.key === "Escape") {
-                    // self.html.classList.remove("selected");
+                    groupElement.classList.remove("selected");
                     document.removeEventListener("keydown", removeSelection);
                 }
             };

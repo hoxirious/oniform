@@ -82,22 +82,28 @@ export class StationButtonCopy extends ActionButton {
         const copyVNode = h("img", {props: {src: copyUrl, alt: "Copy"}});
 
         super(copyVNode, () => {
-            // const previouslySelected = document.querySelector(".selected");
-            // if (previouslySelected) {
-            //     previouslySelected.classList.remove("selected");
-            // }
+            const previouslySelected = document.querySelector(".selected");
+            if (previouslySelected) {
+                previouslySelected.classList.remove("selected");
+            }
             Clipboard.instance.copiedObject = self.clone();
             showSuccessPopup("Question copied to clipboard", 1500);
-            // self.html.classList.add("selected");
+            const stationElement = document.getElementById(self.id);
+            if(!stationElement) {
+                showErrorPopup("Station not found");
+                return;
+            }
 
-            // const removeSelection = (event: Event) => {
-            //     if (event instanceof KeyboardEvent && event.key === "Escape") {
-            //         // self.html.classList.remove("selected");
-            //         document.removeEventListener("keydown", removeSelection);
-            //     }
-            // };
+            stationElement.classList.add("selected");
 
-            // document.addEventListener("keydown", removeSelection);
+            const removeSelection = (event: Event) => {
+                if (event instanceof KeyboardEvent && event.key === "Escape") {
+                    stationElement.classList.remove("selected");
+                    document.removeEventListener("keydown", removeSelection);
+                }
+            };
+
+            document.addEventListener("keydown", removeSelection);
         }, undefined, ["icon"], "Copy Station");
     }
 }
