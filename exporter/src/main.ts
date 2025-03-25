@@ -26,15 +26,14 @@ const clipboardButton = new ActionButton("Clipboard", () => {
     const newClipboardVnode = h("div#sidebar", {key: "clipboard"}, Clipboard.instance.vnode);
     const tempSidebarVnode = patch(sidebarVnode, newClipboardVnode);
 
-    if(tempSidebarVnode.key == newClipboardVnode.key) {
+    if (tempSidebarVnode.key == newClipboardVnode.key) {
         sidebarElement.classList.toggle("show");
-    }
-    else {
+    } else {
         sidebarElement.classList.add("show");
     }
     sidebarVnode = tempSidebarVnode;
 
-}, undefined, ["button"], "Toggle Clipboard").render()
+}, undefined, ["button"], "Toggle Clipboard").render();
 
 const reviewButton = new ActionButton("Review", () => {
     const sidebarElement = document.getElementById("sidebar");

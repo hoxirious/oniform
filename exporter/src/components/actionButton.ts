@@ -37,8 +37,8 @@ export default class ActionButton {
             },
             key: this._id,
             on: {click: this._callback},
-            class: {dropdown: true, "action-button": true, [this._class]: true}
-        }, [
+            class: {dropdown: true, "action-button": true, ...this._class?.reduce((acc, cls) => ({...acc, [cls]: true}), {})}
+            }, [
             this._label,
             this.showDropdown && this._subButtons
                 ? h("ul.action_items", this._subButtons.map(btn => h("li", btn.render())))

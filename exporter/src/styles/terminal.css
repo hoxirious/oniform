@@ -10,6 +10,16 @@
     border-bottom-left-radius: 1rem;
 }
 
+.terminals:hover:not(:has(.terminals:hover)) {
+    background-color: #4b4b4b;
+    border-radius: 0.5rem;
+}
+
+.terminal:hover:not(:has(.terminal:hover)) {
+    background-color: #575757;
+    border-radius: 0.5rem;
+}
+
 .terminal_container {
     display: flex;
     flex-direction: column;

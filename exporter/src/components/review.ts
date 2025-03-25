@@ -16,7 +16,7 @@ export class Review {
 
     render() {
         return h("div#sidebar", {key: "review"}, [
-            ...Array.from(this.collections.values()).map(collection => collection.render())
+            h("div", Array.from(this.collections.values()).map(collection => collection.render()))
         ]);
     }
 }
