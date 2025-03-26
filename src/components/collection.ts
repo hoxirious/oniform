@@ -1,13 +1,11 @@
 import {h, VNode} from "snabbdom";
 import {Question} from "./question.ts";
 import Group from "./group.ts";
-import {Review} from "./review.ts";
 import "../styles/collection.css";
 
 export class Collection {
     questions: Map<string, Question> = new Map();
     label: string = "";
-    parent: Review;
     id: string = "";
     isCompleted: boolean = this.calculatedIsCompleted();
 

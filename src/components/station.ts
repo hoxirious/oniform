@@ -306,7 +306,7 @@ export default class Station {
     }
 
     addStationAfterReference(refStation: Station, newStation: Station) {
-        new Link(this, newStation, Relationship.DEPENDANT);
+        new Link(refStation, newStation, Relationship.DEPENDANT);
         scrollIntoView(newStation.id);
     }
 
