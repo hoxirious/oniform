@@ -1,7 +1,7 @@
 import {h, VNode} from "snabbdom";
 import Group, {GroupButtonAdd} from "./group.ts";
 import "../styles/oniform.css";
-import {generateGUID, showSuccessPopup} from "../common/utility.ts";
+import {generateGUID, scrollIntoView, showSuccessPopup} from "../common/utility.ts";
 import ActionButton from "./actionButton.ts";
 import {renderView} from "../main.ts";
 
@@ -44,16 +44,20 @@ export default class Oniform {
     }
 
     addGroup(prevGroup?: Group) {
+        let groupId;
         if (prevGroup) {
             const prevGroupIndex = this.findGroupIndex(prevGroup);
             const group = new Group(this, `Group ${prevGroupIndex + 1}`);
             this._groups.splice(prevGroupIndex, 0, group);
+            groupId = group.id;
         }
         else {
             const group = new Group(this);
             this._groups.push(group);
+            groupId = group.id;
         }
         renderView();
+        scrollIntoView(groupId);
     }
 
     addGroupAfterReference(prevGroup: Group, newGroup: Group) {
@@ -61,6 +65,7 @@ export default class Oniform {
         const prevGroupIndex = this.findGroupIndex(prevGroup);
         this._groups.splice(prevGroupIndex, 0, newGroup);
         renderView();
+        scrollIntoView(newGroup.id);
     }
 
     deleteGroup(group: Group) {

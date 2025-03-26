@@ -10,7 +10,7 @@ import pasteUrl from "../static/paste.svg";
 import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import Link, {Relationship} from "./link.ts";
-import {generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {generateGUID, scrollIntoView, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 import {h, VNode} from "snabbdom";
 import {renderView} from "../main.ts";
@@ -258,22 +258,26 @@ export default class Station {
     }
 
     addEmptyTerminal(prevTerminal?: Terminal) {
+        let terminalId;
         if (prevTerminal) {
             const terminalIndex = this.findTerminalIndex(prevTerminal);
             const terminal = new Terminal(this);
             this._terminals.splice(terminalIndex, 0, terminal);
+            terminalId = terminal.id;
         } else {
             const terminal = new Terminal(this);
             this._terminals.push(terminal);
+            terminalId = terminal.id;
         }
-
         renderView();
+        scrollIntoView(terminalId);
     }
 
     appendExistingTerminal(terminal: Terminal, noRender: boolean = false) {
         terminal.parent = this;
         this._terminals.push(terminal);
         if (!noRender) renderView();
+        scrollIntoView(terminal.id);
     }
 
     addTerminalAfterReference(refTerminal: Terminal, newTerminal: Terminal) {
@@ -281,6 +285,7 @@ export default class Station {
         const prevTerminalIndex = this.findTerminalIndex(refTerminal);
         this._terminals.splice(prevTerminalIndex, 0, newTerminal);
         renderView();
+        scrollIntoView(newTerminal.id);
     }
 
     deleteTerminal(terminal: Terminal) {
@@ -298,10 +303,12 @@ export default class Station {
     addEmptyStation() {
         const newStation = new Station(this);
         new Link(this, newStation, Relationship.DEPENDANT);
+        scrollIntoView(newStation.id);
     }
 
     addStationAfterReference(refStation: Station, newStation: Station) {
         new Link(this, newStation, Relationship.DEPENDANT);
+        scrollIntoView(newStation.id);
     }
 
     deleteStation(station: Station) {
@@ -332,6 +339,7 @@ export default class Station {
     addLink(link: Link, noRender: boolean = false) {
         this.links.push(link);
         if(!noRender) renderView();
+        scrollIntoView(link.id);
     }
 
 

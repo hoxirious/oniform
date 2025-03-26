@@ -10,7 +10,7 @@ import Group from "./group.ts";
 import Clipboard from "./clipboard.ts";
 import chevronDownUrl from "../static/chevron-down.svg";
 import chevronRightUrl from "../static/chevron-right.svg";
-import {generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {generateGUID, scrollIntoView, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import Oniform from "./oniform.ts";
 import {h, VNode} from "snabbdom";
 import {renderView} from "../main.ts";
@@ -265,12 +265,14 @@ export default class Terminal {
     public addEmptyStation() {
         const newStation = new Station(this);
         new Link(this, newStation, Relationship.DEPENDANT);
+        scrollIntoView(newStation.id);
     }
 
     public addLink(link: Link, noRender: boolean = false) {
         link.parent = this;
         this._links.push(link);
         if(!noRender) renderView();
+        scrollIntoView(link.id)
     }
 
     toObj(): any {

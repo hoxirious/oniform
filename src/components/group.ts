@@ -3,7 +3,7 @@ import '../styles/group.css';
 import ActionButton from "./actionButton.ts";
 import Oniform from "./oniform.ts";
 import Clipboard from "./clipboard.ts";
-import {generateGUID, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
+import {generateGUID, scrollIntoView, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
 import minusUrl from "../static/minus.svg";
 import plusUrl from "../static/plus.svg";
 import copyUrl from "../static/copy.svg";
@@ -189,22 +189,27 @@ export default class Group {
     }
 
     addEmptyStation(prevStation?: Station) {
+        let stationId;
         if(prevStation) {
             const stationIndex = this.findStationIndex(prevStation);
             const station = new Station(this, prevStation, "",`Question ${stationIndex + 1}`);
             this._stations.splice(stationIndex, 0, station);
+            stationId = station.id;
         }
         else {
             const station = new Station(this);
             this._stations.push(station);
+            stationId = station.id;
         }
         renderView();
+        scrollIntoView(stationId);
     }
 
     appendExistingStation(station: Station, noRender: boolean = false) {
         station.parent = this;
         this._stations.push(station);
         if(!noRender) renderView();
+        scrollIntoView(station.id);
     }
 
     addStationAfterReference(refStation: Station, newStation: Station) {
@@ -212,6 +217,7 @@ export default class Group {
         const prevStationIndex = this.findStationIndex(refStation);
         this._stations.splice(prevStationIndex, 0, newStation);
         renderView();
+        scrollIntoView(newStation.id);
     }
 
     deleteStation(station: Station) {
