@@ -1,0 +1,69 @@
+.faq {
+    font-size: 1rem;
+    background-color: #242424;
+    height: 100%;
+    width: 100%;
+}
+.faq > .editor {
+    margin-top: 2rem;
+    width: 60%;
+}
+
+.faq > .editor > .line {
+    counter-increment: editor-counter;
+    display: flex;
+    gap: 3rem;
+    color: #8f8f8f;
+    padding-block: 0.25rem;
+    padding-inline: 1rem;
+}
+
+.faq > .editor > .line:active, .faq > .editor > .line:focus {
+    border-left: 0.2rem solid #fd7326;
+    background-color: rgba(133, 133, 133, 0.55);
+}
+
+.faq > .editor > .line:hover {
+    background-color: rgba(133, 133, 133, 0.45);
+}
+.faq .line::before {
+    --tw-content: counter(editor-counter);
+    content: var(--tw-content);
+}
+
+.faq .line > .qa {
+    display: inline;
+}
+
+.faq .line > .qa .question {
+    color: #e0e0e0;
+}
+
+.faq .line > .qa > .answer {
+}
+
+/*
+.faq ul {
+    list-style-type: decimal;
+    list-style-position: inside;
+}
+
+.faq ul > li::marker{
+    content: counter(list-item)"\a0\a0";
+}
+
+.faq ul > li{
+    margin-bottom: 1rem;
+}
+.faq ul > li:hover{
+    background-color: rgba(133, 133, 133, 0.55);
+}
+.faq .question{
+    position: relative;
+    left: 3rem;
+    color: #e0e0e0;
+}
+.faq .question .answer{
+    color: #8f8f8f;
+}
+*/

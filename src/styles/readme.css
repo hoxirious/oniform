@@ -1,13 +1,15 @@
 .readme {
     font-size: 0.8rem;
     padding: 20px;
-    max-width: 800px;
+    height:100%;
+    overflow: auto;
 }
 
 .readme section {
     margin-bottom: 0.5rem;
     border: 0.1rem solid #505050;
     border-radius: 0.5rem;
+    max-width: 800px;
 }
 
 .readme section blockquote {

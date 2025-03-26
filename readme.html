@@ -1,84 +1,88 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link href="src/styles/style.css" rel="stylesheet">
-  <link href="src/styles/readme.css" rel="stylesheet">
-  <title>Readme Page</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="src/styles/style.css" rel="stylesheet">
+    <link href="src/styles/readme.css" rel="stylesheet">
+    <title>Readme Page</title>
 </head>
 <body>
 <div id="app">
-  <header id="navbar">
-    <a href="/">oniform</a>
-    <nav>
-      <a href="/readme">readme</a>
-      <a href="/faq">faq</a>
-    </nav>
-  </header>
-  <div class="readme">
-    <section>
-      <h2>Description</h2>
-      <div class="info">
-        <p><code>oniform</code> is a <span class="highlight">lightweight</span> tool to create <strong>nested</strong> forms at ease. The interface is
-          built with Typescript and Snabbdom with focus on performance and user experience.</p>
-      </div>
-    </section>
-    <section>
-      <h2>Contributors</h2>
-      <div class="info">
-        <ul>
-          <li><a href="https://hytechblog.vercel.app/">Hy Huynh</a></li>
-        </ul>
-      </div>
-    </section>
-    <section>
-      <h2>Features</h2>
-      <div class="info">
-        <ul>
-          <li><strong>Nested Form Playground</strong>: To create nested forms with ease.</li>
-          <li><strong>Clipboard</strong>: A copy board of form's elements for your convenience.</li>
-          <li><strong>Review</strong>: To review result form before exporting.</li>
-          <li><strong>Library</strong>: To save and load your <code>oniforms</code>.</li>
-        </ul>
-      </div>
-    </section>
+    <header id="navbar">
+        <a href="/">oniform</a>
+        <nav>
+            <a href="/readme">readme</a>
+            <a href="/faq">faq</a>
+        </nav>
+    </header>
+    <div class="readme">
+        <section>
+            <h2>Description</h2>
+            <div class="info">
+                <p><code>oniform</code> is a <span class="highlight">lightweight</span> tool to create
+                    <strong>nested</strong> forms at ease. The interface is
+                    built with Typescript and Snabbdom with focus on performance and user experience.</p>
+            </div>
+        </section>
+        <section>
+            <h2>Contributors</h2>
+            <div class="info">
+                <ul>
+                    <li><a href="https://hytechblog.vercel.app/">Hy Huynh</a></li>
+                </ul>
+            </div>
+        </section>
+        <section>
+            <h2>Features</h2>
+            <div class="info">
+                <ul>
+                    <li><strong>Nested Form Playground</strong>: To create nested forms with ease.</li>
+                    <li><strong>Clipboard</strong>: A copy board of form's elements for your convenience.</li>
+                    <li><strong>Review</strong>: To review result form before exporting.</li>
+                    <li><strong>Library</strong>: To save and load your <code>oniforms</code>.</li>
+                </ul>
+            </div>
+        </section>
 
-    <section>
-      <h2>Documentation</h2>
-      <div class="info">
-        <p>An <code>oniform</code> is created from three main elements: <code>Group</code>, <code>Question</code>, and
-          <code>Option</code>.</p>
+        <section>
+            <h2>Documentation</h2>
+            <div class="info">
+                <p>An <code>oniform</code> is created from three main elements: <code>Group</code>,
+                    <code>Question</code>, and
+                    <code>Option</code>.</p>
 
-        <h3>Group</h3>
-        <blockquote>
-          <p>Each group is the outermost wrapper. It contains questions.</p>
-        </blockquote>
+                <h3>Group</h3>
+                <blockquote>
+                    <p>Each group is the outermost wrapper. It contains questions.</p>
+                </blockquote>
 
-        <h3>Question</h3>
-        <blockquote>
-          <p>Each question contains the question and options.</p>
-          <ul>
-            <li>Can create a <em>dependent question</em> from a question</li>
-            <li>Can create a <em>dependent group</em> from a question</li>
-            <li>Question's dependants will appear when the question is <strong>fully answered</strong>. This includes
-              all of its dependants must be also answered.
-            </li>
-          </ul>
-        </blockquote>
+                <h3>Question</h3>
+                <blockquote>
+                    <p>Each question contains the question and options.</p>
+                    <ul>
+                        <li>Can create a <em>dependent question</em> from a question</li>
+                        <li>Can create a <em>dependent group</em> from a question</li>
+                        <li>Question's dependants will appear when the question is <strong>fully answered</strong>. This
+                            includes
+                            all of its dependants must be also answered.
+                        </li>
+                    </ul>
+                </blockquote>
 
-        <h3>Option</h3>
-        <blockquote>
-          <p>Each option is a choice for a question.</p>
-          <ul>
-            <li>Can create a <em>dependent question</em> from an option</li>
-            <li>Can create a <em>dependent group</em> from an option</li>
-            <li>Options's dependants will appear when the option <strong>is selected</strong>.</li>
-          </ul>
-        </blockquote>
-      </div>
-    </section>
-  </div>
+                <h3>Option</h3>
+                <blockquote>
+                    <p>Each option is a choice for a question.</p>
+                    <ul>
+                        <li>Can create a <em>dependent question</em> from an option</li>
+                        <li>Can create a <em>dependent group</em> from an option</li>
+                        <li>Options's dependants will appear when the option <strong>is selected</strong>.</li>
+                    </ul>
+                </blockquote>
+            </div>
+        </section>
+    </div>
+  <footer>Copyright © oniform 2025</footer>
 </div>
 </body>
 </html>

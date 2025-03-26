@@ -4,21 +4,54 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="src/styles/style.css" rel="stylesheet">
+    <link href="src/styles/faq.css" rel="stylesheet">
     <title>Readme Page</title>
 </head>
 <body>
 <div id="app">
     <header id="navbar">
-        <a href="/public">oniform</a>
+        <a href="/">oniform</a>
         <nav>
             <a href="/readme">readme</a>
             <a href="/faq">faq</a>
         </nav>
     </header>
-    <div>
-        <h1>Faq Page</h1>
-        <p>This is the faq page content.</p>
+    <div class="faq">
+        <div class="editor">
+
+        <div class="line" tabindex="0">
+            <div class="qa">
+                <p class="answer">
+                <span class="question">
+                    I created the form, now what?
+                </span>
+                    You can export the form by clicking on the export button. The form will be saved as a JSON file. Then use the JSON file and add it to a use-onform (TBD) - another library of mine to render the form.
+                </p>
+            </div>
+        </div>
+        <div class="line" tabindex="0">
+            <div class="qa">
+                <p class="answer">
+                <span class="question">
+                   Why do I need this?
+                </span>
+                    You don't need this. But if you want to create a nested form with ease, this is the tool for you.
+                </p>
+            </div>
+        </div>
+            <div class="line" tabindex="0">
+                <div class="qa">
+                    <p class="answer">
+                <span class="question">
+                   Give me the source code
+                </span>
+                        Here it is, https://github.com/hoxirious/oniform/
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
+    <footer>Copyright © oniform 2025</footer>
 </div>
 </body>
 </html>
