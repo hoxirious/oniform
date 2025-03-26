@@ -48,6 +48,8 @@ input:focus, textarea:focus {
 }
 
 #app {
+  display: flex;
+  flex-direction: column;
   width: 100vw;
   height: 100vh;
   filter: contrast(200%) brightness(100%);
@@ -59,7 +61,7 @@ input:focus, textarea:focus {
   align-items: stretch;
   padding-inline: 0.25rem;
   border-bottom: 1px solid #505050;
-  background-color: #111111;
+  background-color: rgba(17, 17, 17, 0.1);
 }
 
 #navbar > * {
@@ -112,4 +114,13 @@ input:focus, textarea:focus {
   align-items: center;
   gap: 0.5rem;
   top: 5rem;
+}
+
+footer {
+  display: flex;
+  padding: 0.5rem;
+  font-size: small;
+  background-color: rgba(17, 17, 17, 0.1);
+  border-top: 1px solid #505050;
+  color: #8f8f8f;
 }
