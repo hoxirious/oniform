@@ -1,0 +1,50 @@
+.readme {
+    font-size: 0.8rem;
+    padding: 20px;
+    max-width: 800px;
+}
+
+.readme section {
+    margin-bottom: 0.5rem;
+}
+
+.readme section blockquote {
+    padding: 1rem;
+    background-color: rgba(91, 91, 91, 0.55);
+}
+
+.readme h1, .readme h2, .readme h3 {
+    margin-block: 0.5rem;
+}
+
+.readme h1 {
+    font-size: 2rem;
+    border-left: 0.5rem solid #fd7326;
+    padding-left: 0.5rem;
+}
+
+.readme h2 {
+    font-size: 1.5rem;
+    border-left: 0.5rem solid #fd7326;
+    padding-left: 0.5rem;
+}
+
+.readme h3 {
+    font-size: 1rem;
+    border-left: 0.5rem solid #fd7326;
+    padding-left: 0.5rem;
+}
+
+.readme ul li {
+    margin-bottom: 0.25rem;
+    padding-left: 1rem;
+}
+
+.readme .info {
+    padding-block: 1rem;
+}
+
+.readme .highlight {
+    background-color: rgba(133, 133, 133, 0.55);
+    padding: 0.25rem;
+}
