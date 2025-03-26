@@ -6,6 +6,8 @@
 
 .readme section {
     margin-bottom: 0.5rem;
+    border: 0.1rem solid #505050;
+    border-radius: 0.5rem;
 }
 
 .readme section blockquote {
@@ -40,8 +42,32 @@
     padding-left: 1rem;
 }
 
+.readme ul li > a{
+    display: block;
+    padding-block: 0.25rem;
+    padding-left: 0.25rem;
+    color: #ffffff;
+    width: 100%;
+    transition: background-color 0.3s ease, color 0.3s ease, font-size 0.3s ease, text-transform 0.3s ease;
+}
+
+.readme ul li > a:checked{
+    display: block;
+    padding-block: 0.25rem;
+    padding-left: 0.25rem;
+    color: #ffffff;
+    width: 100%;
+}
+.readme ul li > a:hover{
+    background-color: rgba(91, 91, 91, 0.55);
+    color: #fd7326;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+}
+
 .readme .info {
     padding-block: 1rem;
+    margin-inline: 1rem;
 }
 
 .readme .highlight {
