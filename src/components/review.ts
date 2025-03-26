@@ -9,7 +9,7 @@ export class Review {
     constructor(groups?: Group[]) {
         if (groups) {
             groups.forEach(group => {
-                this.collections.set(group.id, new Collection(group, this));
+                this.collections.set(group.id, new Collection(group));
             })
         }
     }

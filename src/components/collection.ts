@@ -13,14 +13,12 @@ export class Collection {
 
     constructor(
         group: Group,
-        private readonly review: Review
     ) {
         this.id = group.id;
         this.label = group.label;
         group.stations.forEach(station => {
             this.questions.set(station.id, new Question(station, this));
         });
-        this.parent = review;
     }
 
     calculatedIsCompleted(): boolean {

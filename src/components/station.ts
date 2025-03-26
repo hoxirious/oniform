@@ -140,7 +140,6 @@ export default class Station {
         private _label: string = `Question ${_parent.findStationIndex(this)}`,
         private _terminals: Terminal[] = [],
         private _links: Link[] = [],
-        private _html: HTMLDivElement = document.createElement("div"),
         private _editable: boolean = true,
         private _id: string = `station-${generateGUID()}`
     ) {
@@ -195,7 +194,7 @@ export default class Station {
         const stationClone = new Station(
             parentClone ?? new Group(Oniform.instance),
             this._root, this._value, this._label,
-            [], [], undefined, editable);
+            [], [], editable);
 
         this._terminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal, true));
         this._links.forEach(link => link.clone(stationClone, editable))
@@ -361,7 +360,7 @@ export default class Station {
 
     static from(obj: any, parent: Group | Station | Terminal): Station {
         const {id, value, label, terminals, links} = obj;
-        const station = new Station(parent, undefined, value, label, [], [], undefined, true, id);
+        const station = new Station(parent, undefined, value, label, [], [], true, id);
         station.terminals = terminals.map((terminal: any) => Terminal.from(terminal, station));
         links.forEach((link: any) => Link.from(link, station));
         return station;

@@ -20,7 +20,7 @@ export class Option {
         this.parentCollection = parentCollection;
         this.nextDependencies = terminal.links.map(link => {
             return link.rightType === "Group" ?
-                new Collection(link.right as Group, parentCollection.parent) :
+                new Collection(link.right as Group) :
                 new Question(link.right as Station, parentCollection);
         })
     }

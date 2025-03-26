@@ -19,12 +19,16 @@ export class Question {
         this.parent = parent;
         this.label = station.value;
         this.id = station.id;
-        station.terminals.forEach(terminal => {
-            this.options.set(terminal.id, new Option(terminal, parent));
-        });
-        this.subQuestions = station.links.map(link => {
-            return new Question(link.right as Station, parent);
-        });
+        if(station.terminals && station.terminals.length > 0) {
+            station.terminals.forEach(terminal => {
+                this.options.set(terminal.id, new Option(terminal, parent));
+            });
+        }
+        if(station.links && station.links.length > 0) {
+            this.subQuestions = station.links.map(link => {
+                return new Question(link.right as Station, parent);
+            });
+        }
     }
 
     calculateIsCompleted(): boolean {
