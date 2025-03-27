@@ -9,3 +9,7 @@
     margin: 1rem;
     gap: 0.5rem;
 }
+
+.oniform textarea:focus, .oniform textarea:active, .oniform input:focus, .oniform input:active{
+    background-color: rgb(221, 220, 220);
+}

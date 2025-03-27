@@ -4,16 +4,16 @@
     height: 2.5rem;
     width: fit-content;
     position: relative;
-    background-color: rgb(63, 67, 70);
-    border: 1px solid #505050;
-    color: #8f8f8f;
     padding-inline: 0.625rem;
     white-space: nowrap;
     text-align: center;
     text-decoration: none;
     font-size: 1rem;
     cursor: pointer;
-    border-radius: 0.25rem;
+    /*border-radius: 0.25rem;*/
+    background-color: rgb(187, 187, 187);
+    border: 0.2rem double #505050;
+    color: #242424;
     transition: background-color 0.3s ease;
     display: flex;
     align-items: center;
@@ -45,20 +45,20 @@
 }
 
 .action-button.icon {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2rem;
+    height: 2rem;
     padding: 0.25rem;
-    background: none;
-    border: none;
-    margin: 0;
+    background-color: rgb(187, 187, 187);
+    border: 0.2rem double #505050;
+    margin-inline: 0.1rem;
 }
 
 .action-button.icon:hover {
-    background-color: rgba(108, 117, 125, 0.3);
+    background-color: rgba(108, 117, 125, 0.8);
 }
 
 .action-button:hover {
-    background-color: #545454;
+    background-color: #d0d0d0;
 }
 
 .action_items {
@@ -70,7 +70,7 @@
     list-style-type: none;
     padding: 0;
     margin: 0;
-    border-radius: 0.25rem;
+    /*border-radius: 0.25rem;*/
     z-index: 1; /* Ensure it appears above other elements */
 }
 

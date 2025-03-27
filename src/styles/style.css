@@ -52,8 +52,6 @@ input:focus, textarea:focus {
   flex-direction: column;
   width: 100vw;
   height: 100vh;
-  filter: contrast(200%) brightness(100%);
-  background: linear-gradient(180deg, rgb(77, 77, 77), rgb(47 47 47 / 86%)), url("/noisy-background.jpg");
 }
 
 #navbar {
@@ -100,6 +98,12 @@ input:focus, textarea:focus {
   height: 100%;
   overflow: auto;
   position: relative;
+  background-color: rgb(103, 103, 103);
+}
+
+#exporter *::selection {
+    background-color: #000000;
+    color: white;
 }
 
 #toolbar {

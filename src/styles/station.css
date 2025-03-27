@@ -22,22 +22,25 @@
 .station_label {
     font-size: 1rem;
     padding-left: 1rem;
+    background-color: rgb(196, 196, 196);
+    border: 0.3rem double #505050;
 }
 
 .station_textarea {
     min-width: 32rem;
     min-height: 40px;
     padding: 10px;
-    border: 0.5rem solid #505050;
-    border-radius: 4px;
+    border: 0.3rem double #505050;
+    /*border-radius: 4px;*/
     font-family: monospace;
     font-size: 14px;
     resize: vertical;
     overflow: auto;
+    background-color: rgb(196, 196, 196);
 }
 
 .station_textarea.folded{
-    border-right: 1rem solid #fd7326;
+    border: 0.3rem solid #000000;
     width: 30rem;
 }
 

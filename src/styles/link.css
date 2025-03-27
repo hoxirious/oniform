@@ -1,12 +1,12 @@
 .link {
-    border-left: 0.1rem dashed #646464;
     border-bottom-left-radius: 1rem;
+    border-left: 0.1rem dashed #646464;
 }
 
-.link:hover:not(:has(.link:hover)) {
-    background-color: #4b4b4b;
-    border-radius: 0.5rem;
-}
+/*.link:hover:not(:has(.link:hover)) {*/
+/*    background-color: #4b4b4b;*/
+/*    !*border-radius: 0.5rem;*!*/
+/*}*/
 
 .link.collapse {
     height: 0;
