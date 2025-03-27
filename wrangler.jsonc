@@ -1,0 +1,9 @@
+{
+  "name": "oniform-worker",
+  "main": "./src/main.ts",        // Cloudflare Worker entry point
+  "compatibility_date": "2025-03-26",
+  "workers_dev": true,
+  "site": {
+    "bucket": "./dist"               // Vite output directory
+  }
+}

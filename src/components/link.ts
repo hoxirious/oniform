@@ -1,8 +1,8 @@
-import Station from "./station.ts";
-import Terminal from "./terminal.ts";
-import Group from "./group.ts";
+import Station from "./station";
+import Terminal from "./terminal";
+import Group from "./group";
 import "../styles/link.css";
-import {generateGUID} from "../common/utility.ts";
+import {generateGUID} from "../common/utility";
 import {h, VNode} from "snabbdom";
 
 export enum Relationship {

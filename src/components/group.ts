@@ -1,19 +1,19 @@
-import Station, {StationButtonAdd} from "./station.ts";
+import Station, {StationButtonAdd} from "./station";
 import '../styles/group.css';
-import ActionButton from "./actionButton.ts";
-import Oniform from "./oniform.ts";
-import Clipboard from "./clipboard.ts";
-import {generateGUID, scrollIntoView, showErrorPopup, showSuccessPopup} from "../common/utility.ts";
-import minusUrl from "../static/minus.svg";
-import plusUrl from "../static/plus.svg";
-import copyUrl from "../static/copy.svg";
-import pasteUrl from "../static/paste.svg";
-import Terminal from "./terminal.ts";
-import Link, {Relationship} from "./link.ts";
-import chevronDownUrl from "../static/chevron-down.svg";
-import chevronRightUrl from "../static/chevron-right.svg";
+import ActionButton from "./actionButton";
+import Oniform from "./oniform";
+import Clipboard from "./clipboard";
+import {generateGUID, scrollIntoView, showErrorPopup, showSuccessPopup} from "../common/utility";
+const minusUrl = "/minus.svg";
+const plusUrl = "/plus.svg";
+const copyUrl = "/copy.svg";
+const pasteUrl = "/paste.svg";
+import Terminal from "./terminal";
+import Link, {Relationship} from "./link";
+const chevronDownUrl = "/chevron-down.svg";
+const chevronRightUrl = "/chevron-right.svg";
 import { h } from "snabbdom/build/h";
-import {renderView} from "../main.ts";
+import {renderView} from "../index";
 
 export class GroupButtonAdd extends ActionButton {
     constructor(parent: Oniform|Station|Terminal, self?: Group) {

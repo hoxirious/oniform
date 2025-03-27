@@ -1,9 +1,9 @@
 import {h, VNode} from "snabbdom";
-import Group, {GroupButtonAdd} from "./group.ts";
+import Group, {GroupButtonAdd} from "./group";
 import "../styles/oniform.css";
-import {generateGUID, scrollIntoView, showSuccessPopup} from "../common/utility.ts";
-import ActionButton from "./actionButton.ts";
-import {renderView} from "../main.ts";
+import {generateGUID, scrollIntoView, showSuccessPopup} from "../common/utility";
+import ActionButton from "./actionButton";
+import {renderView} from "../index";
 
 export default class Oniform {
     static instance: Oniform = new Oniform();

@@ -1,9 +1,9 @@
 import {h} from "snabbdom";
-import Terminal from "./terminal.ts";
-import {Collection} from "./collection.ts";
-import {Question} from "./question.ts";
-import Group from "./group.ts";
-import Station from "./station.ts";
+import Terminal from "./terminal";
+import {Collection} from "./collection";
+import {Question} from "./question";
+import Group from "./group";
+import Station from "./station";
 
 // type OptionDependant = Question | Collection;
 

@@ -1,7 +1,7 @@
 import "../styles/action-button.css";
 import {h, VNode} from "snabbdom";
-import {patch} from "../common/snabbdom.setup.ts";
-import {generateGUID} from "../common/utility.ts";
+import {patch} from "../common/snabbdom.setup";
+import {generateGUID} from "../common/utility";
 
 export default class ActionButton {
     private readonly _id = `button-${generateGUID()}`;

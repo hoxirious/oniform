@@ -1,6 +1,6 @@
 import {h, VNode} from "snabbdom";
-import {Question} from "./question.ts";
-import Group from "./group.ts";
+import {Question} from "./question";
+import Group from "./group";
 import "../styles/collection.css";
 
 export class Collection {

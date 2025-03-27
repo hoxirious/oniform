@@ -1,8 +1,8 @@
 import {h, VNode} from "snabbdom";
-import Station from "./station.ts";
-import {Option} from "./option.ts";
-import {Collection} from "./collection.ts";
-import {renderReview} from "../main.ts";
+import Station from "./station";
+import {Option} from "./option";
+import {Collection} from "./collection";
+import {renderReview} from "../index";
 import "../styles/question.css";
 
 export class Question {

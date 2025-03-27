@@ -1,9 +1,9 @@
-import Group from "./group.ts";
-import Station from "./station.ts";
-import Terminal from "./terminal.ts";
+import Group from "./group";
+import Station from "./station";
+import Terminal from "./terminal";
 import "../styles/clipboard.css";
 import {h} from "snabbdom";
-import {renderClipboard} from "../main.ts";
+import {renderClipboard} from "../index";
 
 export default class Clipboard {
     static instance = new Clipboard();

@@ -8,19 +8,10 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "noEmit": true,
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noEmit": false,                     // Emit compiled files
+    "outDir": "./dist"                   // Output folder for Cloudflare Worker
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

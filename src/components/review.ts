@@ -1,6 +1,6 @@
 import {h} from "snabbdom";
-import {Collection} from "./collection.ts";
-import Group from "./group.ts";
+import {Collection} from "./collection";
+import Group from "./group";
 
 export class Review {
     static instance: Review = new Review();
