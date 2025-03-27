@@ -3,7 +3,7 @@ import Group, {GroupButtonAdd} from "./group";
 import "../styles/oniform.css";
 import {generateGUID, scrollIntoView, showSuccessPopup} from "../common/utility";
 import ActionButton from "./actionButton";
-import {renderView} from "../index";
+import {renderView} from "../main";
 
 export default class Oniform {
     static instance: Oniform = new Oniform();

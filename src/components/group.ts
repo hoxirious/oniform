@@ -13,7 +13,7 @@ import Link, {Relationship} from "./link";
 const chevronDownUrl = "/chevron-down.svg";
 const chevronRightUrl = "/chevron-right.svg";
 import { h } from "snabbdom/build/h";
-import {renderView} from "../index";
+import {renderView} from "../main";
 
 export class GroupButtonAdd extends ActionButton {
     constructor(parent: Oniform|Station|Terminal, self?: Group) {

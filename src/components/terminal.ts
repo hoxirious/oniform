@@ -13,7 +13,7 @@ import Clipboard from "./clipboard";
 import {generateGUID, scrollIntoView, showErrorPopup, showSuccessPopup} from "../common/utility";
 import Oniform from "./oniform";
 import {h, VNode} from "snabbdom";
-import {renderView} from "../index";
+import {renderView} from "../main";
 
 export class TerminalButtonAdd extends ActionButton {
     constructor(parent: Station, self?: Terminal) {

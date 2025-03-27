@@ -2,7 +2,7 @@ import {h, VNode} from "snabbdom";
 import Station from "./station";
 import {Option} from "./option";
 import {Collection} from "./collection";
-import {renderReview} from "../index";
+import {renderReview} from "../main";
 import "../styles/question.css";
 
 export class Question {

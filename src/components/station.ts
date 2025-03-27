@@ -13,7 +13,7 @@ import Link, {Relationship} from "./link";
 import {generateGUID, scrollIntoView, showErrorPopup, showSuccessPopup} from "../common/utility";
 import Oniform from "./oniform";
 import {h, VNode} from "snabbdom";
-import {renderView} from "../index";
+import {renderView} from "../main";
 
 export class StationButtonAdd extends ActionButton {
     constructor(parent: Group | Station | Terminal, self?: Station) {

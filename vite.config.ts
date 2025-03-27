@@ -14,15 +14,9 @@ export default defineConfig({
         outDir: 'dist',
         rollupOptions: {
             input: {
-                index: './index.html',
-                readme: './readme.html',
-                faq: './faq.html',
-                client: './src/index.ts', // Outputs as dist/client.js
-            },
-            output: {
-                entryFileNames: '[name].js', // e.g., client.js
-                chunkFileNames: 'chunks/[name].js',
-                assetFileNames: 'assets/[name].[ext]', // e.g., assets/minus.svg
+                main: './index.html',
+                readme: './readme/index.html',
+                faq: './faq/index.html',
             },
         },
         emptyOutDir: true,

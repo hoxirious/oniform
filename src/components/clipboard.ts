@@ -3,7 +3,7 @@ import Station from "./station";
 import Terminal from "./terminal";
 import "../styles/clipboard.css";
 import {h} from "snabbdom";
-import {renderClipboard} from "../index";
+import {renderClipboard} from "../main";
 
 export default class Clipboard {
     static instance = new Clipboard();

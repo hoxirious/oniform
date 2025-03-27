@@ -3,7 +3,10 @@
   "main": "./src/main.ts",        // Cloudflare Worker entry point
   "compatibility_date": "2025-03-26",
   "workers_dev": true,
-  "site": {
+  "build": {
+    "command": "pnpm run build"   // Vite build command
+  },
+  "assets": {
     "bucket": "./dist"               // Vite output directory
   }
 }
