@@ -9,7 +9,7 @@
 
 .group {
     border-radius: 0.5rem;
-    border: 0.1rem solid #505050;
+    border: 1rem solid #505050;
     min-width: 35rem;
     width: fit-content;
     height: fit-content;

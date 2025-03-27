@@ -83,10 +83,10 @@ export function scrollIntoView(id: string, options: ScrollIntoViewOptions = { be
         element.scrollIntoView(options);
         element.animate(
             [
-                { backgroundColor: "rgba(196,196,196,0.2)", boxShadow: "0px 3px 5px 2px rgba(169, 169, 169, 0.4)", borderRadius: "0.25rem" },
-                { backgroundColor: "transparent", boxShadow: "0px 3px 5px 2px rgba(169, 169, 169, 0)", borderRadius: "0.25rem" },
+                { backgroundColor: "rgb(115,115,115)", borderRadius: "0.25rem" },
+                { backgroundColor: "transparent", borderRadius: "0.25rem" },
             ],
-            { duration: 500, iterations: 2}
+            { duration: 500, iterations: 1}
         );
     }
 }
