@@ -13,7 +13,11 @@ export default defineConfig({
     build: {
         outDir: 'dist',
         rollupOptions: {
-            input: './src/index.ts',
+            input: {
+                main: './index.html',
+                readme: './readme.html',
+                faq: './faq.html',
+            },
         },
     },
 });
