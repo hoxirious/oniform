@@ -17,9 +17,16 @@ export default defineConfig({
                 index: './index.html',
                 readme: './readme.html',
                 faq: './faq.html',
-                main: './src/main.ts',
-                client: "./src/index.ts",
+                client: './src/index.ts', // Outputs as dist/client.js
+            },
+            output: {
+                entryFileNames: '[name].js', // e.g., client.js
+                chunkFileNames: 'chunks/[name].js',
+                assetFileNames: 'assets/[name].[ext]', // e.g., assets/minus.svg
             },
         },
+        emptyOutDir: true,
     },
+    publicDir: 'src/public', // Copies src/public/ to dist/
 });
+
