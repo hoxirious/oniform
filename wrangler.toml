@@ -1,4 +1,0 @@
-name = "oniform"
-main = "./worker/index.ts"
-compatibility_date = "2025-03-26"
-workers_dev = true

@@ -11,12 +11,10 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^0.1.17",
     "@cloudflare/workers-types": "^4.20250321.0",
     "typescript": "~5.7.3",
-    "vite": "^6.2.0",
-    "vite-svg-loader": "^5.1.0",
-    "wrangler": "^4.5.0"
+    "vite": "^6.1.0",
+    "vite-svg-loader": "^5.1.0"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",
