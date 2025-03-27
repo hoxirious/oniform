@@ -14,9 +14,11 @@ export default defineConfig({
         outDir: 'dist',
         rollupOptions: {
             input: {
-                main: './index.html',
+                index: './index.html',
                 readme: './readme.html',
                 faq: './faq.html',
+                main: './src/main.ts',
+                client: "./src/index.ts",
             },
         },
     },
