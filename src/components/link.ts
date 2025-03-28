@@ -26,11 +26,13 @@ export default class Link {
 
     private render():VNode {
         this.parent.addLink(this, !this._editable);
-        return h(`div.link.${this.relationship}`, { props: { id: this.id }, key: this._id, class: {collapse: this.isCollapsed} }, [this.right.render()]);
+        const title = `${this._parent.label}'s Dependant`;
+        return h(`div.link.${this.relationship}`, { props: { id: this.id, title, tabIndex: "1" }, key: this._id, class: {collapse: this.isCollapsed} }, [this.right.render()]);
     }
 
     rerender() {
-        return h(`div.link.${this.relationship}`, { props: { id: this.id }, key: this._id, class: {collapse: this.isCollapsed} }, [this.right.render()]);
+        const title = `${this._parent.label}'s Dependant`;
+        return h(`div.link.${this.relationship}`, { props: { id: this.id, title, tabIndex: "1"}, key: this._id, class: {collapse: this.isCollapsed} }, [this.right.render()]);
     }
 
     clone(leftClone: Station|Terminal, editable: boolean = false): Link {

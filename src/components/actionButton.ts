@@ -33,7 +33,8 @@ export default class ActionButton {
             props: {
                 id: this._id,
                 title: this._tooltip,
-                type: "button"
+                type: "button",
+                tabIndex: "-1"
             },
             key: this._id,
             on: {click: this._callback},
