@@ -98,7 +98,7 @@ export default class Oniform {
     }
 
     static deserialize(json: string) {
-        this.instance = Oniform.from(JSON.parse(json));
+        return Oniform.from(JSON.parse(json));
     }
 
     get groups(): Group[] {

@@ -19,13 +19,14 @@ export default class Link {
         private readonly _relationship: Relationship,
         private readonly _editable: boolean = true,
         private readonly _rightType: string = _right.constructor.name,
-        private readonly _id: string = `link-${generateGUID()}`
+        private readonly _id: string = `link-${generateGUID()}`,
+        private readonly noRender: boolean = false
     ) {
-        this.render();
+        this.render(noRender);
     }
 
-    private render():VNode {
-        this.parent.addLink(this, !this._editable);
+    private render(noRender: boolean):VNode {
+        this.parent.addLink(this, noRender || !this._editable);
         const title = `${this._parent.label}'s Dependant`;
         return h(`div.link.${this.relationship}`, { props: { id: this.id, title, tabIndex: "1" }, key: this._id, class: {collapse: this.isCollapsed} }, [this.right.render()]);
     }
@@ -82,10 +83,10 @@ export default class Link {
     static from (obj: any, parent: Station | Terminal): Link {
         const {right, relationship, rightType, id} = obj;
         if(rightType === "Group") {
-            return new Link(parent, Group.from(right, parent), relationship, true, "Group", id);
+            return new Link(parent, Group.from(right, parent), relationship, true, "Group", id, true);
         }
         else {
-            return new Link(parent, Station.from(right, parent), relationship, true, "Station", id);
+            return new Link(parent, Station.from(right, parent), relationship, true, "Station", id, true);
         }
     }
 }
