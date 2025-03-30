@@ -10,12 +10,13 @@ export default class Oniform {
     readonly _id = `oniform-${generateGUID()}`;
     private constructor(
         private _groups: Group[] = [],
-        private _label: string = "",
+        private _label: string = "Untitled Form",
     ) {}
-
 
     render(): VNode {
         return h(`form#${this._id}.oniform`, {key: this._id}, [
+            h("h2", "Playground"),
+            h("input.oniform_label", {props: {value: this._label}}),
             this.createButtons(),
             this._groups.length === 0 ? new GroupButtonAdd(this).render() : null,
             ...this._groups.map(group => group.render())

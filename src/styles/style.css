@@ -96,6 +96,7 @@ input:focus, textarea:focus {
 #exporter {
   display: flex;
   height: 100%;
+  width: 100%;
   overflow: auto;
   position: relative;
   background-color: rgb(103, 103, 103);
@@ -107,17 +108,11 @@ input:focus, textarea:focus {
 }
 
 #toolbar {
-  margin: auto 0 auto auto;
-  width: 3rem;
+  border-right: 0.3rem double #252525;
+  background-color: rgb(70, 70, 70);
+  padding: 0;
   position: sticky;
-  right: 0.5rem;
-  background-color: transparent;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  top: 5rem;
+  top: 0;
 }
 
 footer {

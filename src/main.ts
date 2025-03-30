@@ -1,10 +1,10 @@
-import Library from "./components/library";
-import Oniform from "./components/oniform";
+import {Library} from "./components/library";
 import Clipboard from "./components/clipboard";
 import {h, VNode} from "snabbdom";
 import ActionButton from "./components/actionButton";
 import {patch} from "./common/snabbdom.setup";
 import {Review} from "./components/review";
+import Oniform from "./components/oniform";
 
 declare global {
     interface Window {
@@ -118,20 +118,18 @@ const initForm = () => {
 
     let form: Oniform;
     // initialize empty form
+    const serializedForm = localStorage.getItem("oniformInstance");
+    if (serializedForm) {
+        Oniform.instance = Oniform.deserialize(serializedForm);
+    }
     form = Oniform.instance;
     const oniformElement = document.getElementById("oniform");
+
     if (!oniformElement) {
         console.error("Oniform element not found");
         return;
     }
     vnode = patch(oniformElement, form.render());
-    renderView();
-
-    //initialize cache if available
-    const serializedForm = localStorage.getItem("oniformInstance");
-    if (serializedForm) {
-        Oniform.deserialize(serializedForm);
-    }
     renderView();
     window.oniformInstance = form; // Attach the instance to the window object
 }

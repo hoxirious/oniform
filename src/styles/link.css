@@ -1,6 +1,7 @@
 .link {
     border-bottom-left-radius: 1rem;
     border-left: 0.1rem dashed #646464;
+    padding-left: 1rem;
 }
 
 .link:hover:not(:has(.link:hover)) {

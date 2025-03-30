@@ -16,7 +16,12 @@ export class Review {
 
     render() {
         return h("div#review-window", {key: "review"}, [
-            h("div", Array.from(this.collections.values()).map(collection => collection.render()))
+            h("div.review_container",
+                [
+                    h("h2", "Review"),
+                    h("p", "> A quick peek at the result of your current oniform in the playground"),
+                    h("div.review_object", Array.from(this.collections.values()).map(collection => collection.render()))
+                ])
         ]);
     }
 }

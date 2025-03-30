@@ -1,20 +1,16 @@
 #clipboard-window, #review-window, #library-window {
     display: none;
-    position: fixed;
-    right: 4rem;
     width: 40%;
-    height: 90%;
+    position: sticky;
+    top: 0;
     background-color: rgb(63,63,63);
-    z-index: 999;
     overflow: auto;
     resize: horizontal;
     direction: rtl;
     padding-left: 1rem;
     padding-right: 2rem;
-    border-width: 0.1rem;
-    border-color: rgba(224, 224, 224, 0.5);
     /*border-radius: 0.5rem;*/
-    margin-top: 2rem;
+    border-left: 0.3rem double #252525;
 }
 
 #clipboard-window > *, #review-window > *, #library-window > * {
@@ -30,18 +26,70 @@
     width: 100%;
 }
 
-.clipboard_container h2 {
-    font-size: 1.25rem;
+.clipboard_container h2, .review_container h2, .library_container h2 {
+    font-size: 1.5rem;
     font-weight: bold;
     font-family: Courier, monospace;
     margin-top: 1rem;
     padding-inline: 1rem;
 }
 
+.clipboard_container h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    font-family: Courier, monospace;
+    margin-top: 1rem;
+    padding-inline: 1rem;
+    color: #8f8f8f;
+}
+
+.clipboard_container p, .review_container p {
+    font-size: 0.9rem;
+    font-family: Courier, monospace;
+    padding-inline: 1rem;
+    line-height: 1.5;
+}
+
+.clipboard_container img {
+    display: inline;
+    height: 2rem;
+    width: fit-content;
+    position: relative;
+    padding: 0.2rem 0.625rem;
+    white-space: nowrap;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    /*border-radius: 0.25rem;*/
+    background-color: rgb(187, 187, 187);
+    border: 0.2rem double #505050;
+    color: #242424;
+    transition: background-color 0.3s ease;
+}
+
+.clipboard_container .copy_object {
+    margin-top: 1rem;
+}
+.clipboard_container .copy_object h3 {
+    color: #cccccc;
+}
+.clipboard_container .copy_object * {
+    color: #242424;
+}
+
+.clipboard_container img:hover {
+    background-color: rgba(108, 117, 125, 0.8);
+}
+
+.review_container .review_object, .library_container .library_object  {
+    margin-top: 1rem;
+    padding-inline: 1rem;
+}
+
 #toolbar > .button {
-    writing-mode: sideways-lr;
-    height: 20%;
-    width: 2.5rem;
+    width: 100%;
+    border: none;
 }
 
 #toolbar > .button:focus {

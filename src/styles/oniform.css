@@ -2,11 +2,27 @@
     display: flex;
     flex-direction: column;
     margin: 2rem;
+    flex-grow: 1;
+}
+
+.oniform > h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: Courier, monospace;
+    margin-top: 1rem;
+}
+.oniform > .oniform_label {
+    font-size: 1.25rem;
+    font-family: Courier, monospace;
+    margin-block: 1rem;
+    background-color: #8f8f8f;
+    width: fit-content;
+    padding-left: 1rem;
 }
 
 .oniform > .buttons {
     display: flex;
-    margin: 1rem;
+    margin-bottom: 1rem;
     gap: 0.5rem;
 }
 
