@@ -4,7 +4,7 @@
 `oniform` is a lightweight tool to create **nested** forms at ease. The interface is built with Typescript and Snabbdom with focus on performance and user experience.
 
 ## Demo
-- **Playground**: [Not deployed](todo)
+- **Playground**: [Link](https://oniform.giahy33.workers.dev/)
 
 ## Features
 - **Nested Form Playground**: To create nested forms with ease.
