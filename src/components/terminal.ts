@@ -268,11 +268,13 @@ export default class Terminal {
         scrollIntoView(newStation.id);
     }
 
-    public addLink(link: Link, noRender: boolean = false) {
+    public addLink(link: Link, isRender: boolean = true) {
         link.parent = this;
         this._links.push(link);
-        if(!noRender) renderView();
-        scrollIntoView(link.id)
+        if(isRender) {
+            renderView();
+            scrollIntoView(link.id)
+        }
     }
 
     toObj(): any {

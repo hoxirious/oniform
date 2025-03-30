@@ -335,10 +335,12 @@ export default class Station {
         return (index + 1);
     }
 
-    addLink(link: Link, noRender: boolean = false) {
+    addLink(link: Link, isRender: boolean = true) {
         this.links.push(link);
-        if(!noRender) renderView();
-        scrollIntoView(link.id);
+        if(isRender) {
+            renderView();
+            scrollIntoView(link.id);
+        }
     }
 
 
