@@ -83,7 +83,8 @@ export default class Oniform {
         const {groups, label} = this;
         return {
             label,
-            groups: groups.map(group => group.toObj())
+            groups: groups.map(group => group.toObj()),
+            date: new Date().toISOString()
         };
     }
 

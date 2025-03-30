@@ -1,0 +1,16 @@
+.library_object {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+
+.library_object > .library_item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-inline: 1rem;
+    padding-block: 0.5rem;
+    border-bottom: 1px solid #505050;
+    background-color: rgba(17, 17, 17, 0.1);
+    gap: 2rem;
+}
