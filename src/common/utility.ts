@@ -77,7 +77,7 @@ export function showSuccessPopup(message: string, duration: number = 1000) {
     }, duration);
 }
 
-export function scrollIntoView(id: string, options: ScrollIntoViewOptions = { behavior: "instant", block: "nearest" }) {
+export function scrollIntoView(id: string, options: ScrollIntoViewOptions = { behavior: "smooth", block: "nearest" }) {
     const element = document.getElementById(id);
     if (element) {
         element.scrollIntoView(options);

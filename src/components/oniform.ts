@@ -14,7 +14,7 @@ export default class Oniform {
     ) {}
 
     render(): VNode {
-        return h(`form#${this._id}.oniform`, {key: this._id}, [
+        return h(`form#oniform.oniform`, [
             h("h2", "Playground"),
             h("input.oniform_label", {props: {value: this._label}}),
             this.createButtons(),

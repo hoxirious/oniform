@@ -13,7 +13,7 @@ declare global {
     }
 }
 let isPageInitialized = false;
-let vnode: VNode = h("div#oniform");
+let vnode: VNode = h("form#oniform.oniform");
 let reviewWindowVnode: VNode = h("div#review-window");
 let clipboardWindowVnode: VNode = h("div#clipboard-window");
 let libraryWindowVnode: VNode = h("div#library-window");
@@ -128,9 +128,9 @@ const initForm = () => {
         console.error("Oniform element not found");
         return;
     }
-    vnode = patch(oniformElement, form.render());
-    renderView();
+    vnode = patch(oniformElement, h(`form#oniform.oniform`, []));
     window.oniformInstance = form; // Attach the instance to the window object
+    renderView();
 }
 
 export const renderView = () => {

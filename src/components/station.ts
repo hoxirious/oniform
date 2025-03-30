@@ -196,7 +196,7 @@ export default class Station {
             this._root, this._value, this._label,
             [], [], editable);
 
-        this._terminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal, true));
+        this._terminals.map(terminal => terminal.clone(editable, stationClone)).forEach(terminal => stationClone.appendExistingTerminal(terminal, false));
         this._links.forEach(link => link.clone(stationClone, editable))
         return stationClone;
     }
@@ -216,7 +216,7 @@ export default class Station {
             copiedObject.parent = this;
             new Link(this, copiedObject, Relationship.DEPENDANT);
         } else if (copiedObject instanceof Terminal) {
-            this.appendExistingTerminal(copiedObject, true);
+            this.appendExistingTerminal(copiedObject, false);
         }
     }
 
@@ -272,10 +272,10 @@ export default class Station {
         scrollIntoView(terminalId);
     }
 
-    appendExistingTerminal(terminal: Terminal, noRender: boolean = false) {
+    appendExistingTerminal(terminal: Terminal, isRender: boolean = true) {
         terminal.parent = this;
         this._terminals.push(terminal);
-        if (!noRender) renderView();
+        if (isRender) renderView();
         scrollIntoView(terminal.id);
     }
 

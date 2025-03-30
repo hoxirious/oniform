@@ -159,7 +159,7 @@ export default class Group {
 
     clone(editable: boolean = false, parentClone?: Station|Terminal): Group {
         const cloneGroup = new Group(parentClone ?? Oniform.instance, this._label, [], this._scoreExpression, this._score, editable);
-        this._stations.map(station => station.clone(editable, cloneGroup)).forEach(station => cloneGroup.appendExistingStation(station, true));
+        this._stations.map(station => station.clone(editable, cloneGroup)).forEach(station => cloneGroup.appendExistingStation(station, false));
         return cloneGroup;
     }
 
@@ -179,7 +179,7 @@ export default class Group {
             }
         }
         else if(copiedObject instanceof Station) {
-            this.appendExistingStation(copiedObject, true);
+            this.appendExistingStation(copiedObject);
         }
         else {
             showErrorPopup("Cannot copy Option in Group.", 2000);
@@ -205,10 +205,10 @@ export default class Group {
         scrollIntoView(stationId);
     }
 
-    appendExistingStation(station: Station, noRender: boolean = false) {
+    appendExistingStation(station: Station, isRender: boolean = true) {
         station.parent = this;
         this._stations.push(station);
-        if(!noRender) renderView();
+        if(isRender) renderView();
         scrollIntoView(station.id);
     }
 

@@ -26,7 +26,7 @@ export default class Link {
     }
 
     private render(isRender: boolean):VNode {
-        this.parent.addLink(this, isRender || !this._editable);
+        this.parent.addLink(this, isRender);
         const title = `${this._parent.label}'s Dependant`;
         return h(`div.link.${this.relationship}`, { props: { id: this.id, title, tabIndex: "1" }, key: this._id, class: {collapse: this.isCollapsed} }, [this.right.render()]);
     }
@@ -38,7 +38,7 @@ export default class Link {
 
     clone(leftClone: Station|Terminal, editable: boolean = false): Link {
         const rightClone = this._right.clone(editable, leftClone);
-        return new Link(leftClone, rightClone, this._relationship, editable);
+        return new Link(leftClone, rightClone, this._relationship, editable, this._rightType, this._id, false);
     }
 
 
