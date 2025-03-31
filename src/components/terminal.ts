@@ -7,6 +7,7 @@ const copyUrl = "/copy.svg";
 const pasteUrl = "/paste.svg";
 const chevronDownUrl = "/chevron-down.svg";
 const chevronRightUrl = "/chevron-right.svg";
+const cornerBottomLeftUrl = "/corner-bottom-left.svg";
 import Link, {Relationship} from "./link";
 import Group from "./group";
 import Clipboard from "./clipboard";
@@ -165,11 +166,12 @@ export default class Terminal {
     }
 
     tree() {
+        const optionVnode = h("img", { props: { src: cornerBottomLeftUrl, alt: "Option" } });
         return h("div.tree_terminal", [
             h("div.tree_terminal_row",{props: {tabIndex: "0"}}, [this.links.length > 0 ? new TreeTerminalButtonCollapse(this).render() : h("div.buffer"),
                 h("h1.tree_terminal_label", {
                     on: {click: () => scrollIntoView(this.id, { behavior: "smooth", block: "start" })}
-                }, this._label)]),
+                }, [optionVnode, this._label])]),
             h("div.tree_terminal_links", {class: {collapse: this.isTreeCollapsed}}, this._links.map(link => link.tree()))
         ])
     }

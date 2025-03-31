@@ -1,17 +1,16 @@
 #tree-window {
     margin-top: 1rem;
-    padding-left: 1rem;
 }
 
 .tree_container {
     display: flex;
     flex-direction: column;
     overflow: auto;
-    height: 80vh;
+    height: 75vh;
+    padding-left: 0.5rem;
 }
 
 .tree_group {
-    padding-left: 0.5rem;
 }
 
 .tree_group_row, .tree_station_row, .tree_terminal_row {
@@ -24,37 +23,44 @@
 .tree_group_label, .tree_station_label, .tree_terminal_label {
     font-size: 1rem;
     width: 100%;
-    padding-block: 0.5rem;
+    padding-block: 0.2rem;
 }
 
 .buffer {
-    width: 1.75rem;
+    width: 2.25rem;
 }
 
 .tree_group_row:active, .tree_station_row:active, .tree_terminal_row:active,
 .tree_group_row:focus, .tree_station_row:focus, .tree_terminal_row:focus {
     background-color: #3b3b3b;
 }
+.tree_group_label > img,
+.tree_station_label > img,
+.tree_terminal_label > img {
+    display: inline;
+    margin-right: 0.3rem;
+}
 
 .tree_group > .tree_group_row > button,
 .tree_station > .tree_station_row > button,
 .tree_terminal > .tree_terminal_row > button {
     background: transparent;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1rem;
+    height: 1rem;
     padding: 0;
+    margin-right: 1rem;
     border: 0;
 }
 
 .tree_group_stations {
-    padding-left: 0.5rem;
+    padding-left: 1rem;
 }
 
 .tree_station {
 }
 
 .tree_station_terminals {
-    padding-left: 0.5rem;
+    padding-left: 1rem;
 }
 
 .tree_group_stations.collapse,
@@ -64,9 +70,9 @@
 }
 
 .tree_station_links {
-    padding-left: 0.5rem;
+    padding-left: 1rem;
 }
 
 .tree_terminal_links {
-    padding-left: 0.5rem;
+    padding-left: 1rem;
 }

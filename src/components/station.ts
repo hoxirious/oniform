@@ -7,6 +7,7 @@ const chevronDownUrl = "/chevron-down.svg";
 const chevronRightUrl = "/chevron-right.svg";
 const copyUrl = "/copy.svg";
 const pasteUrl = "/paste.svg";
+const questionUrl = "/question.svg";
 import Group from "./group";
 import Clipboard from "./clipboard";
 import Link, {Relationship} from "./link";
@@ -211,13 +212,14 @@ export default class Station {
     }
 
     tree() {
+        const questionVnode = h("img", { props: { src: questionUrl, alt: "Question" } });
         return h("div.tree_station", [
             h("div.tree_station_row",
                 {props: {tabIndex: "0"}},
                 [new TreeStationButtonCollapse(this).render(),
                 h("h1.tree_station_label", {
                     on: {click: () => scrollIntoView(this.id, {behavior: "smooth", block: "start"})}
-                }, this._label)]),
+                }, [questionVnode, this._label])]),
             this.terminals.length > 0 ? h("div.tree_station_terminals", {class: {collapse: this.isTreeCollapsed}} ,this.terminals.map(terminal => terminal.tree())) : null,
             this.links.length > 0 ? h("div.tree_station_links", this.links.map(link => link.tree())) : null
         ])

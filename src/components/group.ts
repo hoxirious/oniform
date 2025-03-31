@@ -12,6 +12,7 @@ import Terminal from "./terminal";
 import Link, {Relationship} from "./link";
 const chevronDownUrl = "/chevron-down.svg";
 const chevronRightUrl = "/chevron-right.svg";
+const groupUrl = "/group.svg";
 import { h } from "snabbdom/build/h";
 import {renderView} from "../main";
 
@@ -177,12 +178,13 @@ export default class Group {
     }
 
     tree() {
+        const groupVnode = h("img", { props: { src: groupUrl, alt: "Group" } });
         return h("div.tree_group",
             [h("div.tree_group_row",
                 {props: {tabIndex: "0"}},
                 [new TreeGroupButtonCollapse(this).render(), h("h1.tree_group_label", {
                 on: {click: () => scrollIntoView(this.id, { behavior: "smooth", block: "start" })}
-            }, this._label)]),
+            },  [groupVnode, this._label])]),
             h("div.tree_group_stations", {class: {collapse: this.isTreeCollapsed}}, this.stations.map(station => station.tree()))
         ])
     }
