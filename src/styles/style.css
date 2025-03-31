@@ -103,8 +103,8 @@ input:focus, textarea:focus {
 }
 
 #exporter *::selection {
-    background-color: #000000;
-    color: white;
+  background-color: #e9e942;
+  color: #242424;
 }
 
 #toolbar {

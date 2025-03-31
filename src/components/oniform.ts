@@ -43,7 +43,7 @@ export default class Oniform {
                 Library.instance.oniformList.push(serializedForm);
                 renderView();
                 showSuccessPopup("Form saved");
-            }, undefined, ["text"], "Save form").render(),
+            }, undefined, ["text", "save"], "Save form").render(),
             new ActionButton("Reset",() => {
                 this.clear();
                 this.render();

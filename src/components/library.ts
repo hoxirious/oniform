@@ -42,7 +42,7 @@ export class LibraryItem {
         const formattedDate = new Date(date).toLocaleString();
         return h("div.library_item", { key: generateGUID()}, [
             h("h3", label),
-            h("p", `Last Updated: ${formattedDate}`),
+            h("p", formattedDate),
             h("button",
                 { on: { click: () => {
                         Oniform.instance = Oniform.deserialize(this.serializedForm);

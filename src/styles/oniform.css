@@ -29,6 +29,10 @@
     align-items: center;
     gap: 0.5rem;
 }
+
+.oniform_header .buttons > .save {
+    background-color: #e9e942;
+}
 .oniform_header h2 {
     font-size: 1.5rem;
     font-weight: bold;
@@ -42,4 +46,8 @@
     background-color: #8f8f8f;
     width: fit-content;
     padding-left: 1rem;
+}
+.oniform_header .oniform_label:active,
+.oniform_header .oniform_label:focus {
+    background-color: #3b3b3b;
 }

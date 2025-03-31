@@ -27,6 +27,10 @@
     padding-block: 0.5rem;
 }
 
+.buffer {
+    width: 1.75rem;
+}
+
 .tree_group_row:active, .tree_station_row:active, .tree_terminal_row:active,
 .tree_group_row:focus, .tree_station_row:focus, .tree_terminal_row:focus {
     background-color: #3b3b3b;
