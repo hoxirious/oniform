@@ -42,6 +42,12 @@
     padding-left: 0.5rem;
 }
 
+.tree_group_stations.collapse,
+.tree_station_terminals.collapse,
+.tree_terminal_links.collapse {
+    height: 0;
+}
+
 .tree_station_links {
     padding-left: 0.5rem;
 }
