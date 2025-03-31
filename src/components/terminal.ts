@@ -166,9 +166,9 @@ export default class Terminal {
 
     tree() {
         return h("div.tree_terminal", [
-            h("div.tree_terminal_row", [this.links.length > 0 ? new TreeTerminalButtonCollapse(this).render() : null,
+            h("div.tree_terminal_row",{props: {tabIndex: "0"}}, [this.links.length > 0 ? new TreeTerminalButtonCollapse(this).render() : null,
                 h("h1.tree_terminal_label", {
-                    on: {click: () => scrollIntoView(this.id, { behavior: "smooth", block: "center" })}
+                    on: {click: () => scrollIntoView(this.id, { behavior: "smooth", block: "start" })}
                 }, this._label)]),
             h("div.tree_terminal_links", {class: {collapse: this.isTreeCollapsed}}, this._links.map(link => link.tree()))
         ])

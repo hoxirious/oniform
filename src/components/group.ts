@@ -177,8 +177,10 @@ export default class Group {
     }
 
     tree() {
-        return h("div.tree_group", [
-            h("div.tree_group_row", [new TreeGroupButtonCollapse(this).render(), h("h1.tree_group_label", {
+        return h("div.tree_group",
+            [h("div.tree_group_row",
+                {props: {tabIndex: "0"}},
+                [new TreeGroupButtonCollapse(this).render(), h("h1.tree_group_label", {
                 on: {click: () => scrollIntoView(this.id, { behavior: "smooth", block: "start" })}
             }, this._label)]),
             h("div.tree_group_stations", {class: {collapse: this.isTreeCollapsed}}, this.stations.map(station => station.tree()))

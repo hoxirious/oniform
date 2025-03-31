@@ -23,11 +23,13 @@
 }
 .tree_group_label, .tree_station_label, .tree_terminal_label {
     font-size: 1rem;
+    width: 100%;
+    padding-block: 0.5rem;
 }
 
-.tree_group_label:active, .tree_station_label:active, .tree_terminal_label:active,
-.tree_group_label:focus, .tree_station_label:focus, .tree_terminal_label:focus {
-    background-color: #d0d0d0;
+.tree_group_row:active, .tree_station_row:active, .tree_terminal_row:active,
+.tree_group_row:focus, .tree_station_row:focus, .tree_terminal_row:focus {
+    background-color: #3b3b3b;
 }
 
 .tree_group > .tree_group_row > button,
