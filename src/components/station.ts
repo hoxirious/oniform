@@ -212,7 +212,10 @@ export default class Station {
 
     tree() {
         return h("div.tree_station", [
-            h("div.tree_station_label", [new TreeStationButtonCollapse(this).render(), this._label]),
+            h("div.tree_station_row", [new TreeStationButtonCollapse(this).render(),
+                h("h1.tree_station_label", {
+                    on: {click: () => scrollIntoView(this.id, {behavior: "smooth", block: "center"})}
+                }, this._label)]),
             this.terminals.length > 0 ? h("div.tree_station_terminals", {class: {collapse: this.isTreeCollapsed}} ,this.terminals.map(terminal => terminal.tree())) : null,
             this.links.length > 0 ? h("div.tree_station_links", this.links.map(link => link.tree())) : null
         ])

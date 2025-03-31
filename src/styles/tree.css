@@ -14,16 +14,25 @@
     padding-left: 0.5rem;
 }
 
-.tree_group_label, .tree_station_label, .tree_terminal_label {
+.tree_group_row, .tree_station_row, .tree_terminal_row {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 1rem;
+    cursor: pointer;
+}
+.tree_group_label, .tree_station_label, .tree_terminal_label {
+    font-size: 1rem;
 }
 
-.tree_group > .tree_group_label > button,
-.tree_station > .tree_station_label > button,
-.tree_terminal > .tree_terminal_label > button {
+.tree_group_label:active, .tree_station_label:active, .tree_terminal_label:active,
+.tree_group_label:focus, .tree_station_label:focus, .tree_terminal_label:focus {
+    background-color: #d0d0d0;
+}
+
+.tree_group > .tree_group_row > button,
+.tree_station > .tree_station_row > button,
+.tree_terminal > .tree_terminal_row > button {
     background: transparent;
     width: 1.5rem;
     height: 1.5rem;
