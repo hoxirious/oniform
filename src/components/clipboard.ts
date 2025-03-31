@@ -10,7 +10,7 @@ const pasteUrl = "/paste.svg";
 
 export default class Clipboard {
     static instance = new Clipboard();
-    constructor(
+    private constructor(
         private _copiedObject?: Group | Station | Terminal
     ) {}
 

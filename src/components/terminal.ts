@@ -69,6 +69,25 @@ export class TerminalButtonCollapse extends ActionButton {
     }
 }
 
+export class TreeTerminalButtonCollapse extends ActionButton {
+    constructor(self: Terminal) {
+        const chevronDownVNode = h("img", { props: { src: chevronDownUrl, alt: "Collapse All" } });
+        const chevronRightVNode = h("img", { props: { src: chevronRightUrl, alt: "Expand All" } });
+
+        const collapseCallback = () => {
+            self.isTreeCollapsed = !self.isTreeCollapsed;
+            self.links.forEach(link => link.isTreeCollapsed = !link.isTreeCollapsed);
+            renderView();
+        };
+
+        if (self.isTreeCollapsed && self.links.length > 0) {
+            super(chevronRightVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
+        } else {
+            super(chevronDownVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
+        }
+    }
+}
+
 export class TerminalButtonDelete extends ActionButton {
     constructor(parent: Station, self: Terminal) {
         const minusVNode = h("img", { props: { src: minusUrl, alt: "Delete" } });
@@ -123,6 +142,7 @@ export class TerminalButtonPaste extends ActionButton {
 
 export default class Terminal {
     isCollapsed: boolean = false;
+    isTreeCollapsed: boolean = false;
     constructor(
         private _parent: Station,
         private _label: string = `Option ${_parent.label.split(" ").pop()}-${_parent.findTerminalIndex(this).toString()}`,
@@ -142,6 +162,13 @@ export default class Terminal {
             this.createTerminalElement(),
             ...links
             ]);
+    }
+
+    tree() {
+        return h("div.tree_terminal", [
+            h("div.tree_terminal_label", [this.links.length > 0 ? new TreeTerminalButtonCollapse(this).render() : null, this._label]),
+            h("div.tree_terminal_links", {class: {collapse: this.isTreeCollapsed}}, this._links.map(link => link.tree()))
+        ])
     }
 
     private createTerminalElement(): VNode {

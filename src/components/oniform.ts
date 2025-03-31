@@ -4,6 +4,7 @@ import "../styles/oniform.css";
 import {generateGUID, scrollIntoView, showSuccessPopup} from "../common/utility";
 import ActionButton from "./actionButton";
 import {renderView} from "../main";
+import {Library} from "./library";
 
 export default class Oniform {
     static instance: Oniform = new Oniform();
@@ -15,11 +16,20 @@ export default class Oniform {
 
     render(): VNode {
         return h(`form#oniform.oniform`, [
-            h("h2", "Playground"),
-            h("input.oniform_label", {props: {value: this._label}}),
-            this.createButtons(),
+            h("div.oniform_header", [
+                h("div.right", [
+                    h("h2", "Playground"),
+                    h("input.oniform_label", {props: {value: this._label}, on: {
+                            input: (event: Event) => {
+                                this._label = (event.target as HTMLInputElement).value;
+                            }
+                        }},
+                    ),
+                ]),
+                this.createButtons()
+            ]),
             this._groups.length === 0 ? new GroupButtonAdd(this).render() : null,
-            ...this._groups.map(group => group.render())
+            h("div.groups", [...this._groups.map(group => group.render())])
         ]);
     }
 
@@ -27,7 +37,11 @@ export default class Oniform {
         return h("div.buttons", [
             new ActionButton("Save", () => {
                 const serializedForm = this.serialize();
+                const index = Library.instance.oniformList.length;
                 localStorage.setItem("oniformInstance", serializedForm);
+                localStorage.setItem(`oniformLibrary-${index}`, serializedForm);
+                Library.instance.oniformList.push(serializedForm);
+                renderView();
                 showSuccessPopup("Form saved");
             }, undefined, ["text"], "Save form").render(),
             new ActionButton("Reset",() => {

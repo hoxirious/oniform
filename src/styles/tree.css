@@ -1,0 +1,51 @@
+#tree-window {
+    margin-top: 1rem;
+    padding-left: 1rem;
+}
+
+.tree_container {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    height: 80vh;
+}
+
+.tree_group {
+    padding-left: 0.5rem;
+}
+
+.tree_group_label, .tree_station_label, .tree_terminal_label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+}
+
+.tree_group > .tree_group_label > button,
+.tree_station > .tree_station_label > button,
+.tree_terminal > .tree_terminal_label > button {
+    background: transparent;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 0;
+}
+
+.tree_group_stations {
+    padding-left: 0.5rem;
+}
+
+.tree_station {
+}
+
+.tree_station_terminals {
+    padding-left: 0.5rem;
+}
+
+.tree_station_links {
+    padding-left: 0.5rem;
+}
+
+.tree_terminal_links {
+    padding-left: 0.5rem;
+}

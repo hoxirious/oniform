@@ -5,6 +5,7 @@ import ActionButton from "./components/actionButton";
 import {patch} from "./common/snabbdom.setup";
 import {Review} from "./components/review";
 import Oniform from "./components/oniform";
+import Tree from "./components/tree";
 
 declare global {
     interface Window {
@@ -17,6 +18,7 @@ let vnode: VNode = h("form#oniform.oniform");
 let reviewWindowVnode: VNode = h("div#review-window");
 let clipboardWindowVnode: VNode = h("div#clipboard-window");
 let libraryWindowVnode: VNode = h("div#library-window");
+let toolbarVnode: VNode = h("div#toolbar");
 
 const initToolbar = () => {
     const clipboardButton = new ActionButton("Clipboard", () => {
@@ -84,13 +86,14 @@ const initToolbar = () => {
 const initPage = () => {
     if (isPageInitialized) return;
     isPageInitialized = true;
-    initForm();
     const toolbar = document.getElementById("toolbar");
     if (!toolbar) {
         console.error("Toolbar element not found");
         return;
     }
-    patch(toolbar, h("div#toolbar", initToolbar()));
+    Tree.instance = new Tree(Oniform.instance.groups);
+    toolbarVnode = patch(toolbar, h("div#toolbar", [...initToolbar(), Tree.instance.render()]));
+    initForm();
 }
 
 const initForm = () => {
@@ -141,6 +144,7 @@ export const renderView = () => {
     renderReview();
     renderClipboard();
     renderLibrary();
+    renderToolbar();
 }
 
 export const renderReview = () => {
@@ -156,6 +160,11 @@ export const renderClipboard = () => {
 export const renderLibrary = () => {
     const newLibraryVnode = Library.instance.render();
     libraryWindowVnode = patch(libraryWindowVnode, newLibraryVnode);
+}
+
+export const renderToolbar = () => {
+    Tree.instance = new Tree(Oniform.instance.groups);
+    toolbarVnode = patch(toolbarVnode, h("div#toolbar", [...initToolbar(), Tree.instance.render()]));
 }
 
 document.addEventListener("DOMContentLoaded", initPage);

@@ -1,31 +1,45 @@
 .oniform {
     display: flex;
     flex-direction: column;
-    margin: 2rem;
     flex-grow: 1;
 }
 
-.oniform > h2 {
+.oniform textarea:focus, .oniform textarea:active, .oniform input:focus, .oniform input:active{
+    background-color: rgb(221, 220, 220);
+}
+
+.oniform_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: rgb(221, 220, 220);
+    border-bottom: 0.3rem double #505050;
+}
+
+.oniform_header > .right {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.oniform_header .buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.oniform_header h2 {
     font-size: 1.5rem;
     font-weight: bold;
     font-family: Courier, monospace;
-    margin-top: 1rem;
+    color: rgb(99 99 99);
 }
-.oniform > .oniform_label {
+.oniform_header .oniform_label {
     font-size: 1.25rem;
     font-family: Courier, monospace;
     margin-block: 1rem;
     background-color: #8f8f8f;
     width: fit-content;
     padding-left: 1rem;
-}
-
-.oniform > .buttons {
-    display: flex;
-    margin-bottom: 1rem;
-    gap: 0.5rem;
-}
-
-.oniform textarea:focus, .oniform textarea:active, .oniform input:focus, .oniform input:active{
-    background-color: rgb(221, 220, 220);
 }

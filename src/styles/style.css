@@ -112,7 +112,9 @@ input:focus, textarea:focus {
   background-color: rgb(70, 70, 70);
   padding: 0;
   position: sticky;
+  width: 20rem;
   top: 0;
+  padding-top: 1rem;
 }
 
 footer {

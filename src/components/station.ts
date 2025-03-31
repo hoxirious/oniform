@@ -67,6 +67,25 @@ export class StationButtonCollapse extends ActionButton {
     }
 }
 
+export class TreeStationButtonCollapse extends ActionButton {
+    constructor(self: Station) {
+        const chevronDownVNode = h("img", {props: {src: chevronDownUrl, alt: "Collapse All"}});
+        const chevronRightVNode = h("img", {props: {src: chevronRightUrl, alt: "Expand All"}});
+
+        const collapseCallback = () => {
+            self.isTreeCollapsed = !self.isTreeCollapsed;
+            self.links.forEach(link => link.isTreeCollapsed = !link.isTreeCollapsed);
+            renderView();
+        };
+
+        if (self.isTreeCollapsed && (self.links.length > 0 || self.terminals.length > 0)) {
+            super(chevronRightVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
+        } else {
+            super(chevronDownVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
+        }
+    }
+}
+
 export class StationButtonDelete extends ActionButton {
     constructor(self: Station) {
         const minusVNode = h("img", {props: {src: minusUrl, alt: "Delete"}});
@@ -132,6 +151,7 @@ export class StationButtonPaste extends ActionButton {
 
 export default class Station {
     isCollapsed: boolean = false;
+    isTreeCollapsed: boolean = false;
 
     constructor(
         private _parent: Group | Station | Terminal,
@@ -190,6 +210,13 @@ export default class Station {
         ]);
     }
 
+    tree() {
+        return h("div.tree_station", [
+            h("div.tree_station_label", [new TreeStationButtonCollapse(this).render(), this._label]),
+            this.terminals.length > 0 ? h("div.tree_station_terminals", {class: {collapse: this.isTreeCollapsed}} ,this.terminals.map(terminal => terminal.tree())) : null,
+            this.links.length > 0 ? h("div.tree_station_links", this.links.map(link => link.tree())) : null
+        ])
+    }
     clone(editable: boolean = false, parentClone?: Group | Station | Terminal): Station {
         const stationClone = new Station(
             parentClone ?? new Group(Oniform.instance),
@@ -367,4 +394,5 @@ export default class Station {
         links.forEach((link: any) => Link.from(link, station));
         return station;
     }
+
 }

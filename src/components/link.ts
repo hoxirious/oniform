@@ -11,6 +11,7 @@ export enum Relationship {
 
 export default class Link {
     isCollapsed: boolean = false;
+    isTreeCollapsed: boolean = false;
     private readonly _html: HTMLDivElement = document.createElement("div");
 
     constructor(
@@ -34,6 +35,10 @@ export default class Link {
     rerender() {
         const title = `${this._parent.label}'s Dependant`;
         return h(`div.link.${this.relationship}`, { props: { id: this.id, title, tabIndex: "1"}, key: this._id, class: {collapse: this.isCollapsed} }, [this.right.render()]);
+    }
+
+    tree() {
+        return h("div.tree_link",{props: {class: {collapse: this.isCollapsed} }}, [this.right.tree()]);
     }
 
     clone(leftClone: Station|Terminal, editable: boolean = false): Link {

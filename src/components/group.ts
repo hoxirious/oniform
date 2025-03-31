@@ -66,6 +66,24 @@ export class GroupButtonCollapse extends ActionButton {
     }
 }
 
+export class TreeGroupButtonCollapse extends ActionButton {
+    constructor(self: Group) {
+        const chevronDownVNode = h("img", { props: { src: chevronDownUrl, alt: "Collapse All" } });
+        const chevronRightVNode = h("img", { props: { src: chevronRightUrl, alt: "Expand All" } });
+
+        const collapseCallback = () => {
+            self.isTreeCollapsed = !self.isTreeCollapsed
+            renderView();
+        };
+
+        if (self.isTreeCollapsed && self.stations.length > 0) {
+            super(chevronRightVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
+        } else {
+            super(chevronDownVNode, collapseCallback, undefined, ["icon"], "Collapse Dependants");
+        }
+    }
+}
+
 export class GroupButtonCopy extends ActionButton {
     constructor(self: Group) {
         const copyVNode = h("img", { props: { src: copyUrl, alt: "Copy" } });
@@ -107,6 +125,7 @@ export class GroupButtonPaste extends ActionButton {
 }
 export default class Group {
     isCollapsed: boolean = false;
+    isTreeCollapsed: boolean = false;
 
     constructor(
         private _parent: Oniform|Station|Terminal,
@@ -157,6 +176,13 @@ export default class Group {
         )
     }
 
+    tree() {
+        return h("div.tree_group", [
+            h("h1.tree_group_label", [
+                new TreeGroupButtonCollapse(this).render(), this._label]),
+            h("div.tree_group_stations", {class: {collapse: this.isTreeCollapsed}}, this.stations.map(station => station.tree()))
+        ])
+    }
     clone(editable: boolean = false, parentClone?: Station|Terminal): Group {
         const cloneGroup = new Group(parentClone ?? Oniform.instance, this._label, [], this._scoreExpression, this._score, editable);
         this._stations.map(station => station.clone(editable, cloneGroup)).forEach(station => cloneGroup.appendExistingStation(station, false));
