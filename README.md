@@ -9,7 +9,7 @@
 ## Features
 - **Nested Form Playground**: To create nested forms with ease.
 - **Clipboard**: A copy board of form's elements for your convenience.
-- **Review**: To review result form before exporting.
+- **Preview**: To preview result form before exporting.
 - **Library**: To save and load your `oniforms`.
 
 ## Documentation

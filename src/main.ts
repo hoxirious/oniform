@@ -3,7 +3,7 @@ import Clipboard from "./components/clipboard";
 import {h, VNode} from "snabbdom";
 import ActionButton from "./components/actionButton";
 import {patch} from "./common/snabbdom.setup";
-import {Review} from "./components/review";
+import {Preview} from "./components/preview";
 import Oniform from "./components/oniform";
 import Tree from "./components/tree";
 
@@ -15,14 +15,14 @@ declare global {
 }
 let isPageInitialized = false;
 let vnode: VNode = h("form#oniform.oniform");
-let reviewWindowVnode: VNode = h("div#review-window");
+let reviewWindowVnode: VNode = h("div#preview-window");
 let clipboardWindowVnode: VNode = h("div#clipboard-window");
 let libraryWindowVnode: VNode = h("div#library-window");
 let toolbarVnode: VNode = h("div#toolbar");
 
 const initToolbar = () => {
     const clipboardButton = new ActionButton("Clipboard", () => {
-        const reviewElement = document.getElementById("review-window");
+        const reviewElement = document.getElementById("preview-window");
         const clipboardElement = document.getElementById("clipboard-window");
         const libraryElement = document.getElementById("library-window");
         if (!reviewElement || !clipboardElement || !libraryElement) {
@@ -41,15 +41,15 @@ const initToolbar = () => {
 
     }, undefined, ["button"], "Toggle Clipboard").render();
 
-    const reviewButton = new ActionButton("Review", () => {
-        const reviewElement = document.getElementById("review-window");
+    const reviewButton = new ActionButton("Preview", () => {
+        const reviewElement = document.getElementById("preview-window");
         const clipboardElement = document.getElementById("clipboard-window");
         const libraryElement = document.getElementById("library-window");
         if (!reviewElement || !clipboardElement || !libraryElement) {
             console.error("Clipboard element not found");
             return;
         }
-        const newReviewVnode = Review.instance.render();
+        const newReviewVnode = Preview.instance.render();
         const tempVnode = patch(reviewWindowVnode, newReviewVnode);
 
         reviewElement.classList.toggle("show");
@@ -59,10 +59,10 @@ const initToolbar = () => {
             libraryElement.classList.remove("show");
         reviewWindowVnode = tempVnode;
 
-    }, undefined, ["button"], "Toggle Review").render();
+    }, undefined, ["button"], "Toggle Preview").render();
 
     const libraryButton = new ActionButton("Library", () => {
-        const reviewElement = document.getElementById("review-window");
+        const reviewElement = document.getElementById("preview-window");
         const clipboardElement = document.getElementById("clipboard-window");
         const libraryElement = document.getElementById("library-window");
         if (!reviewElement || !clipboardElement || !libraryElement) {
@@ -104,12 +104,12 @@ const initForm = () => {
     }
     clipboardWindowVnode = patch(clipboardElement, h("div#clipboard-window", []));
 
-    const reviewElement = document.getElementById("review-window");
+    const reviewElement = document.getElementById("preview-window");
     if (!reviewElement) {
-        console.error("Review element not found");
+        console.error("Preview element not found");
         return;
     }
-    reviewWindowVnode = patch(reviewElement, h("div#review-window", []));
+    reviewWindowVnode = patch(reviewElement, h("div#preview-window", []));
 
     const libraryElement = document.getElementById("library-window");
     if (!libraryElement) {
@@ -140,7 +140,7 @@ export const renderView = () => {
     const newNode = Oniform.instance.render();
     vnode = patch(vnode, newNode);
 
-    Review.instance = new Review(Oniform.instance.groups);
+    Preview.instance = new Preview(Oniform.instance.groups);
     renderReview();
     renderClipboard();
     renderLibrary();
@@ -148,7 +148,7 @@ export const renderView = () => {
 }
 
 export const renderReview = () => {
-    const newReviewVnode = Review.instance.render();
+    const newReviewVnode = Preview.instance.render();
     reviewWindowVnode = patch(reviewWindowVnode, newReviewVnode);
 }
 

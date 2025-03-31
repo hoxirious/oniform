@@ -1,4 +1,4 @@
-#clipboard-window, #review-window, #library-window {
+#clipboard-window, #preview-window, #library-window {
     display: none;
     width: 40%;
     position: sticky;
@@ -13,11 +13,11 @@
     border-left: 0.3rem double #252525;
 }
 
-#clipboard-window > *, #review-window > *, #library-window > * {
+#clipboard-window > *, #preview-window > *, #library-window > * {
     direction: ltr;
 }
 
-#clipboard-window.show, #review-window.show, #library-window.show {
+#clipboard-window.show, #preview-window.show, #library-window.show {
     display: flex;
     flex-direction: column;
 }
