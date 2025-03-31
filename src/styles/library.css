@@ -14,3 +14,8 @@
     background-color: rgba(17, 17, 17, 0.1);
     gap: 2rem;
 }
+
+.library_object > .library_item > button:hover {
+    background-color: #545454;
+    cursor: pointer;
+}

@@ -109,11 +109,12 @@ input:focus, textarea:focus {
 #toolbar {
   border-right: 0.3rem double #252525;
   background-color: rgb(70, 70, 70);
-  padding: 0;
   position: sticky;
-  width: 20rem;
+  width: 25rem;
   top: 0;
-  padding-top: 1rem;
+  padding: 1rem 0 0;
+  overflow: auto;
+  resize: horizontal;
 }
 
 footer {
