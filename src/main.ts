@@ -15,17 +15,17 @@ declare global {
 }
 let isPageInitialized = false;
 let vnode: VNode = h("form#oniform.oniform");
-let reviewWindowVnode: VNode = h("div#preview-window");
+let previewWindowVnode: VNode = h("div#preview-window");
 let clipboardWindowVnode: VNode = h("div#clipboard-window");
 let libraryWindowVnode: VNode = h("div#library-window");
 let toolbarVnode: VNode = h("div#toolbar");
 
 const initToolbar = () => {
     const clipboardButton = new ActionButton("Clipboard", () => {
-        const reviewElement = document.getElementById("preview-window");
+        const previewElement = document.getElementById("preview-window");
         const clipboardElement = document.getElementById("clipboard-window");
         const libraryElement = document.getElementById("library-window");
-        if (!reviewElement || !clipboardElement || !libraryElement) {
+        if (!previewElement || !clipboardElement || !libraryElement) {
             console.error("Clipboard element not found");
             return;
         }
@@ -33,39 +33,39 @@ const initToolbar = () => {
         const tempVnode = patch(clipboardWindowVnode, newClipboardVnode);
         clipboardElement.classList.toggle("show");
 
-        if (reviewElement.classList.contains("show"))
-            reviewElement.classList.remove("show");
+        if (previewElement.classList.contains("show"))
+            previewElement.classList.remove("show");
         if (libraryElement.classList.contains("show"))
             libraryElement.classList.remove("show");
         clipboardWindowVnode = tempVnode;
 
     }, undefined, ["button"], "Toggle Clipboard").render();
 
-    const reviewButton = new ActionButton("Preview", () => {
-        const reviewElement = document.getElementById("preview-window");
+    const previewButton = new ActionButton("Preview", () => {
+        const previewElement = document.getElementById("preview-window");
         const clipboardElement = document.getElementById("clipboard-window");
         const libraryElement = document.getElementById("library-window");
-        if (!reviewElement || !clipboardElement || !libraryElement) {
+        if (!previewElement || !clipboardElement || !libraryElement) {
             console.error("Clipboard element not found");
             return;
         }
-        const newReviewVnode = Preview.instance.render();
-        const tempVnode = patch(reviewWindowVnode, newReviewVnode);
+        const newPreviewVnode = Preview.instance.render();
+        const tempVnode = patch(previewWindowVnode, newPreviewVnode);
 
-        reviewElement.classList.toggle("show");
+        previewElement.classList.toggle("show");
         if (clipboardElement.classList.contains("show"))
             clipboardElement.classList.remove("show");
         if (libraryElement.classList.contains("show"))
             libraryElement.classList.remove("show");
-        reviewWindowVnode = tempVnode;
+        previewWindowVnode = tempVnode;
 
     }, undefined, ["button"], "Toggle Preview").render();
 
     const libraryButton = new ActionButton("Library", () => {
-        const reviewElement = document.getElementById("preview-window");
+        const previewElement = document.getElementById("preview-window");
         const clipboardElement = document.getElementById("clipboard-window");
         const libraryElement = document.getElementById("library-window");
-        if (!reviewElement || !clipboardElement || !libraryElement) {
+        if (!previewElement || !clipboardElement || !libraryElement) {
             console.error("Clipboard element not found");
             return;
         }
@@ -75,12 +75,12 @@ const initToolbar = () => {
         libraryElement.classList.toggle("show");
         if (clipboardElement.classList.contains("show"))
             clipboardElement.classList.remove("show");
-        if (reviewElement.classList.contains("show"))
-            reviewElement.classList.remove("show");
+        if (previewElement.classList.contains("show"))
+            previewElement.classList.remove("show");
         libraryWindowVnode = tempVnode;
     }, undefined, ["button"], "Toggle Library").render();
 
-    return [clipboardButton, reviewButton, libraryButton];
+    return [clipboardButton, previewButton, libraryButton];
 }
 
 const initPage = () => {
@@ -104,12 +104,12 @@ const initForm = () => {
     }
     clipboardWindowVnode = patch(clipboardElement, h("div#clipboard-window", []));
 
-    const reviewElement = document.getElementById("preview-window");
-    if (!reviewElement) {
+    const previewElement = document.getElementById("preview-window");
+    if (!previewElement) {
         console.error("Preview element not found");
         return;
     }
-    reviewWindowVnode = patch(reviewElement, h("div#preview-window", []));
+    previewWindowVnode = patch(previewElement, h("div#preview-window", []));
 
     const libraryElement = document.getElementById("library-window");
     if (!libraryElement) {
@@ -141,15 +141,15 @@ export const renderView = () => {
     vnode = patch(vnode, newNode);
 
     Preview.instance = new Preview(Oniform.instance.groups);
-    renderReview();
+    renderPreview();
     renderClipboard();
     renderLibrary();
     renderToolbar();
 }
 
-export const renderReview = () => {
-    const newReviewVnode = Preview.instance.render();
-    reviewWindowVnode = patch(reviewWindowVnode, newReviewVnode);
+export const renderPreview = () => {
+    const newPreviewVnode = Preview.instance.render();
+    previewWindowVnode = patch(previewWindowVnode, newPreviewVnode);
 }
 
 export const renderClipboard = () => {

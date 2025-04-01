@@ -2,7 +2,7 @@ import {h, VNode} from "snabbdom";
 import Station from "./station";
 import {Option} from "./option";
 import {Collection} from "./collection";
-import {renderReview} from "../main";
+import {renderPreview} from "../main";
 import "../styles/question.css";
 
 export class Question {
@@ -58,7 +58,7 @@ export class Question {
         }
 
         this.selectedOptionId = selectedOptionId;
-        renderReview();
+        renderPreview();
     }
 
     private addDependencies(optionId: string): void {
