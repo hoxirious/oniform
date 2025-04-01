@@ -144,6 +144,7 @@ export class StationButtonPaste extends ActionButton {
             }, undefined, ["text"], "New Dependant Station")
         ];
 
+        // if(Clipboard.instance.)
         super(pasteVNode, () => {
             self.paste();
         }, actionItems, ["icon"], "Paste");
@@ -250,7 +251,7 @@ export default class Station {
             copiedObject.parent = this;
             new Link(this, copiedObject, Relationship.DEPENDANT);
         } else if (copiedObject instanceof Terminal) {
-            this.appendExistingTerminal(copiedObject, false);
+            this.appendExistingTerminal(copiedObject);
         }
     }
 
