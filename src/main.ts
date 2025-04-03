@@ -1,9 +1,9 @@
-import {Library} from "./components/library";
 import Clipboard from "./components/clipboard";
 import {h, VNode} from "snabbdom";
 import ActionButton from "./components/actionButton";
 import {patch} from "./common/snabbdom.setup";
 import {Preview} from "./components/preview";
+import {Library} from "./components/library";
 import Oniform from "./components/oniform";
 import Tree from "./components/tree";
 
@@ -97,6 +97,17 @@ const initPage = () => {
 }
 
 const initForm = () => {
+    let form: Oniform;
+    form = Oniform.instance;
+    const oniformElement = document.getElementById("oniform");
+
+    if (!oniformElement) {
+        console.error("Oniform element not found");
+        return;
+    }
+    vnode = patch(oniformElement, h(`form#oniform.oniform`, []));
+    window.oniformInstance = form; // Attach the instance to the window object
+
     const clipboardElement = document.getElementById("clipboard-window");
     if (!clipboardElement) {
         console.error("Clipboard element not found");
@@ -118,21 +129,6 @@ const initForm = () => {
     }
     libraryWindowVnode = patch(libraryElement, h("div#library-window", []));
 
-    let form: Oniform;
-    // initialize empty form
-    const serializedForm = localStorage.getItem("oniformInstance");
-    if (serializedForm) {
-        Oniform.instance = Oniform.deserialize(serializedForm);
-    }
-    form = Oniform.instance;
-    const oniformElement = document.getElementById("oniform");
-
-    if (!oniformElement) {
-        console.error("Oniform element not found");
-        return;
-    }
-    vnode = patch(oniformElement, h(`form#oniform.oniform`, []));
-    window.oniformInstance = form; // Attach the instance to the window object
     renderView();
 }
 
@@ -140,11 +136,10 @@ export const renderView = () => {
     const newNode = Oniform.instance.render();
     vnode = patch(vnode, newNode);
 
-    Preview.instance = new Preview(Oniform.instance.groups);
-    renderPreview();
     renderClipboard();
     renderLibrary();
     renderToolbar();
+    renderPreview();
 }
 
 export const renderPreview = () => {

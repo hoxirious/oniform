@@ -7,28 +7,41 @@ import "../styles/question.css";
 
 export class Question {
     parent: Collection;
+    station: Station;
     options: Map<string, Option> = new Map();
     label: string = "";
     id: string = "";
     selectedOptionId: string = "nil";
     optionSubQuestions: (Question|Collection)[] = [];
-    subQuestions: Question[] = [];
+    subQuestions: Map<string, Question> = new Map();
     isCompleted: boolean = this.calculateIsCompleted();
 
-    constructor(station: Station, parent: Collection) {
-        this.parent = parent;
+    constructor(station: Station) {
+        this.station = station;
         this.label = station.value;
         this.id = station.id;
         if(station.terminals && station.terminals.length > 0) {
             station.terminals.forEach(terminal => {
-                this.options.set(terminal.id, new Option(terminal, parent));
+                this.options.set(terminal.id, new Option(terminal));
             });
         }
         if(station.links && station.links.length > 0) {
-            this.subQuestions = station.links.map(link => {
-                return new Question(link.right as Station, parent);
-            });
+            station.links.forEach(link => {
+                this.subQuestions.set(link.right.id, new Question(link.right as Station));
+            })
         }
+    }
+
+    update() {
+        this.station.terminals.forEach(terminal => {
+            if(!this.options.has(terminal.id) || this.options.get(terminal.id).value !== terminal.value) {
+                this.options.set(terminal.id, new Option(terminal));
+            }
+            else {
+                this.options.get(terminal.id).update(terminal);
+            }
+        });
+        this.subQuestions.forEach(subQuestion => subQuestion.update());
     }
 
     calculateIsCompleted(): boolean {
@@ -43,7 +56,7 @@ export class Question {
     }
 
     private handleChange(event: Event): void {
-    const target = event.target as HTMLSelectElement;
+        const target = event.target as HTMLSelectElement;
         const selectedOptionId = target.options[target.selectedIndex].id;
 
         if (selectedOptionId === this.selectedOptionId) return;
@@ -81,7 +94,7 @@ export class Question {
                     if (current) {
                         if (current instanceof Collection) {
                             current.questions.forEach(question => {
-                                question.subQuestions = [];
+                                question.subQuestions = new Map();
                                 question.selectedOptionId = "nil";
                             });
                         } else {
@@ -97,6 +110,11 @@ export class Question {
     }
 
     render(): VNode {
+        // this.options = new Map();
+        // this.station.terminals.forEach(terminal => {
+        //     this.options.set(terminal.id, new Option(terminal, this.parent));
+        // });
+        // this.selectedOptionId = "nil";
         return h("div.question", [
             h("label", {props: {for: this.id}}, this.label),
             h("select", {
@@ -108,7 +126,7 @@ export class Question {
             ]),
             ...this.optionSubQuestions.map(subQuestion => subQuestion.render()),
             ...(this.calculateIsCompleted() ?
-                this.subQuestions.map(subQuestion => subQuestion.render()) : [])
+                Array.from(this.subQuestions.values()).map(subQuestion => subQuestion.render()) : [])
         ]);
     }
 }

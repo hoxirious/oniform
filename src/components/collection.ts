@@ -5,6 +5,7 @@ import "../styles/collection.css";
 
 export class Collection {
     questions: Map<string, Question> = new Map();
+    group: Group;
     label: string = "";
     id: string = "";
     isCompleted: boolean = this.calculatedIsCompleted();
@@ -13,9 +14,21 @@ export class Collection {
         group: Group,
     ) {
         this.id = group.id;
+        this.group = group;
         this.label = group.label;
         group.stations.forEach(station => {
-            this.questions.set(station.id, new Question(station, this));
+            this.questions.set(station.id, new Question(station));
+        });
+    }
+
+    update() {
+        this.group.stations.forEach(station => {
+            if(!this.questions.has(station.id)) {
+                this.questions.set(station.id, new Question(station));
+            }
+            else {
+                this.questions.get(station.id).update();
+            }
         });
     }
 
@@ -26,6 +39,10 @@ export class Collection {
     }
 
     render(): VNode {
+        // this.questions = new Map();
+        // this.group.stations.forEach(station => {
+        //     this.questions.set(station.id, new Question(station, this));
+        // });
         return h("div.collection", [
             h("div", [this.label]),
             ...Array.from(this.questions.values()).map(question => question.render())

@@ -8,21 +8,32 @@ import Station from "./station";
 // type OptionDependant = Question | Collection;
 
 export class Option {
-    parentCollection: Collection;
+    terminal: Terminal;
     value: string = "";
     id: string = "";
     nextDependencies: (Collection|Question)[] = [];
     isCompleted: boolean = false;
 
-    constructor(terminal: Terminal, parentCollection: Collection) {
+    constructor(terminal: Terminal) {
         this.value = terminal.value;
+        this.terminal = terminal;
         this.id = terminal.id;
-        this.parentCollection = parentCollection;
         this.nextDependencies = terminal.links.map(link => {
             return link.rightType === "Group" ?
                 new Collection(link.right as Group) :
-                new Question(link.right as Station, parentCollection);
+                new Question(link.right as Station);
         })
+    }
+
+    update(terminal: Terminal) {
+        // this.nextDependencies = this.terminal.links.map(link => {
+        //     if(link)
+        //     return link.rightType === "Group" ?
+        //         new Collection(link.right as Group) :
+        //         new Question(link.right as Station, this.parentCollection);
+        // })
+        this.terminal = terminal;
+        this.value = terminal.value;
     }
 
     calculateIsCompleted(): boolean {
@@ -37,6 +48,11 @@ export class Option {
     }
 
     render() {
+        // this.nextDependencies = this.terminal.links.map(link => {
+        //     return link.rightType === "Group" ?
+        //         new Collection(link.right as Group) :
+        //         new Question(link.right as Station, this.parentCollection);
+        // })
         return h("option", {props: {id: this.id}}, [this.value]);
     }
 }

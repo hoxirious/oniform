@@ -7,12 +7,23 @@ import {renderView} from "../main";
 import {Library} from "./library";
 
 export default class Oniform {
-    static instance: Oniform = new Oniform();
+    static instance: Oniform = this.initialize();
     readonly _id = `oniform-${generateGUID()}`;
-    private constructor(
+    private constructor (
         private _groups: Group[] = [],
         private _label: string = "Untitled Form",
     ) {}
+
+    static initialize() {
+        // initialize empty form
+        const serializedForm = localStorage.getItem("oniformInstance");
+        if (serializedForm) {
+            return Oniform.deserialize(serializedForm);
+        }
+        else {
+            return new Oniform();
+        }
+    }
 
     render(): VNode {
         return h(`form#oniform.oniform`, [

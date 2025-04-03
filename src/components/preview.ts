@@ -1,20 +1,35 @@
 import {h} from "snabbdom";
 import {Collection} from "./collection";
-import Group from "./group";
+import Oniform from "./oniform";
 
 export class Preview {
     static instance: Preview = new Preview();
     collections: Map<string, Collection> = new Map();
 
-    constructor(groups?: Group[]) {
-        if (groups) {
-            groups.forEach(group => {
+    private constructor() {
+        console.log("Preview instance created");
+        console.log(Oniform.instance.groups);
+        Oniform.instance.groups.forEach(group => {
+            this.collections.set(group.id, new Collection(group));
+        })
+        console.log(this.collections);
+    }
+
+    update(){
+        Oniform.instance.groups.forEach(group => {
+            if(!this.collections.has(group.id)) {
                 this.collections.set(group.id, new Collection(group));
-            })
-        }
+            }
+            else {
+                this.collections.get(group.id).update();
+            }
+        })
     }
 
     render() {
+        this.update();
+        // console.log(Oniform.instance.groups);
+        // console.log(this.collections);
         return h("div#preview-window", {key: "preview"}, [
             h("div.review_container",
                 [
