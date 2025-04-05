@@ -14,7 +14,7 @@ export class Question {
   id: string = "";
   selectedOptionId: string = "nil";
   optionSubQuestions: (Question | Collection)[] = [];
-  subQuestions: Map<string, Question> = new Map();
+  subQuestions: Map<string, Question | Collection> = new Map();
   isCompleted: boolean = this.calculateIsCompleted();
 
   constructor(station: Station) {
@@ -30,9 +30,13 @@ export class Question {
       console.log("constructor", station.links);
       station.links.forEach((link) => {
         if (link.rightType === "Group") {
-          (link.right as Group).stations.forEach((station) => {
-            this.subQuestions.set(station.id, new Question(station));
-          });
+          // (link.right as Group).stations.forEach((station) => {
+          //   this.subQuestions.set(station.id, new Question(station));
+          // });
+          this.subQuestions.set(
+            link.right.id,
+            new Collection(link.right as Group),
+          );
         } else {
           this.subQuestions.set(
             link.right.id,
@@ -61,22 +65,21 @@ export class Question {
     console.log("update", this.station.links);
     if (this.station.links)
       this.station.links.forEach((link) => {
-        if (link.rightType == "Group") {
-          (link.right as Group).stations.forEach((station) => {
-            if (!this.subQuestions.has(station.id)) {
-              console.log("create new sub group question");
-              this.subQuestions.set(station.id, new Question(station));
-            } else this.subQuestions.get(station.id).update(station);
-          });
-        } else {
-          if (!this.subQuestions.has(link.right.id)) {
-            this.subQuestions.set(
-              link.right.id,
-              new Question(link.right as Station),
-            );
-          } else
-            this.subQuestions.get(link.right.id).update(link.right as Station);
-        }
+        if (!this.subQuestions.has(link.right.id)) {
+          this.subQuestions.set(
+            link.right.id,
+            link.rightType == "Group"
+              ? new Collection(link.right as Group)
+              : new Question(link.right as Station),
+          );
+        } else if (link.rightType == "Group")
+          (this.subQuestions.get(link.right.id) as Collection).update(
+            link.right as Group,
+          );
+        else
+          (this.subQuestions.get(link.right.id) as Question).update(
+            link.right as Station,
+          );
       });
   }
 

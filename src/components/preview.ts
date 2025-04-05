@@ -17,7 +17,7 @@ export class Preview {
       if (!this.collections.has(group.id)) {
         this.collections.set(group.id, new Collection(group));
       } else {
-        this.collections.get(group.id).update();
+        this.collections.get(group.id).update(group);
       }
     });
   }

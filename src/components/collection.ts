@@ -19,7 +19,9 @@ export class Collection {
     });
   }
 
-  update() {
+  update(group: Group) {
+    this.group = group;
+    this.label = group.label;
     this.group.stations.forEach((station) => {
       if (!this.questions.has(station.id)) {
         console.log("create new question");
