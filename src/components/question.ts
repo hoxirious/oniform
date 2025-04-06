@@ -13,7 +13,7 @@ export class Question {
   label: string = "";
   id: string = "";
   selectedOptionId: string = "nil";
-  optionSubQuestions: (Question | Collection)[] = [];
+  optionSubQuestions: Map<string, Question | Collection> = new Map();
   subQuestions: Map<string, Question | Collection> = new Map();
   isCompleted: boolean = this.calculateIsCompleted();
 
@@ -30,9 +30,6 @@ export class Question {
       console.log("constructor", station.links);
       station.links.forEach((link) => {
         if (link.rightType === "Group") {
-          // (link.right as Group).stations.forEach((station) => {
-          //   this.subQuestions.set(station.id, new Question(station));
-          // });
           this.subQuestions.set(
             link.right.id,
             new Collection(link.right as Group),
@@ -104,7 +101,7 @@ export class Question {
 
     if (selectedOptionId !== "nil") {
       this.addDependencies(selectedOptionId);
-      if (this.optionSubQuestions.length === 0) {
+      if (this.optionSubQuestions.size === 0) {
         this.calculateIsCompleted();
       }
     } else {
@@ -121,7 +118,7 @@ export class Question {
     if (selectedOptionDependencies) {
       this.removeOutdatedDependencies();
       selectedOptionDependencies.forEach((dependency) => {
-        this.optionSubQuestions.push(dependency);
+        this.optionSubQuestions.set(dependency.id, dependency);
       });
     }
   }
@@ -142,11 +139,11 @@ export class Question {
                 question.selectedOptionId = "nil";
               });
             } else {
-              stack.push(...current.optionSubQuestions);
-              current.optionSubQuestions = [];
+              stack.push(...Array.from(current.optionSubQuestions.values()));
+              current.optionSubQuestions = new Map();
               current.selectedOptionId = "nil";
             }
-            this.optionSubQuestions = [];
+            this.optionSubQuestions = new Map();
           }
         }
       });
@@ -154,11 +151,6 @@ export class Question {
   }
 
   render(): VNode {
-    // this.options = new Map();
-    // this.station.terminals.forEach(terminal => {
-    //     this.options.set(terminal.id, new Option(terminal, this.parent));
-    // });
-    // this.selectedOptionId = "nil";
     return h("div.question", [
       h("label", { props: { for: this.id } }, this.label),
       h(
@@ -172,7 +164,7 @@ export class Question {
           ...Array.from(this.options.values()).map((option) => option.render()),
         ],
       ),
-      ...this.optionSubQuestions.map((subQuestion) => subQuestion.render()),
+      ...Array.from(this.optionSubQuestions.values()).map((subQuestion) => subQuestion.render()),
       ...(this.calculateIsCompleted()
         ? Array.from(this.subQuestions.values()).map((subQuestion) =>
             subQuestion.render(),
