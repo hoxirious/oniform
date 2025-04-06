@@ -6,14 +6,16 @@ import Group from "./group";
 import Station from "./station";
 
 export class Option {
+  parent: Question;
   terminal: Terminal;
   value: string = "";
   id: string = "";
   nextDependencies: Map<string, Collection | Question> = new Map();
   isCompleted: boolean = false;
 
-  constructor(terminal: Terminal) {
+  constructor(terminal: Terminal, parent: Question) {
     this.value = terminal.value;
+    this.parent = parent;
     this.terminal = terminal;
     this.id = terminal.id;
     terminal.links.forEach((link) => {
@@ -52,8 +54,12 @@ export class Option {
     });
 
     Array.from(this.nextDependencies.keys()).forEach((key) => {
-      if (dependencyVisited.includes(key) === false)
+      if (dependencyVisited.includes(key) === false) {
+        if (this.nextDependencies.get(key)) {
+          this.parent.optionSubQuestions.delete(key);
+        }
         this.nextDependencies.delete(key);
+      }
     });
   }
 

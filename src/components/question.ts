@@ -23,7 +23,7 @@ export class Question {
     this.id = station.id;
     if (station.terminals && station.terminals.length > 0) {
       station.terminals.forEach((terminal) => {
-        this.options.set(terminal.id, new Option(terminal));
+        this.options.set(terminal.id, new Option(terminal, this));
       });
     }
     if (station.links && station.links.length > 0) {
@@ -56,7 +56,7 @@ export class Question {
           !this.options.has(terminal.id) ||
           this.options.get(terminal.id).value !== terminal.value
         ) {
-          this.options.set(terminal.id, new Option(terminal));
+          this.options.set(terminal.id, new Option(terminal, this));
         } else {
           this.options.get(terminal.id).update(terminal);
         }
@@ -67,7 +67,6 @@ export class Question {
         if (optionVisited.includes(key) === false) {
           this.removeOutdatedDependencies(key);
           this.options.delete(key);
-          this.selectedOptionId = "nil";
         }
       });
     }
@@ -97,7 +96,6 @@ export class Question {
         if (linkVisited.includes(key) === false) {
           this.removeOutdatedDependencies(key);
           this.subQuestions.delete(key);
-          this.selectedOptionId = "nil";
         }
       });
     }
@@ -187,9 +185,9 @@ export class Question {
           ...Array.from(this.options.values()).map((option) => option.render()),
         ],
       ),
-      ...Array.from(this.optionSubQuestions.values()).map((subQuestion) =>
-        subQuestion.render(),
-      ),
+      ...Array.from(this.optionSubQuestions.values()).map((subQuestion) => {
+        return subQuestion.render();
+      }),
       ...(this.calculateIsCompleted()
         ? Array.from(this.subQuestions.values()).map((subQuestion) =>
             subQuestion.render(),
