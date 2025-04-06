@@ -22,14 +22,19 @@ export class Collection {
   update(group: Group) {
     this.group = group;
     this.label = group.label;
+    let visited: string[] = [];
     this.group.stations.forEach((station) => {
+      visited.push(station.id);
       if (!this.questions.has(station.id)) {
-        console.log("create new question");
         this.questions.set(station.id, new Question(station));
       } else {
-        console.log("update question");
         this.questions.get(station.id).update(station);
       }
+    });
+
+    // Remove unvisited
+    Array.from(this.questions.keys()).forEach((key) => {
+      if (visited.includes(key) === false) this.questions.delete(key);
     });
   }
 

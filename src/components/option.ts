@@ -29,7 +29,9 @@ export class Option {
   update(terminal: Terminal) {
     this.terminal = terminal;
     this.value = terminal.value;
+    let dependencyVisited: string[] = [];
     this.terminal.links.forEach((link) => {
+      dependencyVisited.push(link.right.id);
       if (!this.nextDependencies.has(link.right.id)) {
         this.nextDependencies.set(
           link.right.id,
@@ -47,6 +49,11 @@ export class Option {
             link.right as Station,
           );
       }
+    });
+
+    Array.from(this.nextDependencies.keys()).forEach((key) => {
+      if (dependencyVisited.includes(key) === false)
+        this.nextDependencies.delete(key);
     });
   }
 

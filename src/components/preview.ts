@@ -13,12 +13,19 @@ export class Preview {
   }
 
   update() {
+    let visited: string[] = [];
     Oniform.instance.groups.forEach((group) => {
+      visited.push(group.id);
       if (!this.collections.has(group.id)) {
         this.collections.set(group.id, new Collection(group));
       } else {
         this.collections.get(group.id).update(group);
       }
+    });
+
+    // Remove unvisited
+    Array.from(this.collections.keys()).forEach((key) => {
+      if (visited.includes(key) === false) this.collections.delete(key);
     });
   }
 
@@ -41,4 +48,3 @@ export class Preview {
     ]);
   }
 }
-

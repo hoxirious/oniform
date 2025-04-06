@@ -27,7 +27,6 @@ export class Question {
       });
     }
     if (station.links && station.links.length > 0) {
-      console.log("constructor", station.links);
       station.links.forEach((link) => {
         if (link.rightType === "Group") {
           this.subQuestions.set(
@@ -47,8 +46,12 @@ export class Question {
   update(station: Station) {
     this.station = station;
     this.label = this.station.value;
-    if (this.station.terminals)
+    let optionVisited: string[] = [];
+    let linkVisited: string[] = [];
+
+    if (this.station.terminals) {
       this.station.terminals.forEach((terminal) => {
+        optionVisited.push(terminal.id);
         if (
           !this.options.has(terminal.id) ||
           this.options.get(terminal.id).value !== terminal.value
@@ -59,9 +62,19 @@ export class Question {
         }
       });
 
-    console.log("update", this.station.links);
-    if (this.station.links)
+      // Remove unvisited
+      Array.from(this.options.keys()).forEach((key) => {
+        if (optionVisited.includes(key) === false) {
+          this.removeOutdatedDependencies(key);
+          this.options.delete(key);
+          this.selectedOptionId = "nil";
+        }
+      });
+    }
+
+    if (this.station.links) {
       this.station.links.forEach((link) => {
+        linkVisited.push(link.right.id);
         if (!this.subQuestions.has(link.right.id)) {
           this.subQuestions.set(
             link.right.id,
@@ -78,6 +91,16 @@ export class Question {
             link.right as Station,
           );
       });
+
+      // Remove unvisited
+      Array.from(this.subQuestions.keys()).forEach((key) => {
+        if (linkVisited.includes(key) === false) {
+          this.removeOutdatedDependencies(key);
+          this.subQuestions.delete(key);
+          this.selectedOptionId = "nil";
+        }
+      });
+    }
   }
 
   calculateIsCompleted(): boolean {
@@ -123,10 +146,10 @@ export class Question {
     }
   }
 
-  private removeOutdatedDependencies(): void {
+  private removeOutdatedDependencies(optionId?: string): void {
     if (this.selectedOptionId !== "nil") {
       const previousDependencies = this.options.get(
-        this.selectedOptionId,
+        optionId ?? this.selectedOptionId,
       )?.nextDependencies;
       previousDependencies?.forEach((previousDependency) => {
         const stack: (Question | Collection)[] = [previousDependency];
@@ -164,7 +187,9 @@ export class Question {
           ...Array.from(this.options.values()).map((option) => option.render()),
         ],
       ),
-      ...Array.from(this.optionSubQuestions.values()).map((subQuestion) => subQuestion.render()),
+      ...Array.from(this.optionSubQuestions.values()).map((subQuestion) =>
+        subQuestion.render(),
+      ),
       ...(this.calculateIsCompleted()
         ? Array.from(this.subQuestions.values()).map((subQuestion) =>
             subQuestion.render(),
