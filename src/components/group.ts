@@ -143,7 +143,7 @@ export default class Group {
         return h("div.group_container", {props: {id: this._id}, key: this._id},
             [h("div.buttons", [
                 this._parent && this._editable ? new GroupButtonDelete(this._parent, this).render() : undefined,
-                this._parent instanceof Oniform && this._editable ? new GroupButtonAdd(this._parent, this).render() : undefined,
+                !(this._parent instanceof Station) && !(this._parent instanceof Terminal) && this._editable ? new GroupButtonAdd(this._parent, this).render() : undefined,
                 this._editable ? new GroupButtonCopy(this).render() : null,
                 this._editable ? new GroupButtonPaste(this).render() : null,
                 this._editable ? new GroupButtonCollapse(this).render() : null,

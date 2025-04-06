@@ -1,42 +1,82 @@
-import {h} from "snabbdom";
+import { h } from "snabbdom";
 import Terminal from "./terminal";
-import {Collection} from "./collection";
-import {Question} from "./question";
+import { Collection } from "./collection";
+import { Question } from "./question";
 import Group from "./group";
 import Station from "./station";
 
-// type OptionDependant = Question | Collection;
-
 export class Option {
-    parentCollection: Collection;
-    value: string = "";
-    id: string = "";
-    nextDependencies: (Collection|Question)[] = [];
-    isCompleted: boolean = false;
+  parent: Question;
+  terminal: Terminal;
+  value: string = "";
+  id: string = "";
+  nextDependencies: Map<string, Collection | Question> = new Map();
+  isCompleted: boolean = false;
 
-    constructor(terminal: Terminal, parentCollection: Collection) {
-        this.value = terminal.value;
-        this.id = terminal.id;
-        this.parentCollection = parentCollection;
-        this.nextDependencies = terminal.links.map(link => {
-            return link.rightType === "Group" ?
-                new Collection(link.right as Group) :
-                new Question(link.right as Station, parentCollection);
-        })
-    }
+  constructor(terminal: Terminal, parent: Question) {
+    this.value = terminal.value;
+    this.parent = parent;
+    this.terminal = terminal;
+    this.id = terminal.id;
+    terminal.links.forEach((link) => {
+      this.nextDependencies.set(
+        link.right.id,
+        link.rightType === "Group"
+          ? new Collection(link.right as Group)
+          : new Question(link.right as Station),
+      );
+    });
+  }
 
-    calculateIsCompleted(): boolean {
-        this.isCompleted = this.nextDependencies.every(dependency => {
-            if (dependency instanceof Collection) {
-                return dependency.calculatedIsCompleted();
-            } else {
-                return dependency.calculateIsCompleted();
-            }
-        });
-        return this.isCompleted;
-    }
+  update(terminal: Terminal) {
+    this.terminal = terminal;
+    this.value = terminal.value;
+    let dependencyVisited: string[] = [];
+    this.terminal.links.forEach((link) => {
+      dependencyVisited.push(link.right.id);
+      if (!this.nextDependencies.has(link.right.id)) {
+        this.nextDependencies.set(
+          link.right.id,
+          link.rightType === "Group"
+            ? new Collection(link.right as Group)
+            : new Question(link.right as Station),
+        );
+      } else {
+        if (link.rightType == "Group")
+          (this.nextDependencies.get(link.right.id) as Collection).update(
+            link.right as Group,
+          );
+        else
+          (this.nextDependencies.get(link.right.id) as Question).update(
+            link.right as Station,
+          );
+      }
+    });
 
-    render() {
-        return h("option", {props: {id: this.id}}, [this.value]);
-    }
+    Array.from(this.nextDependencies.keys()).forEach((key) => {
+      if (dependencyVisited.includes(key) === false) {
+        if (this.nextDependencies.get(key)) {
+          this.parent.optionSubQuestions.delete(key);
+        }
+        this.nextDependencies.delete(key);
+      }
+    });
+  }
+
+  calculateIsCompleted(): boolean {
+    this.isCompleted = Array.from(this.nextDependencies.values()).every(
+      (dependency) => {
+        if (dependency instanceof Collection) {
+          return dependency.calculatedIsCompleted();
+        } else {
+          return dependency.calculateIsCompleted();
+        }
+      },
+    );
+    return this.isCompleted;
+  }
+
+  render() {
+    return h("option", { props: { id: this.id } }, [this.value]);
+  }
 }

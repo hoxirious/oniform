@@ -14,7 +14,7 @@ import Clipboard from "./clipboard";
 import {generateGUID, scrollIntoView, showErrorPopup, showSuccessPopup} from "../common/utility";
 import Oniform from "./oniform";
 import {h, VNode} from "snabbdom";
-import {renderView} from "../main";
+import {renderPreview, renderView} from "../main";
 
 export class TerminalButtonAdd extends ActionButton {
     constructor(parent: Station, self?: Terminal) {
@@ -209,6 +209,7 @@ export default class Terminal {
             on: {
                 input: (event: Event) => {
                     this._value = (event.target as HTMLInputElement).value;
+                    renderPreview();
                 }
             },
             class: {folded: this.isCollapsed && this.links.length > 0}

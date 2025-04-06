@@ -14,7 +14,7 @@ import Link, {Relationship} from "./link";
 import {generateGUID, scrollIntoView, showErrorPopup, showSuccessPopup} from "../common/utility";
 import Oniform from "./oniform";
 import {h, VNode} from "snabbdom";
-import {renderView} from "../main";
+import {renderPreview, renderView} from "../main";
 
 export class StationButtonAdd extends ActionButton {
     constructor(parent: Group | Station | Terminal, self?: Station) {
@@ -202,6 +202,7 @@ export default class Station {
                         props: {value: this._value, placeholder: "Enter question here"}, on: {
                             input: (event: Event) => {
                                 this._value = (event.target as HTMLTextAreaElement).value;
+                                renderPreview();
                             }
                         }, class: {folded: this.isCollapsed && (this.terminals.length > 0 || this.links.length > 0)}
                     }),
