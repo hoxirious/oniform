@@ -1,23 +1,39 @@
 .link {
-    border-bottom-left-radius: 1rem;
-    border-left: 0.1rem dashed #646464;
-    padding-left: 1rem;
+  border-bottom-left-radius: 1rem;
+  border-left: 0.1rem dashed #646464;
+  display: flex;
 }
 
 .link:hover:not(:has(.link:hover)) {
-    background-color: #727272;
-    /*border-radius: 0.5rem;*/
+  background-color: #aeaeae;
+  /*border-radius: 0.5rem;*/
 }
 
-.link:active, .link:focus {
-    background-color: #4b4b4b;
+.link:active,
+.link:focus {
+  background-color: #727272;
 }
 
 .link.collapse {
-    height: 0;
+  height: 0;
 }
 .link.dependant {
+  border-style: dashed;
 }
 
-.link.sibling {
+.link.associate {
+  border-style: double;
+  border-left-width: 0.2rem;
+}
+
+.link > .action-button {
+  background: none;
+  border: none;
+  border-bottom-left-radius: 0.5rem;
+  height: unset;
+  width: 1rem;
+}
+.link > .action-button > .action_items {
+  top: 50%;
+  left: 120%;
 }
