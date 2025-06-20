@@ -1,7 +1,8 @@
 import { h, VNode } from "snabbdom";
 import { Question } from "./question";
-import Group from "./group";
-import "../styles/collection.css";
+import Group from "../oniform/group";
+import "../../styles/collection.css";
+import {Relationship} from "../../common/utility";
 
 export class Collection {
   questions: Map<string, Question> = new Map();
@@ -9,26 +10,29 @@ export class Collection {
   label: string = "";
   id: string = "";
   isCompleted: boolean = this.calculatedIsCompleted();
+  relationship: Relationship = Relationship.ASSOCIATE;
 
-  constructor(group: Group) {
+  constructor(group: Group, relationship?: Relationship) {
     this.id = group.id;
     this.group = group;
     this.label = group.label;
+    if (relationship) this.relationship = relationship;
     group.stations.forEach((station) => {
-      this.questions.set(station.id, new Question(station));
+      this.questions.set(station.id, new Question(station, this.relationship));
     });
   }
 
-  update(group: Group) {
+  update(group: Group, relationship?: Relationship) {
     this.group = group;
     this.label = group.label;
+    if (relationship) this.relationship = relationship;
     let visited: string[] = [];
     this.group.stations.forEach((station) => {
       visited.push(station.id);
       if (!this.questions.has(station.id)) {
-        this.questions.set(station.id, new Question(station));
+        this.questions.set(station.id, new Question(station, relationship));
       } else {
-        this.questions.get(station.id).update(station);
+        this.questions.get(station.id).update(station, relationship);
       }
     });
 
@@ -48,15 +52,15 @@ export class Collection {
     return this.isCompleted;
   }
 
-  render(): VNode {
-    // this.questions = new Map();
-    // this.group.stations.forEach(station => {
-    //     this.questions.set(station.id, new Question(station, this));
-    // });
+  render(number?: string): VNode {
     return h("div.collection", [
       h("div", [this.label]),
-      ...Array.from(this.questions.values()).map((question) =>
-        question.render(),
+      ...Array.from(this.questions.values()).map((question, index) =>
+          {
+            let label = `${index+1}`;
+            if(number) label = number + "." + label;
+            return question.render(label);
+          }
       ),
     ]);
   }

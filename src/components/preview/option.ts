@@ -1,9 +1,9 @@
 import { h } from "snabbdom";
-import Terminal from "./terminal";
+import Terminal from "../oniform/terminal";
 import { Collection } from "./collection";
 import { Question } from "./question";
-import Group from "./group";
-import Station from "./station";
+import Group from "../oniform/group";
+import Station from "../oniform/station";
 
 export class Option {
   parent: Question;
@@ -22,8 +22,8 @@ export class Option {
       this.nextDependencies.set(
         link.right.id,
         link.rightType === "Group"
-          ? new Collection(link.right as Group)
-          : new Question(link.right as Station),
+          ? new Collection(link.right as Group, link.relationship)
+          : new Question(link.right as Station, link.relationship),
       );
     });
   }
@@ -38,17 +38,19 @@ export class Option {
         this.nextDependencies.set(
           link.right.id,
           link.rightType === "Group"
-            ? new Collection(link.right as Group)
-            : new Question(link.right as Station),
+            ? new Collection(link.right as Group, link.relationship)
+            : new Question(link.right as Station, link.relationship),
         );
       } else {
         if (link.rightType == "Group")
           (this.nextDependencies.get(link.right.id) as Collection).update(
             link.right as Group,
+            link.relationship,
           );
         else
           (this.nextDependencies.get(link.right.id) as Question).update(
             link.right as Station,
+            link.relationship,
           );
       }
     });

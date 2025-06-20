@@ -1,6 +1,6 @@
-import Group from "./group";
+import Group from "../oniform/group";
 import {h} from "snabbdom";
-import "../styles/tree.css";
+import "../../styles/tree.css";
 
 export default class Tree {
     static instance = new Tree();

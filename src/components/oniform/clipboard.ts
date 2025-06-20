@@ -1,9 +1,9 @@
 import Group from "./group";
 import Station from "./station";
 import Terminal from "./terminal";
-import "../styles/clipboard.css";
+import "../../styles/clipboard.css";
 import { h } from "snabbdom";
-import { renderClipboard } from "../main";
+import { renderClipboard } from "../../main";
 const copyUrl = "/copy.svg";
 const pasteUrl = "/paste.svg";
 

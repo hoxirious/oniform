@@ -1,6 +1,6 @@
 import Terminal, {TerminalButtonAdd} from "./terminal";
 import ActionButton from "./actionButton";
-import "../styles/station.css";
+import "../../styles/station.css";
 const plusUrl = "/plus.svg";
 const minusUrl = "/minus.svg";
 const chevronDownUrl = "/chevron-down.svg";
@@ -10,11 +10,11 @@ const pasteUrl = "/paste.svg";
 const questionUrl = "/question.svg";
 import Group from "./group";
 import Clipboard from "./clipboard";
-import Link, {Relationship} from "./link";
-import {generateGUID, scrollIntoView, showErrorPopup, showSuccessPopup} from "../common/utility";
+import Link from "./link";
+import {generateGUID, Relationship, scrollIntoView, showErrorPopup, showSuccessPopup} from "../../common/utility";
 import Oniform from "./oniform";
 import {h, VNode} from "snabbdom";
-import {renderPreview, renderView} from "../main";
+import {renderPreview, renderView} from "../../main";
 
 export class StationButtonAdd extends ActionButton {
     constructor(parent: Group | Station | Terminal, self?: Station) {

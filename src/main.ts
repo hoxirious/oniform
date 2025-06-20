@@ -1,11 +1,11 @@
-import Clipboard from "./components/clipboard";
+import Clipboard from "./components/oniform/clipboard";
 import { h, VNode } from "snabbdom";
-import ActionButton from "./components/actionButton";
+import ActionButton from "./components/oniform/actionButton";
 import { patch } from "./common/snabbdom.setup";
-import { Preview } from "./components/preview";
-import { Library } from "./components/library";
-import Oniform from "./components/oniform";
-import Tree from "./components/tree";
+import { Preview } from "./components/preview/preview";
+import { Library } from "./components/library/library";
+import Oniform from "./components/oniform/oniform";
+import Tree from "./components/tree/tree";
 
 declare global {
   interface Window {

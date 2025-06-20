@@ -1,6 +1,6 @@
 import { h } from "snabbdom";
 import { Collection } from "./collection";
-import Oniform from "./oniform";
+import Oniform from "../oniform/oniform";
 
 export class Preview {
   static instance: Preview = new Preview();

@@ -1,20 +1,20 @@
 import Station, {StationButtonAdd} from "./station";
-import '../styles/group.css';
+import '../../styles/group.css';
 import ActionButton from "./actionButton";
 import Oniform from "./oniform";
 import Clipboard from "./clipboard";
-import {generateGUID, scrollIntoView, showErrorPopup, showSuccessPopup} from "../common/utility";
+import {generateGUID, Relationship, scrollIntoView, showErrorPopup, showSuccessPopup} from "../../common/utility";
 const minusUrl = "/minus.svg";
 const plusUrl = "/plus.svg";
 const copyUrl = "/copy.svg";
 const pasteUrl = "/paste.svg";
 import Terminal from "./terminal";
-import Link, {Relationship} from "./link";
+import Link from "./link";
 const chevronDownUrl = "/chevron-down.svg";
 const chevronRightUrl = "/chevron-right.svg";
 const groupUrl = "/group.svg";
 import { h } from "snabbdom/build/h";
-import {renderView} from "../main";
+import {renderView} from "../../main";
 
 export class GroupButtonAdd extends ActionButton {
     constructor(parent: Oniform|Station|Terminal, self?: Group) {

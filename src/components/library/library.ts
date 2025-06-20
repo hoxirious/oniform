@@ -1,8 +1,8 @@
 import { h } from "snabbdom";
-import Oniform from "./oniform";
-import {renderLibrary, renderView} from "../main";
-import "../styles/library.css";
-import {generateGUID} from "../common/utility";
+import Oniform from "../oniform/oniform";
+import {renderLibrary, renderView} from "../../main";
+import "../../styles/library.css";
+import {generateGUID} from "../../common/utility";
 
 export class Library {
     static instance: Library = new Library();

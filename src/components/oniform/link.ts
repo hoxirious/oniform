@@ -1,16 +1,12 @@
 import Station from "./station";
 import Terminal from "./terminal";
 import Group from "./group";
-import "../styles/link.css";
-import { generateGUID, scrollIntoView } from "../common/utility";
+import "../../styles/link.css";
+import {generateGUID, Relationship, scrollIntoView} from "../../common/utility";
 import { h, VNode } from "snabbdom";
 import ActionButton from "./actionButton";
-import { renderView } from "../main";
+import { renderView } from "../../main";
 
-export enum Relationship {
-  ASSOCIATE = "associate",
-  DEPENDANT = "dependant",
-}
 
 class LinkButton extends ActionButton {
   constructor(self: Link) {
