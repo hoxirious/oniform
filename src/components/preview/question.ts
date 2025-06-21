@@ -192,15 +192,17 @@ export class Question {
                 ],
             ),
             ...Array.from(this.optionSubQuestions.values()).map(
-                (subQuestion) => {
-                    const label = `${subQuestion.relationship === Relationship.ASSOCIATE ? `${parseInt(number) + 1}` : number}`;
-                    return subQuestion.render(label);
+                (subQuestion, index) => {
+                    console.log("optionSubQuestion", subQuestion);
+                    const labelNumber = `${subQuestion.relationship === Relationship.ASSOCIATE ? `${parseInt(number) + 1}` : index+1}`;
+                    return subQuestion.render(labelNumber);
                 },
             ),
             ...(this.calculateIsCompleted()
                 ? Array.from(this.subQuestions.values()).map((subQuestion, index) => {
-                        const label = `${subQuestion.relationship === Relationship.ASSOCIATE ? `${parseInt(number) + 1}` : `${number}.${index + 1}`}`
-                        return subQuestion.render(label);
+                        console.log("subQuestion", subQuestion);
+                        const labelNumber = `${subQuestion.relationship === Relationship.ASSOCIATE ? `${parseInt(number) + 1}` : `${number}.${index + 1}`}`
+                        return subQuestion.render(labelNumber);
                     }
                 )
                 : []),
