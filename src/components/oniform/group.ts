@@ -26,10 +26,10 @@ export class GroupButtonAdd extends ActionButton {
             const groupButton = new ActionButton("New group", () => {
                 (parent as Oniform).addGroup(self);
             }, undefined, ["text"], "New Group")
-            const stationButton = new ActionButton("New question", () => {
+            const stationButton = new ActionButton("New question below", () => {
                 self.addEmptyStation();
                 self.stations[self.stations.length - 1].addEmptyTerminal();
-            }, undefined, ["text"], "New Question");
+            }, undefined, ["text"], "New Question Below");
 
             const actionItems = [groupButton, stationButton];
 

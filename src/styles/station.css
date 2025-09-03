@@ -17,6 +17,7 @@
 .station {
     position: relative;
     padding-top: 1rem;
+    width: 100%;
 }
 
 .station_label {
@@ -24,10 +25,11 @@
     padding-left: 1rem;
     background-color: rgb(196, 196, 196);
     border: 0.3rem double #505050;
+    width: 100%;
 }
 
 .station_textarea {
-    min-width: 32rem;
+    width: 100%;
     min-height: 40px;
     padding: 10px;
     border: 0.3rem double #505050;

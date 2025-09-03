@@ -19,13 +19,13 @@ import {renderPreview, renderView} from "../../main";
 export class StationButtonAdd extends ActionButton {
     constructor(parent: Group | Station | Terminal, self?: Station) {
         if (!self) {
-            super("New Question", () => {
+            super("New Question Below", () => {
                 parent.addEmptyStation();
-            }, undefined, ["text"], "New Question");
+            }, undefined, ["text"], "New Question Below");
         } else {
-            const siblingButton = new ActionButton("New question", () => {
+            const siblingButton = new ActionButton("New question below", () => {
                 parent.addEmptyStation(self);
-            }, undefined, ["text"], "New Question");
+            }, undefined, ["text"], "New Question Below");
             const dependantGroup = new ActionButton("New sub-group", () => {
                 const newGroup = new Group(self);
                 newGroup.addEmptyStation();
@@ -136,7 +136,7 @@ export class StationButtonPaste extends ActionButton {
             new ActionButton("Paste as question", () => {
                 if (self.parent instanceof Group || self.parent instanceof Station)
                     self.parent.addStationAfterReference(self, <Station>Clipboard.instance.cloneCopiedObject());
-            }, undefined, ["text"], "New Question"),
+            }, undefined, ["text"], "New Question Below"),
             new ActionButton("Paste as sub-question", () => {
                 const cloneObject = <Station>Clipboard.instance.cloneCopiedObject();
                 cloneObject.parent = self;
