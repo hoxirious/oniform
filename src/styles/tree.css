@@ -54,6 +54,9 @@
 
 .tree_group_stations {
     padding-left: 1rem;
+    margin-left: 0.5rem;
+    border-left: 0.125rem solid rgba(143, 143, 143, 0.5);
+    border-bottom-left-radius: 0.5rem;
 }
 
 .tree_station {
@@ -61,6 +64,9 @@
 
 .tree_station_terminals {
     padding-left: 1rem;
+    margin-left: 0.5rem;
+    border-left: 0.125rem solid rgba(143, 143, 143, 0.5);
+    border-bottom-left-radius: 0.5rem;
 }
 
 .tree_group_stations.collapse,
@@ -71,8 +77,14 @@
 
 .tree_station_links {
     padding-left: 1rem;
+    margin-left: 0.5rem;
+    border-left: 0.125rem solid rgba(143, 143, 143, 0.5);
+    border-bottom-left-radius: 0.5rem;
 }
 
 .tree_terminal_links {
     padding-left: 1rem;
+    margin-left: 0.5rem;
+    border-left: 0.125rem solid rgba(143, 143, 143, 0.5);
+    border-bottom-left-radius: 0.5rem;
 }
